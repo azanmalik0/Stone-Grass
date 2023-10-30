@@ -1,4 +1,3 @@
-using ControlFreak2;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,16 +19,11 @@ public class MovementController : MonoBehaviour
         Init();
 
     }
-
     private void Init()
     {
+        rb = GetComponent<Rigidbody>();
         GM = GameManager.Instance;
-        CurrentState = GM.GetState();
-
-        if (CurrentState == GameState.Tractor)
-            rb = GetComponent<Rigidbody>();
-        if (CurrentState == GameState.Farmer)
-            characterController = GetComponent<CharacterController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -46,30 +40,10 @@ public class MovementController : MonoBehaviour
 
     public void HandleMovement()
     {
-        switch (CurrentState)
-        {
-            case (GameState.Tractor):
-
-                if (JoystickMoving)
-                {
-                    currentMovement = new(joystick.Horizontal, 0, joystick.Vertical);
-                    Vector3 velocity = movementSpeed * Time.deltaTime * new Vector3(joystick.Horizontal, 0, joystick.Vertical);
-                    rb.velocity = velocity;
-                }
-                else
-                    rb.velocity = Vector3.zero;
-                break;
-            case (GameState.Farmer):
-
-                currentMovement = new(joystick.Horizontal, 0, joystick.Vertical);
-                characterController.Move(movementSpeed * Time.deltaTime * currentMovement);
-                break;
-
-
-        }
-
+        currentMovement = new(joystick.Horizontal, 0, joystick.Vertical);
+        rb.velocity = movementSpeed * Time.deltaTime * currentMovement;
+        //characterController.Move(movementSpeed * Time.deltaTime * currentMovement);
     }
-
     void HandleRotation()
     {
         if (JoystickMoving)

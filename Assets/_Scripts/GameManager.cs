@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     GameState state;
+    public static event Action<GameState> OnGameStateChanged;
     public GameObject tractorObject;
     public GameObject farmerObject;
     private void Awake()
@@ -15,31 +17,31 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        UpdateGameState(GameState.Farmer);
+        UpdateGameState(GameState.Tractor);
     }
 
-    public void UpdateGameState(GameState state)
+    public void UpdateGameState(GameState NewState)
     {
-        this.state = state;
-        print(this.state);
+        this.state = NewState;
 
-        switch (this.state)
+        switch (NewState)
         {
             case GameState.Tractor:
-                tractorObject.SetActive(true);
                 farmerObject.SetActive(false);
+                tractorObject.transform.position = farmerObject.transform.position;
+                tractorObject.transform.rotation = farmerObject.transform.rotation;
+                tractorObject.SetActive(true);
                 break;
             case GameState.Farmer:
                 tractorObject.SetActive(false);
+                farmerObject.transform.position = tractorObject.transform.position;
+                farmerObject.transform.rotation = tractorObject.transform.rotation;
                 farmerObject.SetActive(true);
                 break;
         }
+
+        OnGameStateChanged?.Invoke(NewState);
     }
 
-    public GameState GetState()
-    {
-        return this.state;
-        print(this.state);
-    }
 }
 public enum GameState { Tractor, Farmer }

@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class CameraManager : MonoBehaviour
 {
+    [SerializeField] Transform followTarget;
     [SerializeField] Vector3 offset;
     GameManager GM;
 
@@ -12,14 +14,27 @@ public class CameraManager : MonoBehaviour
         GM = GameManager.Instance;
     }
 
-    void LateUpdate()
+    private void OnEnable()
     {
-        if (GM.GetState() == GameState.Tractor)
-            FollowPlayer(GM.tractorObject.transform);
-        if (GM.GetState() == GameState.Farmer)
-            FollowPlayer(GM.farmerObject.transform);
+        GameManager.OnGameStateChanged += SetTarget;
     }
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= SetTarget;
 
+    }
+    private void LateUpdate()
+    {
+        FollowPlayer(followTarget);
+    }
+    void SetTarget(GameState state)
+    {
+        GameState currentState = state;
+        if (currentState == GameState.Tractor)
+            followTarget = GM.tractorObject.transform;
+        if (currentState == GameState.Farmer)
+            followTarget = GM.farmerObject.transform;
+    }
     private void FollowPlayer(Transform target)
     {
         transform.position = target.position + offset;

@@ -22,7 +22,6 @@ namespace Es.InkPainter
 	[DisallowMultipleComponent]
 	public class InkCanvas : MonoBehaviour
 	{
-
 		[Serializable]
 		public class PaintSet
 		{
@@ -767,7 +766,6 @@ namespace Es.InkPainter
 
 			if(renderCamera == null)
 				renderCamera = Camera.main;
-
 
 			Vector3 p = transform.InverseTransformPoint(worldPos);
 			Matrix4x4 mvp = renderCamera.projectionMatrix * renderCamera.worldToCameraMatrix * transform.localToWorldMatrix;
