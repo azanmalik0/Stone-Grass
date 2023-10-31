@@ -78,10 +78,12 @@ namespace PT.Garden
 
         private void OnTriggerEnter(Collider other)
         {
-            try
+            //try
+            //{
+            if (other.CompareTag("Cutter"))
             {
-                PositionPainter p = other.GetComponent<PositionPainter>();
-                if (p != null)
+
+                if (other.TryGetComponent<PositionPainter>(out var p))
                 {
                     _hasBeeIn = true;
                     p._removeCanvas = _removeCanvas;
@@ -89,22 +91,25 @@ namespace PT.Garden
                     p._isPainting = true;
                 }
             }
-            catch { }
+            //}
+            //catch { }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            try
+            // try
+            //{
+            if (other.CompareTag("Cutter"))
             {
-                PositionPainter p = other.GetComponent<PositionPainter>();
-                if (p != null)
+                if (other.TryGetComponent<PositionPainter>(out var p))
                 {
                     _hasBeeIn = false;
                     _hasCopy = false;
                     p._isPainting = false;
                 }
             }
-            catch { }
+            // }
+            // catch { }
         }
 
         private void Update()
