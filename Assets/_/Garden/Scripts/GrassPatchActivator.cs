@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Es.InkPainter;
+using System;
+using System.Diagnostics;
 
 namespace PT.Garden
 {
     public class GrassPatchActivator : MonoBehaviour
     {
+        [System.Serializable]
         public struct PixelChange
         {
             public float x;
@@ -31,6 +34,7 @@ namespace PT.Garden
         public RenderTexture lastRenderTexture;
         public RenderTexture grassTexture;
         private ComputeBuffer resultsBFF;
+
         private bool _isSetUp = false;
 
         private void Start()
@@ -66,6 +70,8 @@ namespace PT.Garden
 
         private void DoParticle(Vector3 position, Color c)
         {
+            
+            print("Particle");
             ParticleSystem p = particlePool[particleIndex];
             particleIndex = (particleIndex + 1) % 40;
             p.startColor = c;
@@ -80,13 +86,13 @@ namespace PT.Garden
         {
             try
             {
-                PositionPainter p = other.GetComponent<PositionPainter>();
-                if (p != null)
+                if (other.TryGetComponent<PositionPainter>(out var p))
                 {
                     _hasBeeIn = true;
                     p._removeCanvas = _removeCanvas;
                     p._bendCanvas = _windCanvas;
                     p._isPainting = true;
+
                 }
             }
             catch { }
@@ -96,8 +102,7 @@ namespace PT.Garden
         {
             try
             {
-                PositionPainter p = other.GetComponent<PositionPainter>();
-                if (p != null)
+                if (other.TryGetComponent<PositionPainter>(out var p))
                 {
                     _hasBeeIn = false;
                     _hasCopy = false;
@@ -118,6 +123,7 @@ namespace PT.Garden
                 }
                 else
                 {
+                            print("Here1");
                     RenderTexture curRT = CopyTexture(renderTexture);
 
                     computeShader.SetBuffer(0, "results", resultsBFF);
@@ -136,10 +142,13 @@ namespace PT.Garden
                     {
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
-                            Vector3 pos = new Vector3();
-                            pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
-                            pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;
-                            pos.y = transform.position.y + 0.5f;
+                            print("======================================>");
+                            Vector3 pos = new()
+                            {
+                                x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
+                                z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
+                                y = transform.position.y + 0.5f
+                            };
                             DoParticle(pos, new Color(pt.r, pt.g, pt.b));
                         }
                     }
@@ -149,8 +158,10 @@ namespace PT.Garden
 
         private RenderTexture CopyTexture(RenderTexture t)
         {
-            RenderTexture newrt = new RenderTexture(t);
-            newrt.enableRandomWrite = true;
+            RenderTexture newrt = new(t)
+            {
+                enableRandomWrite = true
+            };
             newrt.Create();
 
             Graphics.Blit(t, newrt);
@@ -159,8 +170,10 @@ namespace PT.Garden
 
         private RenderTexture CopyTexture(Texture t)
         {
-            RenderTexture newrt = new RenderTexture(t.width, t.height, 1, UnityEngine.Experimental.Rendering.DefaultFormat.LDR);
-            newrt.enableRandomWrite = true;
+            RenderTexture newrt = new(t.width, t.height, 1, UnityEngine.Experimental.Rendering.DefaultFormat.LDR)
+            {
+                enableRandomWrite = true
+            };
             newrt.Create();
 
             Graphics.Blit(t, newrt);
