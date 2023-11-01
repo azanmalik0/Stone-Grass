@@ -123,7 +123,7 @@ namespace PT.Garden
                 }
                 else
                 {
-                            print("Here1");
+                            //print("Here1");
                     RenderTexture curRT = CopyTexture(renderTexture);
 
                     computeShader.SetBuffer(0, "results", resultsBFF);

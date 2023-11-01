@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace PT.Garden{
+namespace PT.Garden
+{
     public class PercentageChecker : MonoBehaviour
     {
         [SerializeField] private float percentage;
@@ -28,7 +29,8 @@ namespace PT.Garden{
         [SerializeField] private Image _filledSlider;
         private ComputeBuffer sumBuffer;
 
-        private void Start(){
+        private void Start()
+        {
             _mainMaterial = _meshRenderer.materials[_matIndex];
             _txid = Shader.PropertyToID(_mainTexName);
             kernelindex = _cs.FindKernel("CSMain");
@@ -36,52 +38,96 @@ namespace PT.Garden{
             results = new float[_texture.width * _texture.height];
             sumBuffer = new ComputeBuffer(results.Length, sizeof(float));
         }
-        
-        private void Update(){
+
+        private void Update()
+        {
             _run = false;
-            
+
             // get the texture
             _texture = _mainMaterial.GetTexture(_txid);
-            RenderTexture t = (RenderTexture)_texture;
 
-            RenderTexture rt = new RenderTexture(t.width, t.height, t.depth, t.format);
-            rt.enableRandomWrite = true;
-            rt.Create();
 
-            RenderTexture currentRT = RenderTexture.active;
-            RenderTexture.active = t;
-            
-            // copy the texture
-            Graphics.Blit(t, rt);
+            //RenderTexture t = (RenderTexture)_texture;
 
-            RenderTexture.active = currentRT;
-            
-            _cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
-            _cs.SetFloat("resolution", rt.width);
-            _cs.SetTexture(kernelindex, "Input", rt);
+            //RenderTexture rt = new RenderTexture(t.width, t.height, t.depth, t.format);
+            //rt.enableRandomWrite = true;
+            //rt.Create();
+
+            //RenderTexture currentRT = RenderTexture.active;
+            //RenderTexture.active = t;
+
+            //// copy the texture
+            //Graphics.Blit(t, rt);
+
+            //RenderTexture.active = currentRT;
+
+            //_cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
+            //_cs.SetFloat("resolution", rt.width);
+            //_cs.SetTexture(kernelindex, "Input", rt);
+            RenderTexture t = _texture as RenderTexture;
+
+            if (t != null)
+            {
+                print("Here");
+
+                int width = t.width;
+                int height = t.height;
+                int depth = t.depth;
+                RenderTextureFormat format = t.format;
+
+                RenderTexture rt = new RenderTexture(width, height, depth, format);
+                rt.enableRandomWrite = true;
+                rt.Create();
+
+                RenderTexture currentRT = RenderTexture.active;
+                RenderTexture.active = t;
+
+                // Copy the texture
+                Graphics.Blit(t, rt);
+
+                RenderTexture.active = currentRT;
+
+                // Set the RenderTexture as the input texture for the Compute Shader
+                _cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
+                _cs.SetFloat("resolution", rt.width);
+                _cs.SetTexture(kernelindex, "Input", rt);
+
+                // Don't forget to release the created RenderTexture when it's no longer needed
+                // rt.Release();
+            }
+            else
+            {
+                print("Here2");
+                // Handle the case where _texture is not a RenderTexture
+            }
             _cs.Dispatch(kernelindex, _texture.width / 8, _texture.height / 8, 1);
             sumBuffer.GetData(results);
 
             float sum = 0;
-            for(int i = 0; i < results.Length; i++){
+            for (int i = 0; i < results.Length; i++)
+            {
                 sum += results[i];
             }
 
             percentage = sum / results.Length;
             _filledSlider.fillAmount = percentage;
 
-            if(percentage > 0.95){
+            if (percentage > 0.95)
+            {
+                print("Here3");
                 // win
                 int idx = SceneManager.GetActiveScene().buildIndex;
-                if(idx == SceneManager.sceneCount - 1){
+                if (idx == SceneManager.sceneCount - 1)
+                {
                     idx = 0;
                 }
                 SceneManager.LoadScene(idx + 1);
             }
         }
 
-        private void OnDestroy(){
-            if(sumBuffer != null)
+        private void OnDestroy()
+        {
+            if (sumBuffer != null)
                 sumBuffer.Dispose();
         }
     }
