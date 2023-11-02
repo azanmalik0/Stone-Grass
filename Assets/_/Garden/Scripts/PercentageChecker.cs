@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 using UnityEngine.UI;
 
 namespace PT.Garden
@@ -13,18 +11,18 @@ namespace PT.Garden
         private float[] results;
 
         [SerializeField] private ComputeShader _cs;
-        [SerializeField] private Color _refree;
+        //[SerializeField] private Color _refree;
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private int _matIndex = 0;
         [SerializeField] private string _mainTexName = "_NoGrassTex";
-        [SerializeField] private float _betweenReads = 0.5f;
-        [SerializeField] private bool _run;
+        //[SerializeField] private float _betweenReads = 0.5f;
+        //[SerializeField] private bool _run;
         private int _txid;
         private Material _mainMaterial;
         private Texture _texture;
-        private bool _isChecking = true, _checkSig = false;
-        private int width, height;
-        private Color[] colors;
+        //private bool _isChecking = true, _checkSig = false;
+        //private int width, height;
+        //private Color[] colors;
         [SerializeField] int kernelindex;
         [SerializeField] private Image _filledSlider;
         private ComputeBuffer sumBuffer;
@@ -41,65 +39,31 @@ namespace PT.Garden
 
         private void Update()
         {
-            _run = false;
+            //_run = false;
+
+
 
             // get the texture
             _texture = _mainMaterial.GetTexture(_txid);
+            RenderTexture t = (RenderTexture)_texture;
 
-
-            //RenderTexture t = (RenderTexture)_texture;
-
-            //RenderTexture rt = new RenderTexture(t.width, t.height, t.depth, t.format);
-            //rt.enableRandomWrite = true;
-            //rt.Create();
-
-            //RenderTexture currentRT = RenderTexture.active;
-            //RenderTexture.active = t;
-
-            //// copy the texture
-            //Graphics.Blit(t, rt);
-
-            //RenderTexture.active = currentRT;
-
-            //_cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
-            //_cs.SetFloat("resolution", rt.width);
-            //_cs.SetTexture(kernelindex, "Input", rt);
-            RenderTexture t = _texture as RenderTexture;
-
-            if (t != null)
+            RenderTexture rt = new(t.width, t.height, t.depth, t.format)
             {
-                print("Here");
+                enableRandomWrite = true
+            };
+            rt.Create();
 
-                int width = t.width;
-                int height = t.height;
-                int depth = t.depth;
-                RenderTextureFormat format = t.format;
+            RenderTexture currentRT = RenderTexture.active;
+            RenderTexture.active = t;
 
-                RenderTexture rt = new RenderTexture(width, height, depth, format);
-                rt.enableRandomWrite = true;
-                rt.Create();
+            // copy the texture
+            Graphics.Blit(t, rt);
 
-                RenderTexture currentRT = RenderTexture.active;
-                RenderTexture.active = t;
+            RenderTexture.active = currentRT;
 
-                // Copy the texture
-                Graphics.Blit(t, rt);
-
-                RenderTexture.active = currentRT;
-
-                // Set the RenderTexture as the input texture for the Compute Shader
-                _cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
-                _cs.SetFloat("resolution", rt.width);
-                _cs.SetTexture(kernelindex, "Input", rt);
-
-                // Don't forget to release the created RenderTexture when it's no longer needed
-                // rt.Release();
-            }
-            else
-            {
-                print("Here2");
-                // Handle the case where _texture is not a RenderTexture
-            }
+            _cs.SetBuffer(kernelindex, "diffSum", sumBuffer);
+            _cs.SetFloat("resolution", rt.width);
+            _cs.SetTexture(kernelindex, "Input", rt);
             _cs.Dispatch(kernelindex, _texture.width / 8, _texture.height / 8, 1);
             sumBuffer.GetData(results);
 
@@ -114,21 +78,13 @@ namespace PT.Garden
 
             if (percentage > 0.95)
             {
-                print("Here3");
-                // win
-                int idx = SceneManager.GetActiveScene().buildIndex;
-                if (idx == SceneManager.sceneCount - 1)
-                {
-                    idx = 0;
-                }
-                SceneManager.LoadScene(idx + 1);
+                Debug.LogError("Win");
             }
         }
 
         private void OnDestroy()
         {
-            if (sumBuffer != null)
-                sumBuffer.Dispose();
+            sumBuffer?.Dispose();
         }
     }
 }

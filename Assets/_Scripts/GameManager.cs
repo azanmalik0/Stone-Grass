@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        //Application.targetFrameRate = Screen.currentResolution.refreshRate;
+        Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
     }
 
