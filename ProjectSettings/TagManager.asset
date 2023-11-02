@@ -9,6 +9,7 @@ TagManager:
   - Farmer
   - Cutter
   - Hay
+  - Unload
   layers:
   - Default
   - TransparentFX

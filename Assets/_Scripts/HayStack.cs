@@ -15,7 +15,11 @@ public class HayStack : MonoBehaviour
     public float cellHeight = 1.0f;
     public Vector3 gridOffset = Vector3.zero;
     //==============================================
+    [SerializeField] Transform unloadTarget;
+    //==============================================
+
     public Vector3[,] cellPositions;
+
     int currentR = 0;
     int currentC = 0;
 
@@ -40,6 +44,8 @@ public class HayStack : MonoBehaviour
     }
     void StackHay(Collider hay)
     {
+
+        hayCells.Add(hay.gameObject);
         hay.transform.SetParent(this.transform);
 
         int row = currentR;
@@ -78,6 +84,37 @@ public class HayStack : MonoBehaviour
             StackHay(other);
         }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Unload"))
+        {
+            Unload();
+        }
+
+    }
+
+
+    public List<GameObject> hayCells = new();
+    float delay=0;
+    bool unloading;
+
+    private void Unload()
+    {
+        for (int i = 0; i < hayCells.Count; i++)
+        {
+            if (hayCells.Count > 0)
+            {
+                Debug.LogError("Unloading");
+                hayCells[i].transform.SetParent(null, true);
+                hayCells[i].GetComponent<BoxCollider>().enabled = false;
+                hayCells[i].transform.DOJump(unloadTarget.position, 1, 1, 0.5f).SetDelay(delay);
+                delay += 0.09f;
+            }
+
+
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

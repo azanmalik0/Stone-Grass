@@ -10,7 +10,7 @@ namespace PT.Garden
         [SerializeField] private Brush _removeBrush, _bendBrush;
         public InkCanvas _bendCanvas, _removeCanvas;
         public bool _isPainting = false;
-        public LayerMask lm;
+        //public LayerMask lm;
 
         private void Update(){
 
