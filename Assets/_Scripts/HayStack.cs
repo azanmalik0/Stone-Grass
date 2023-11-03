@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class HayStack : MonoBehaviour
 {
+    public static HayStack instance;
+
+    public static event Action OnSellingHarvest;
     [Title("Grid Preferences")]
     public int maxRows;
     public int maxColumns;
@@ -15,8 +18,16 @@ public class HayStack : MonoBehaviour
     public float cellHeight = 1.0f;
     public Vector3 gridOffset = Vector3.zero;
     //==============================================
+    [Title("Unloading References")]
     [SerializeField] Transform unloadTarget;
+    [SerializeField] ParticleSystem boilerParticle;
+    float delay = 0;
+    bool unloading;
     //==============================================
+    [Title("Stack Preferences")]
+    [SerializeField] int maxStacks;
+    int stacksAdded;
+    bool maxStackReached;
 
     public Vector3[,] cellPositions;
 
@@ -25,11 +36,16 @@ public class HayStack : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+    }
+    private void Start()
+    {
+        cellPositions = new Vector3[maxRows, maxColumns];
         CalculateCellPositions();
+
     }
     private void CalculateCellPositions()
     {
-        cellPositions = new Vector3[maxRows, maxColumns];
 
         Vector3 startPosition = transform.localPosition + gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
 
@@ -45,24 +61,28 @@ public class HayStack : MonoBehaviour
     void StackHay(Collider hay)
     {
 
-        hayCells.Add(hay.gameObject);
-        hay.transform.SetParent(this.transform);
-
-        int row = currentR;
-        int col = currentC;
-
-        hay.transform.DOLocalJump(cellPositions[row, col], 5, 1, 1f).SetEase(Ease.Linear);
-        hay.transform.localRotation = Quaternion.identity;
-
-        currentC++;
-        if (currentC >= maxColumns)
+        if (!maxStackReached)
         {
-            currentC = 0;
-            currentR++;
 
-            if (currentR >= maxRows)
+            hay.transform.SetParent(this.transform);
+
+            int _row = currentR;
+            int _col = currentC;
+            DOTween.Complete(hay.transform);
+            hay.transform.DOLocalJump(cellPositions[_row, _col], 5, 1, 1f).SetEase(Ease.Linear).OnComplete(() => Debug.LogError("Completed"));
+            hay.transform.localRotation = Quaternion.identity;
+
+            currentC++;
+            if (currentC >= maxColumns)
             {
-                RepositionStack();
+                currentC = 0;
+                currentR++;
+
+                if (currentR >= maxRows)
+                {
+                    Debug.LogError("StackComplete");
+                    RepositionStack();
+                }
             }
         }
 
@@ -72,49 +92,70 @@ public class HayStack : MonoBehaviour
     }
     private void RepositionStack()
     {
-        gridOffset.y += 0.2f;
-        CalculateCellPositions();
-        currentC = 0;
-        currentR = 0;
+        stacksAdded++;
+        if (stacksAdded >= maxStacks)
+        {
+            maxStackReached = true;
+            Debug.LogError("Max Stacks Reached");
+        }
+        else
+        {
+
+            gridOffset.y += 0.2f;
+            currentC = 0;
+            currentR = 0;
+            CalculateCellPositions();
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hay"))
         {
+            //boilerParticle.Stop();
             StackHay(other);
         }
+        if (other.CompareTag("Unload"))
+        {
+            unloading = true;
+            Debug.LogError("True");
+            StartCoroutine(Unload());
+        }
     }
-    private void OnTriggerStay(Collider other)
+
+    private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Unload"))
         {
-            Unload();
+            unloading = false;
+            //StopCoroutine(Unload());
+            Debug.LogError("False");
         }
 
     }
-
-
-    public List<GameObject> hayCells = new();
-    float delay=0;
-    bool unloading;
-
-    private void Unload()
+    int haySold;
+    public int HaySold { get => haySold; }
+    IEnumerator Unload()
     {
-        for (int i = 0; i < hayCells.Count; i++)
+
+        while (unloading && transform.childCount > 0)
         {
-            if (hayCells.Count > 0)
+            print("In");
+            GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
+            haySold++;
+            hayCell.GetComponent<BoxCollider>().enabled = false;
+            hayCell.transform.DOMove(unloadTarget.position, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
             {
-                Debug.LogError("Unloading");
-                hayCells[i].transform.SetParent(null, true);
-                hayCells[i].GetComponent<BoxCollider>().enabled = false;
-                hayCells[i].transform.DOJump(unloadTarget.position, 1, 1, 0.5f).SetDelay(delay);
-                delay += 0.09f;
+                Destroy(hayCell);
+                boilerParticle.Play();
+                OnSellingHarvest?.Invoke();
             }
-
-
+            );
+            hayCell.transform.SetParent(null, true);
+            delay += 0.0001f;
+            yield return null;
         }
+        print("OUT");
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
