@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +15,24 @@ public class MovementController : MonoBehaviour
     Rigidbody rb;
     GameManager GM;
     GameState CurrentState;
+
+
+    [SerializeField] Transform upgradeZonePosition;
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += ChangeAvatarPosition;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= ChangeAvatarPosition;
+
+    }
     void Start()
     {
         Init();
 
     }
+
     private void Init()
     {
         rb = GetComponent<Rigidbody>();
@@ -34,15 +48,16 @@ public class MovementController : MonoBehaviour
 
     void FixedUpdate()
     {
+
         HandleMovement();
         HandleRotation();
+
     }
 
     public void HandleMovement()
     {
         currentMovement = new(joystick.Horizontal, 0, joystick.Vertical);
         rb.velocity = movementSpeed * Time.deltaTime * currentMovement;
-        //characterController.Move(movementSpeed * Time.deltaTime * currentMovement);
     }
     void HandleRotation()
     {
@@ -59,5 +74,16 @@ public class MovementController : MonoBehaviour
 
             }
         }
+    }
+    void ChangeAvatarPosition(GameState state)
+    {
+        GameState CurrentState = state;
+        if (CurrentState == GameState.Upgrading)
+        {
+            transform.DOLocalMove(upgradeZonePosition.localPosition, 0.5f).SetEase(Ease.Linear);
+            transform.DOLocalRotate(upgradeZonePosition.localEulerAngles, 0.5f).SetEase(Ease.Linear);
+        }
+
+
     }
 }

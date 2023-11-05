@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class upgradeManager : MonoBehaviour
+public class UpgradeManager : MonoBehaviour
 {
     [SerializeField] Image UpgradePanel;
     [SerializeField] GameObject sawStage1;
@@ -11,15 +11,14 @@ public class upgradeManager : MonoBehaviour
 
     private void OnEnable()
     {
-        Upgrade.OnEnteringUpgradeZone += OpenUpgradePanel;
+        GameManager.OnGameStateChanged += OpenMenu;
     }
 
     public void OnButtonClick(string str)
     {
         if (str == "Exit")
         {
-            UpgradePanel.gameObject.SetActive(false);
-
+            CloseMenu();
         }
         if (str == "UpgradeSaw")
         {
@@ -29,8 +28,14 @@ public class upgradeManager : MonoBehaviour
         }
 
     }
-    void OpenUpgradePanel()
+    void OpenMenu(GameState state)
     {
-        UpgradePanel.gameObject.SetActive(true);
+        if (state == GameState.Upgrading)
+            UpgradePanel.gameObject.SetActive(true);
+    }
+    void CloseMenu()
+    {
+        UpgradePanel.gameObject.SetActive(false);
+        GameManager.Instance.UpdateGameState(GameState.InGame);
     }
 }

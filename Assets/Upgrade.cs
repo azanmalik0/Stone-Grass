@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class Upgrade : MonoBehaviour
 {
-    public static event Action OnEnteringUpgradeZone;
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("UpgradeZone"))
         {
-            OnEnteringUpgradeZone?.Invoke();
+            GameManager.Instance.UpdateGameState(GameState.Upgrading);
         }
     }
 }
