@@ -7,18 +7,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HayStack : SerializedMonoBehaviour
+public class HayStack : MonoBehaviour
 {
     public static HayStack instance;
 
     public static event Action<int> OnSellingHarvest;
     public static event Action<int> OnHayCollect;
+    [Title("General Preferences")]
+    public int maxHayCapacity;
     [Title("Grid Preferences")]
-    public int maxRows;
-    public int maxColumns;
-    public float cellWidth = 1.0f;
-    public float cellHeight = 1.0f;
-    public Vector3 gridOffset = Vector3.zero;
+    [SerializeField] int maxRows;
+    [SerializeField] int maxColumns;
+    [SerializeField] float cellWidth = 1.0f;
+    [SerializeField] float cellHeight = 1.0f;
+    [SerializeField] Vector3 gridOffset = Vector3.zero;
     //==============================================
     [Title("Unloading References")]
     [SerializeField] Transform unloadTarget;
@@ -27,21 +29,21 @@ public class HayStack : SerializedMonoBehaviour
     bool unloading;
     //==============================================
     [Title("Stack Preferences")]
-    [TableMatrix]
     public Vector3[,] cellPositions;
 
     int currentR = 0;
     int currentC = 0;
     int haySold;
-    public int hayCollected;
-    public int maxHayCapacity;
+    [HideInInspector]
+    int hayCollected;
     public int HaySold { get => haySold; }
+    public int HayCollected { get => hayCollected; }
 
     private void Awake()
     {
         instance = this;
     }
-    private void Start()
+    void Start()
     {
         CalculateCellPositions();
 
@@ -57,29 +59,26 @@ public class HayStack : SerializedMonoBehaviour
             for (int col = 0; col < maxColumns; col++)
             {
                 cellPositions[row, col] = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
-                print(cellPositions[row, col]);
-                print(row + " " + col);
+                //print(cellPositions[row, col]);
+                //print(row + " " + col);
             }
         }
 
     }
-    void StackHay(Collider hay)
+    void Load(Collider hay)
     {
         if (hayCollected >= maxHayCapacity)
         {
-            Debug.LogError("MaxCapacityReached");
+            //Debug.LogError("MaxCapacityReached");
 
         }
         else
         {
             hayCollected++;
             OnHayCollect?.Invoke(hayCollected);
-
             hay.transform.SetParent(this.transform);
-
             DOTween.Complete(hay.transform);
-            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear).OnComplete(() => Debug.LogError("Completed"));
-            //print(cellPositions[2, 2]);
+            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             hay.transform.localRotation = Quaternion.identity;
 
             currentC++;
@@ -90,7 +89,7 @@ public class HayStack : SerializedMonoBehaviour
 
                 if (currentR >= maxRows)
                 {
-                    Debug.LogError("StackComplete");
+                    //Debug.LogError("StackComplete");
                     RepositionStack(false);
                 }
             }
@@ -121,8 +120,6 @@ public class HayStack : SerializedMonoBehaviour
 
         while (unloading && transform.childCount > 0)
         {
-
-
             hayCollected--;
             haySold++;
             OnHayCollect?.Invoke(hayCollected);
@@ -147,7 +144,7 @@ public class HayStack : SerializedMonoBehaviour
 
                 if (currentR < 0)
                 {
-                    Debug.LogError("Niche");
+                    //Debug.LogError("Niche");
                     RepositionStack(true);
                 }
 
@@ -161,18 +158,18 @@ public class HayStack : SerializedMonoBehaviour
             currentR = 0;
         }
 
-        print("OUT");
+        //print("OUT");
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hay"))
         {
-            StackHay(other);
+            Load(other);
         }
         if (other.CompareTag("Unload"))
         {
             unloading = true;
-            Debug.LogError("True");
+            //Debug.LogError("True");
             StartCoroutine(Unload());
         }
     }
@@ -181,7 +178,7 @@ public class HayStack : SerializedMonoBehaviour
         if (other.CompareTag("Unload"))
         {
             unloading = false;
-            Debug.LogError("False");
+            //Debug.LogError("False");
         }
 
     }
