@@ -10,7 +10,8 @@ public class HayStack : MonoBehaviour
 {
     public static HayStack instance;
 
-    public static event Action OnSellingHarvest;
+    public static event Action<int> OnSellingHarvest;
+    public static event Action<int> OnHayCollect;
     [Title("Grid Preferences")]
     public int maxRows;
     public int maxColumns;
@@ -33,6 +34,10 @@ public class HayStack : MonoBehaviour
 
     int currentR = 0;
     int currentC = 0;
+    public int haySold;
+    public int hayCollected;
+    public int maxHayCapacity;
+    public int HaySold { get => haySold; }
 
     private void Awake()
     {
@@ -60,9 +65,15 @@ public class HayStack : MonoBehaviour
     }
     void StackHay(Collider hay)
     {
-
-        if (!maxStackReached)
+        if (hayCollected >= maxHayCapacity)
         {
+            Debug.LogError("MaxCapacityReached");
+
+        }
+        else
+        {
+            hayCollected++;
+            OnHayCollect?.Invoke(hayCollected);
 
             hay.transform.SetParent(this.transform);
 
@@ -89,24 +100,48 @@ public class HayStack : MonoBehaviour
 
 
 
+
+
     }
     private void RepositionStack()
     {
-        stacksAdded++;
-        if (stacksAdded >= maxStacks)
-        {
-            maxStackReached = true;
-            Debug.LogError("Max Stacks Reached");
-        }
-        else
-        {
+        gridOffset.y += 0.2f;
+        currentC = 0;
+        currentR = 0;
+        CalculateCellPositions();
 
-            gridOffset.y += 0.2f;
-            currentC = 0;
-            currentR = 0;
-            CalculateCellPositions();
-        }
     }
+    IEnumerator Unload()
+    {
+
+        while (unloading && transform.childCount > 0)
+        {
+            print("In");
+            GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
+            haySold++;
+
+            hayCell.GetComponent<BoxCollider>().enabled = false;
+            hayCell.transform.DOMove(unloadTarget.position, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
+            {
+                Destroy(hayCell);
+                boilerParticle.Play();
+                OnSellingHarvest?.Invoke(haySold);
+                ChangesOnSelling();
+            }
+            );
+            hayCell.transform.SetParent(null, true);
+            delay += 0.0001f;
+            yield return null;
+        }
+        print("OUT");
+    }
+    private void ChangesOnSelling()
+    {
+        hayCollected--;
+        OnHayCollect?.Invoke(hayCollected);
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Hay"))
@@ -121,7 +156,6 @@ public class HayStack : MonoBehaviour
             StartCoroutine(Unload());
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Unload"))
@@ -131,30 +165,6 @@ public class HayStack : MonoBehaviour
             Debug.LogError("False");
         }
 
-    }
-    int haySold;
-    public int HaySold { get => haySold; }
-    IEnumerator Unload()
-    {
-
-        while (unloading && transform.childCount > 0)
-        {
-            print("In");
-            GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
-            haySold++;
-            hayCell.GetComponent<BoxCollider>().enabled = false;
-            hayCell.transform.DOMove(unloadTarget.position, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                Destroy(hayCell);
-                boilerParticle.Play();
-                OnSellingHarvest?.Invoke();
-            }
-            );
-            hayCell.transform.SetParent(null, true);
-            delay += 0.0001f;
-            yield return null;
-        }
-        print("OUT");
     }
     private void OnDrawGizmos()
     {

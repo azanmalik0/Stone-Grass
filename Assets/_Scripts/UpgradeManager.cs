@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,25 +8,73 @@ using UnityEngine.UI;
 public class UpgradeManager : MonoBehaviour
 {
     [SerializeField] Image UpgradePanel;
-    [SerializeField] GameObject sawStage1;
-    [SerializeField] GameObject sawStage2;
+    [Title("Saw")]
+    [SerializeField] GameObject[] sawBladeUpgrades;
+    int currentSawBlades = 0;
+    [Title("Truck")]
+    [SerializeField] GameObject[] truckWheelUpgrades;
+    int currentWheels = 0;
+
 
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenMenu;
     }
 
-    public void OnButtonClick(string str)
+    public void OnButtonClick(string button)
     {
-        if (str == "Exit")
+        if (button == "Exit")
         {
             CloseMenu();
         }
-        if (str == "UpgradeSaw")
+        if (button == "AddSawBlades")
         {
-            sawStage1.SetActive(false);
-            sawStage2.SetActive(true);
+            AddBlades();
 
+        }
+        if (button == "AddWheels")
+        {
+            AddWheels();
+
+        }
+        if (button == "IncreaseCapacity")
+        {
+            IncreaseCarCapacity();
+
+        }
+
+    }
+
+    void IncreaseCarCapacity()
+    {
+        HayStack.instance.maxHayCapacity += 50;
+
+    }
+    void AddWheels()
+    {
+        if (currentWheels < truckWheelUpgrades.Length - 1)
+        {
+            truckWheelUpgrades[currentWheels].SetActive(false);
+            truckWheelUpgrades[currentWheels + 1].SetActive(true);
+            currentWheels++;
+        }
+        else
+        {
+            Debug.LogError("MaxWheels");
+        }
+
+    }
+    void AddBlades()
+    {
+        if (currentSawBlades < sawBladeUpgrades.Length - 1)
+        {
+            sawBladeUpgrades[currentSawBlades].SetActive(false);
+            sawBladeUpgrades[currentSawBlades + 1].SetActive(true);
+            currentSawBlades++;
+        }
+        else
+        {
+            Debug.LogError("MaxBlades");
         }
 
     }

@@ -41,19 +41,11 @@ public class GameManager : MonoBehaviour
                 farmerObject.transform.rotation = tractorObject.transform.rotation;
                 farmerObject.SetActive(true);
                 break;
-            case GameState.Upgrading:
-                HandleUpgrading();
-                break;
-            case GameState.InGame:
-                break;
         }
 
         OnGameStateChanged?.Invoke(NewState);
     }
 
-    private void HandleUpgrading()
-    {
-
-    }
+   
 }
 public enum GameState { Tractor, Farmer, Upgrading, InGame }
