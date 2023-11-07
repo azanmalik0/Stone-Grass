@@ -40,6 +40,7 @@ public class HayLoft : Stacker
         else
         {
             hayProcessed++;
+            hay.GetComponent<BoxCollider>().enabled = false;
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
 
@@ -59,6 +60,7 @@ public class HayLoft : Stacker
 
 
     }
+ 
     void GetValue(int value)
     {
         collected++;

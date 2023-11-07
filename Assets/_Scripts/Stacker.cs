@@ -41,6 +41,7 @@ public abstract class Stacker : MonoBehaviour
     }
     protected virtual void Load(Collider hay) { }
     protected virtual void Load(Transform hay) { }
+    protected virtual IEnumerator LoadDelay(Collider hay) { yield return null; }
     protected virtual void CalculateCellPositions()
     {
 
@@ -52,7 +53,6 @@ public abstract class Stacker : MonoBehaviour
             for (int col = 0; col < maxColumns; col++)
             {
                 cellPositions[row, col] = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
-                print(cellPositions[row, col] + gameObject.name);
 
             }
         }
