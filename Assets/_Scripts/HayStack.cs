@@ -79,7 +79,9 @@ public class HayStack : MonoBehaviour
             hay.transform.SetParent(this.transform);
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
-            hay.transform.localRotation = Quaternion.identity;
+            float randomAngle = UnityEngine.Random.Range(0, 360);
+            hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
+
 
             currentC++;
             if (currentC >= maxColumns)
@@ -126,14 +128,14 @@ public class HayStack : MonoBehaviour
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
             hayCell.GetComponent<BoxCollider>().enabled = false;
             hayCell.transform.SetParent(null);
-            hayCell.transform.DOMove(unloadTarget.position, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
-                    {
-                        Destroy(hayCell);
-                        boilerParticle.Play();
-                        OnSellingHarvest?.Invoke(haySold);
-                    }
-                    );
-            delay += 0.0001f;
+            hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                Destroy(hayCell);
+                boilerParticle.Play();
+                OnSellingHarvest?.Invoke(haySold);
+            });
+
+            delay += 0.000001f;
 
             currentC--;
 
@@ -144,7 +146,6 @@ public class HayStack : MonoBehaviour
 
                 if (currentR < 0)
                 {
-                    //Debug.LogError("Niche");
                     RepositionStack(true);
                 }
 
@@ -152,12 +153,6 @@ public class HayStack : MonoBehaviour
 
             yield return null;
         }
-        if (transform.childCount <= 0)
-        {
-            currentC = 0;
-            currentR = 0;
-        }
-
         //print("OUT");
     }
     private void OnTriggerEnter(Collider other)

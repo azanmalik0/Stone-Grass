@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class HarvestGrass : MonoBehaviour
 {
-    
+
     [SerializeField] GameObject hayCellPrefab;
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
@@ -31,6 +31,6 @@ public class HarvestGrass : MonoBehaviour
             GameObject hayCell = Instantiate(hayCellPrefab, other.transform.position, Quaternion.identity);
             hayCell.transform.DOJump(other.transform.position + jumpOffset, 3, 1, 1);
         }
-        
+
     }
 }
