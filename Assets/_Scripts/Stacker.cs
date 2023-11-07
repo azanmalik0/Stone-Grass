@@ -15,11 +15,30 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset = Vector3.zero;
     protected Vector3[,] cellPositions;
-    public int currentR = 0;
-    public int currentC = 0;
 
+    protected int currentR = 0;
 
+    protected int currentC = 0;
 
+    protected virtual void RepositionStack(bool Reverse)
+    {
+        if (!Reverse)
+        {
+
+            gridOffset.y += 0.2f;
+            currentC = 0;
+            currentR = 0;
+        }
+        else
+        {
+            gridOffset.y -= 0.2f;
+            currentC = maxColumns - 1;
+            currentR = maxRows - 1;
+
+        }
+        CalculateCellPositions();
+
+    }
     protected virtual void Load(Collider hay) { }
     protected virtual void Load(Transform hay) { }
     protected virtual void CalculateCellPositions()

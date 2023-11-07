@@ -1,14 +1,20 @@
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HayLoft : Stacker
 {
+    [Title("General")]
+    public int requiredHay;
+    [Title("References")]
     [SerializeField] GameObject feedCellPrefab;
     [SerializeField] Transform feedCellStart;
     [SerializeField] Transform feedCellLast;
 
+    int collected = 0;
+    bool IsGenerating;
     int hayProcessed;
 
     private void OnEnable()
@@ -35,8 +41,7 @@ public class HayLoft : Stacker
         {
             hayProcessed++;
             hay.transform.SetParent(this.transform);
-            //DOTween.Complete(hay.transform);
-            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
+            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
 
             currentC++;
             if (currentC >= maxColumns)
@@ -47,17 +52,13 @@ public class HayLoft : Stacker
                 if (currentR >= maxRows)
                 {
                     //Debug.LogError("StackComplete");
-                    //RepositionStack(false);
+                    RepositionStack(false);
                 }
             }
         }
 
 
     }
-
-    int collected = 0;
-    public int requiredHay;
-    bool IsGenerating;
     void GetValue(int value)
     {
         collected++;

@@ -36,25 +36,7 @@ public class HayStack : Stacker
     {
         CalculateCellPositions();
     }
-    void RepositionStack(bool Reverse)
-    {
-        if (!Reverse)
-        {
 
-            gridOffset.y += 0.2f;
-            currentC = 0;
-            currentR = 0;
-        }
-        else
-        {
-            gridOffset.y -= 0.2f;
-            currentC = maxColumns - 1;
-            currentR = maxRows - 1;
-
-        }
-        CalculateCellPositions();
-
-    }
     protected override void Load(Collider hay)
     {
         if (hayCollected >= maxHayCapacity)
