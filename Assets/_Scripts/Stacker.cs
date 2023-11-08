@@ -14,7 +14,7 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected float cellWidth = 1.0f;
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset = Vector3.zero;
-    protected Vector3[,] cellPositions;
+    public Vector3[,] cellPositions;
 
     protected int currentR = 0;
 
@@ -42,6 +42,7 @@ public abstract class Stacker : MonoBehaviour
     protected virtual void Load(Collider hay) { }
     protected virtual void Load(Transform hay) { }
     protected virtual IEnumerator LoadDelay(Collider hay) { yield return null; }
+    protected virtual IEnumerator UnloadDelay(Collider hay) { yield return null; }
     protected virtual void CalculateCellPositions()
     {
 

@@ -15,6 +15,8 @@ TagManager:
   - Wheat
   - UpgradeZone
   - HayLoft
+  - Farmer_Stack
+  - Henhouse
   layers:
   - Default
   - TransparentFX

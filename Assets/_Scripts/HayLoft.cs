@@ -40,7 +40,6 @@ public class HayLoft : Stacker
         else
         {
             hayProcessed++;
-            hay.GetComponent<BoxCollider>().enabled = false;
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
 
@@ -60,7 +59,6 @@ public class HayLoft : Stacker
 
 
     }
- 
     void GetValue(int value)
     {
         collected++;
@@ -82,12 +80,33 @@ public class HayLoft : Stacker
 
             collected -= requiredHay;
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-            feedCell.transform.DOLocalMove(feedCellLast.position, 3).SetEase(Ease.Linear).OnComplete(() =>
+            feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 Load(feedCell.transform);
                 GenerateFeed();
             });
         }
     }
+    public void ResetGridPositions()
+    {
+
+        currentC--;
+        if (currentC < 0)
+        {
+            currentC = maxColumns - 1;
+            currentR--;
+
+            if (currentR < 0)
+            {
+                Debug.LogError("StackComplete");
+                RepositionStack(true);
+            }
+        }
+
+    }
 
 }
+
+
+
+
