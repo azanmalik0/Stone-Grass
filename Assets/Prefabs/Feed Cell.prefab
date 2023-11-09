@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4107832463647309}
   m_Layer: 0
   m_Name: Feed Cell
-  m_TagString: Untagged
+  m_TagString: Crude
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

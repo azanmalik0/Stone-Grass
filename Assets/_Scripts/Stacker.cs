@@ -16,9 +16,9 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected Vector3 gridOffset = Vector3.zero;
     public Vector3[,] cellPositions;
 
-    protected int currentR = 0;
+    public int currentR = 0;
 
-    protected int currentC = 0;
+    public int currentC = 0;
 
     protected virtual void RepositionStack(bool Reverse)
     {
@@ -39,11 +39,7 @@ public abstract class Stacker : MonoBehaviour
         CalculateCellPositions();
 
     }
-    protected virtual void Load(Collider hay) { }
-    protected virtual void Load(Transform hay) { }
-    protected virtual IEnumerator LoadDelay(Collider hay) { yield return null; }
-    protected virtual IEnumerator UnloadDelay(Collider hay) { yield return null; }
-    protected virtual void CalculateCellPositions()
+    protected void CalculateCellPositions()
     {
 
         cellPositions = new Vector3[maxRows, maxColumns];
@@ -76,6 +72,36 @@ public abstract class Stacker : MonoBehaviour
         }
 
         Gizmos.matrix = oldGizmosMatrix;
+    }
+    public void UpdateGridPositions()
+    {
+        currentC++;
+        if (currentC >= maxColumns)
+        {
+            currentC = 0;
+            currentR++;
+
+            if (currentR >= maxRows)
+            {
+                Debug.LogError("StackComplete");
+                RepositionStack(false);
+            }
+        }
+    }
+    public void ResetGridPositions()
+    {
+        currentC--;
+        if (currentC < 0)
+        {
+            currentC = maxColumns - 1;
+            currentR--;
+
+            if (currentR < 0)
+            {
+                Debug.LogError("StackComplete");
+                RepositionStack(true);
+            }
+        }
     }
 
 }

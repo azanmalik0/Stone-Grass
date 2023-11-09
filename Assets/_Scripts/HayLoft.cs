@@ -30,35 +30,6 @@ public class HayLoft : Stacker
     {
         CalculateCellPositions();
     }
-    protected override void Load(Transform hay)
-    {
-        if (hayProcessed >= maxHayCapacity)
-        {
-            //Debug.LogError("MaxCapacityReached");
-
-        }
-        else
-        {
-            hayProcessed++;
-            hay.transform.SetParent(this.transform);
-            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
-
-            currentC++;
-            if (currentC >= maxColumns)
-            {
-                currentC = 0;
-                currentR++;
-
-                if (currentR >= maxRows)
-                {
-                    //Debug.LogError("StackComplete");
-                    RepositionStack(false);
-                }
-            }
-        }
-
-
-    }
     void GetValue(int value)
     {
         collected++;
@@ -82,28 +53,30 @@ public class HayLoft : Stacker
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
             feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                Load(feedCell.transform);
+                LoadOnLoftPlatform(feedCell.transform);
                 GenerateFeed();
             });
         }
     }
-    public void ResetGridPositions()
+    void LoadOnLoftPlatform(Transform hay)
     {
-
-        currentC--;
-        if (currentC < 0)
+        if (hayProcessed >= maxHayCapacity)
         {
-            currentC = maxColumns - 1;
-            currentR--;
+            //Debug.LogError("MaxCapacityReached");
 
-            if (currentR < 0)
-            {
-                Debug.LogError("StackComplete");
-                RepositionStack(true);
-            }
+        }
+        else
+        {
+            hayProcessed++;
+            hay.transform.SetParent(this.transform);
+            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
+            UpdateGridPositions();
+
         }
 
+
     }
+
 
 }
 

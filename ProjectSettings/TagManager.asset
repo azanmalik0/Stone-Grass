@@ -17,6 +17,9 @@ TagManager:
   - HayLoft
   - Farmer_Stack
   - Henhouse
+  - LS_ProductShelf
+  - Crude
+  - Egg
   layers:
   - Default
   - TransparentFX

@@ -6,9 +6,7 @@ using UnityEngine;
 
 public class FarmerStack : Stacker
 {
-    int feedCollected;
     bool IsLoading;
-    bool IsUnloading;
     float delay;
     private void Start()
     {
@@ -20,72 +18,68 @@ public class FarmerStack : Stacker
         {
             if (!IsLoading)
             {
-                IsLoading = true;
-                Load(other);
-                Debug.LogError("enter1");
+                LoadFeedOnFarmer(other);
             }
-            Debug.LogError("enter");
+        }
+        if (other.CompareTag("LS_ProductShelf"))
+        {
+            if (!IsLoading)
+            {
+                Debug.LogError("LS_ProductShelf");
+                LoadProductOnFarmer(other);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("HayLoft"))
         {
-            //IsLoading = false;
-            Debug.LogError("exit");
+            IsLoading = false;
+        }
+        if (other.CompareTag("LS_ProductShelf"))
+        {
+            IsLoading = false;
         }
     }
 
-    protected override void Load(Collider other)
+    void LoadFeedOnFarmer(Collider other)
     {
-        if (IsLoading && other.transform.childCount > 0)
+        if (other.transform.childCount == 0)
         {
-            Debug.LogError(other.transform.childCount);
-            feedCollected++;
-            Transform feedCell = other.transform.GetChild(0);
+            IsLoading = false;
+        }
+        else if (other.transform.childCount > 0)
+        {
+            IsLoading = true;
+            Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
             DOTween.Complete(feedCell);
             feedCell.SetParent(this.transform);
-            //feedCell.localPosition = cellPositions[currentC, currentR];
-            feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine);
-            feedCell.localRotation = Quaternion.identity;
+            feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => feedCell.localRotation = Quaternion.identity);
             delay += 0.0001f;
-
-            currentC++;
-            if (currentC >= maxColumns)
-            {
-                currentC = 0;
-                currentR++;
-
-                if (currentR >= maxRows)
-                {
-                    Debug.LogError("StackComplete");
-                    RepositionStack(false);
-                }
-            }
+            UpdateGridPositions();
             other.GetComponent<HayLoft>().ResetGridPositions();
-            Debug.LogError("enter2");
             IsLoading = false;
-            print("OUT");
         }
-
     }
 
-    public void ResetGridPositions()
+    void LoadProductOnFarmer(Collider other)
     {
-        currentC--;
-        if (currentC < 0)
+        if (other.transform.childCount == 0)
         {
-            currentC = maxColumns - 1;
-            currentR--;
-
-            if (currentR < 0)
-            {
-                Debug.LogError("StackComplete");
-                RepositionStack(true);
-            }
+            IsLoading = false;
+        }
+        else if (other.transform.childCount > 0)
+        {
+            IsLoading = true;
+            Transform product = other.transform.GetChild(other.transform.childCount - 1);
+            DOTween.Complete(product);
+            product.SetParent(this.transform);
+            product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+            delay += 0.0001f;
+            UpdateGridPositions();
+            other.GetComponent<ProductStack>().ResetGridPositions();
+            IsLoading = false;
         }
     }
-
-
 
 }

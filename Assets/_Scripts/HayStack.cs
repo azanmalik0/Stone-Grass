@@ -37,7 +37,7 @@ public class HayStack : Stacker
         CalculateCellPositions();
     }
 
-    protected override void Load(Collider hay)
+    void LoadOnTractor(Collider hay)
     {
         if (hayCollected >= maxHayCapacity)
         {
@@ -53,24 +53,13 @@ public class HayStack : Stacker
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
+            UpdateGridPositions();
 
 
-            currentC++;
-            if (currentC >= maxColumns)
-            {
-                currentC = 0;
-                currentR++;
-
-                if (currentR >= maxRows)
-                {
-                    //Debug.LogError("StackComplete");
-                    RepositionStack(false);
-                }
-            }
         }
 
     }
-    IEnumerator Unload()
+    IEnumerator UnloadFromTruck()
     {
 
         while (unloading && transform.childCount > 0)
@@ -89,22 +78,9 @@ public class HayStack : Stacker
             });
 
             delay += 0.000001f;
-
-            currentC--;
-
-            if (currentC < 0)
-            {
-                currentC = maxColumns - 1;
-                currentR--;
-
-                if (currentR < 0)
-                {
-                    RepositionStack(true);
-                }
-
-            }
-
+            ResetGridPositions();
             yield return null;
+
         }
         //print("OUT");
     }
@@ -112,13 +88,13 @@ public class HayStack : Stacker
     {
         if (other.CompareTag("Hay"))
         {
-            Load(other);
+            LoadOnTractor(other);
         }
         if (other.CompareTag("Unload"))
         {
             unloading = true;
             //Debug.LogError("True");
-            StartCoroutine(Unload());
+            StartCoroutine(UnloadFromTruck());
         }
     }
     private void OnTriggerExit(Collider other)

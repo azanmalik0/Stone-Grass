@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,7 @@ public class AIWander : MonoBehaviour
     private Animator animator;
     private bool isWandering;
     private bool isIdleHeadTurn;
+    [SerializeField] Transform targetPosition;
 
     public float wanderRadius = 10f;
     public float wanderInterval = 5f;
@@ -28,6 +30,17 @@ public class AIWander : MonoBehaviour
         nextHeadTurnTime = Random.Range(minHeadTurnTime, maxHeadTurnTime);
 
         StartCoroutine(Wander());
+    }
+    private void OnEnable()
+    {
+        EggStack.OnTroughFull += GoToTargetPosition;
+        Timer.OnTimeOut += BacktoWandering;
+    }
+    private void OnDisable()
+    {
+        EggStack.OnTroughFull -= GoToTargetPosition;
+        Timer.OnTimeOut -= BacktoWandering;
+
     }
 
     private IEnumerator Wander()
@@ -92,5 +105,30 @@ public class AIWander : MonoBehaviour
         }
 
         animator.SetBool("Turn", isIdleHeadTurn);
+    }
+
+    public void GoToTargetPosition()
+    {
+        StopCoroutine(Wander());
+        animator.SetBool("IsWalking", true);
+        StartCoroutine(MoveToTarget());
+    }
+
+    private IEnumerator MoveToTarget()
+    {
+        agent.SetDestination(targetPosition.position);
+        yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance < 0.1f);
+        transform.eulerAngles = new(0, 90, 0);
+        animator.SetBool("IsEating", true);
+    }
+
+    void BacktoWandering()
+    {
+        Debug.LogError("BacktoWandering");
+        isWandering = false;
+        animator.SetBool("IsEating", false);
+        animator.SetBool("IsWalking", true);
+        StopCoroutine(MoveToTarget());
+        StartCoroutine(Wander());
     }
 }
