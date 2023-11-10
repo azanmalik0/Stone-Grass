@@ -33,12 +33,12 @@ public class AIWander : MonoBehaviour
     }
     private void OnEnable()
     {
-        EggStack.OnTroughFull += GoToTargetPosition;
+        TroughStack.OnTroughFull += GoToTargetPosition;
         Timer.OnTimeOut += BacktoWandering;
     }
     private void OnDisable()
     {
-        EggStack.OnTroughFull -= GoToTargetPosition;
+        TroughStack.OnTroughFull -= GoToTargetPosition;
         Timer.OnTimeOut -= BacktoWandering;
 
     }

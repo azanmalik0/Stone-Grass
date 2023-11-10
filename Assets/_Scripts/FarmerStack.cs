@@ -6,11 +6,19 @@ using UnityEngine;
 
 public class FarmerStack : Stacker
 {
+    public static FarmerStack Instance;
+    public float initialYOffset;
     bool IsLoading;
     float delay;
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         CalculateCellPositions();
+        initialYOffset = gridOffset.y;
+        print(initialYOffset);
     }
     private void OnTriggerStay(Collider other)
     {
@@ -47,6 +55,7 @@ public class FarmerStack : Stacker
         if (other.transform.childCount == 0)
         {
             IsLoading = false;
+            RefreshGrid(initialYOffset);
         }
         else if (other.transform.childCount > 0)
         {
@@ -56,17 +65,18 @@ public class FarmerStack : Stacker
             feedCell.SetParent(this.transform);
             feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => feedCell.localRotation = Quaternion.identity);
             delay += 0.0001f;
-            UpdateGridPositions();
-            other.GetComponent<HayLoft>().ResetGridPositions();
+            UpdateGridPositions(initialYOffset);
+            other.GetComponent<HayLoft>().ResetGridPositions(other.GetComponent<HayLoft>().initialYOffset);
             IsLoading = false;
         }
     }
 
-    void LoadProductOnFarmer(Collider other)
+    public void LoadProductOnFarmer(Collider other)
     {
         if (other.transform.childCount == 0)
         {
             IsLoading = false;
+            RefreshGrid(initialYOffset);
         }
         else if (other.transform.childCount > 0)
         {
@@ -76,10 +86,11 @@ public class FarmerStack : Stacker
             product.SetParent(this.transform);
             product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
             delay += 0.0001f;
-            UpdateGridPositions();
-            other.GetComponent<ProductStack>().ResetGridPositions();
+            UpdateGridPositions(initialYOffset);
+            other.GetComponent<ProductStack>().ResetGridPositions(other.GetComponent<ProductStack>().initialYOffset);
             IsLoading = false;
         }
     }
+
 
 }

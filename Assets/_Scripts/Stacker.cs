@@ -13,14 +13,20 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected int maxColumns;
     [SerializeField] protected float cellWidth = 1.0f;
     [SerializeField] protected float cellHeight = 1.0f;
-    [SerializeField] protected Vector3 gridOffset = Vector3.zero;
+    [SerializeField] protected Vector3 gridOffset;
+
+
+    private void Start()
+    {
+        CalculateCellPositions();
+    }
     public Vector3[,] cellPositions;
 
     public int currentR = 0;
 
     public int currentC = 0;
 
-    protected virtual void RepositionStack(bool Reverse)
+    protected virtual void RepositionStack(bool Reverse, float initial)
     {
         if (!Reverse)
         {
@@ -31,9 +37,13 @@ public abstract class Stacker : MonoBehaviour
         }
         else
         {
-            gridOffset.y -= 0.2f;
+            if (gridOffset.y > initial)
+                gridOffset.y -= 0.2f;
+            else
+                gridOffset.y -= initial;
             currentC = maxColumns - 1;
             currentR = maxRows - 1;
+
 
         }
         CalculateCellPositions();
@@ -73,7 +83,7 @@ public abstract class Stacker : MonoBehaviour
 
         Gizmos.matrix = oldGizmosMatrix;
     }
-    public void UpdateGridPositions()
+    public void UpdateGridPositions(float initial)
     {
         currentC++;
         if (currentC >= maxColumns)
@@ -83,12 +93,11 @@ public abstract class Stacker : MonoBehaviour
 
             if (currentR >= maxRows)
             {
-                Debug.LogError("StackComplete");
-                RepositionStack(false);
+                RepositionStack(false, initial);
             }
         }
     }
-    public void ResetGridPositions()
+    public void ResetGridPositions(float initial)
     {
         currentC--;
         if (currentC < 0)
@@ -99,9 +108,24 @@ public abstract class Stacker : MonoBehaviour
             if (currentR < 0)
             {
                 Debug.LogError("StackComplete");
-                RepositionStack(true);
+                RepositionStack(true, initial);
             }
         }
     }
+    public void RefreshGrid(float initial)
+    {
+        currentC = 0;
+        currentR = 0;
+        gridOffset.y = initial;
+        print(initial);
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).localPosition = cellPositions[currentC, currentR];
+            UpdateGridPositions(initial);
+
+
+        }
+    }
+
 
 }

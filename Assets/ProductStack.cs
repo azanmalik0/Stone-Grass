@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class ProductStack : Stacker
 {
+    public float initialYOffset;
     [SerializeField] GameObject hayParent;
     [SerializeField] GameObject eggPrefab;
     float delay;
@@ -13,6 +14,7 @@ public class ProductStack : Stacker
     private void Start()
     {
         CalculateCellPositions();
+        initialYOffset = gridOffset.y;
     }
 
     private void OnEnable()
@@ -35,8 +37,8 @@ public class ProductStack : Stacker
             GameObject egg = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
             feedCell.transform.SetParent(null);
             Destroy(feedCell);
-            int feedCollected = hayParent.GetComponent<EggStack>().feedCollected;
-            hayParent.GetComponent<EggStack>().feedCollectedText.text = feedCollected.ToString() + "/" + maxHayCapacity.ToString();
+            int feedCollected = hayParent.GetComponent<TroughStack>().feedCollected;
+            //hayParent.GetComponent<TroughStack>().feedCollectedText.text = feedCollected.ToString() + "/" + maxHayCapacity.ToString();
 
             LoadProductOnShelf(egg);
             GenerateProduct();
@@ -48,8 +50,8 @@ public class ProductStack : Stacker
         product.transform.SetParent(this.transform);
         product.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine);
         delay += 0.001f;
-        UpdateGridPositions();
-        hayParent.GetComponent<EggStack>().ResetGridPositions();
+        UpdateGridPositions(initialYOffset);
+        hayParent.GetComponent<TroughStack>().ResetGridPositions(hayParent.GetComponent<TroughStack>().initialYOffset);
     }
 
 

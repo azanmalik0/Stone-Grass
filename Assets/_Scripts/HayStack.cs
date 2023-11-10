@@ -21,7 +21,7 @@ public class HayStack : Stacker
     float delay = 0;
     bool unloading;
     //==============================================
-
+    public float initialYOffset;
     int haySold;
     [HideInInspector]
     int hayCollected;
@@ -34,6 +34,7 @@ public class HayStack : Stacker
     }
     private void Start()
     {
+        initialYOffset = gridOffset.y;
         CalculateCellPositions();
     }
 
@@ -53,7 +54,7 @@ public class HayStack : Stacker
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
-            UpdateGridPositions();
+            UpdateGridPositions(initialYOffset);
 
 
         }
@@ -78,7 +79,7 @@ public class HayStack : Stacker
             });
 
             delay += 0.000001f;
-            ResetGridPositions();
+            ResetGridPositions(initialYOffset);
             yield return null;
 
         }
