@@ -28,7 +28,7 @@ public class HayLoft : Stacker
     }
     private void Start()
     {
-        initialYOffset = gridOffset.y;
+        SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
     }
     void GetValue(int value)
@@ -71,7 +71,7 @@ public class HayLoft : Stacker
             hayProcessed++;
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
-            UpdateGridPositions(initialYOffset);
+            UpdateGridPositions();
 
         }
 

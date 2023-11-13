@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -17,8 +18,7 @@ public class FarmerStack : Stacker
     private void Start()
     {
         CalculateCellPositions();
-        initialYOffset = gridOffset.y;
-        print(initialYOffset);
+        SetGridYOffset(gridOffset.y);
     }
     private void OnTriggerStay(Collider other)
     {
@@ -33,7 +33,6 @@ public class FarmerStack : Stacker
         {
             if (!IsLoading)
             {
-                Debug.LogError("LS_ProductShelf");
                 LoadProductOnFarmer(other);
             }
         }
@@ -43,10 +42,12 @@ public class FarmerStack : Stacker
         if (other.CompareTag("HayLoft"))
         {
             IsLoading = false;
+            RefreshGrid();
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
             IsLoading = false;
+            RefreshGrid();
         }
     }
 
@@ -55,7 +56,7 @@ public class FarmerStack : Stacker
         if (other.transform.childCount == 0)
         {
             IsLoading = false;
-            RefreshGrid(initialYOffset);
+            RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -65,8 +66,8 @@ public class FarmerStack : Stacker
             feedCell.SetParent(this.transform);
             feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => feedCell.localRotation = Quaternion.identity);
             delay += 0.0001f;
-            UpdateGridPositions(initialYOffset);
-            other.GetComponent<HayLoft>().ResetGridPositions(other.GetComponent<HayLoft>().initialYOffset);
+            UpdateGridPositions();
+            other.GetComponent<HayLoft>().ResetGridPositions();
             IsLoading = false;
         }
     }
@@ -76,7 +77,7 @@ public class FarmerStack : Stacker
         if (other.transform.childCount == 0)
         {
             IsLoading = false;
-            RefreshGrid(initialYOffset);
+            RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -86,8 +87,8 @@ public class FarmerStack : Stacker
             product.SetParent(this.transform);
             product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
             delay += 0.0001f;
-            UpdateGridPositions(initialYOffset);
-            other.GetComponent<ProductStack>().ResetGridPositions(other.GetComponent<ProductStack>().initialYOffset);
+            UpdateGridPositions();
+            other.GetComponent<ProductStack>().ResetGridPositions();
             IsLoading = false;
         }
     }

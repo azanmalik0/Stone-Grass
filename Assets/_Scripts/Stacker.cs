@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using Sirenix.Reflection.Editor;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public abstract class Stacker : MonoBehaviour
@@ -15,19 +16,21 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected float cellWidth = 1.0f;
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset;
+    [HideInInspector] public float InitialYOffset;
+    public Vector3[,] cellPositions;
+    protected int currentR = 0;
+    protected int currentC = 0;
 
 
     private void Start()
     {
         CalculateCellPositions();
     }
-    public Vector3[,] cellPositions;
-
-    public int currentR = 0;
-
-    public int currentC = 0;
-
-    protected virtual void RepositionStack(bool Reverse, float initial)
+    protected void SetGridYOffset(float initial)
+    {
+        InitialYOffset = initial;
+    }
+    protected virtual void RepositionStack(bool Reverse)
     {
         if (!Reverse)
         {
@@ -38,10 +41,10 @@ public abstract class Stacker : MonoBehaviour
         }
         else
         {
-            if (gridOffset.y > initial)
+            if (gridOffset.y > InitialYOffset)
                 gridOffset.y -= 0.2f;
             else
-                gridOffset.y -= initial;
+                gridOffset.y -= InitialYOffset;
             currentC = maxColumns - 1;
             currentR = maxRows - 1;
 
@@ -84,7 +87,7 @@ public abstract class Stacker : MonoBehaviour
 
         Gizmos.matrix = oldGizmosMatrix;
     }
-    public void UpdateGridPositions(float initial)
+    public void UpdateGridPositions()
     {
         currentC++;
         if (currentC >= maxColumns)
@@ -94,11 +97,11 @@ public abstract class Stacker : MonoBehaviour
 
             if (currentR >= maxRows)
             {
-                RepositionStack(false, initial);
+                RepositionStack(false);
             }
         }
     }
-    public void ResetGridPositions(float initial)
+    public void ResetGridPositions()
     {
         currentC--;
         if (currentC < 0)
@@ -108,21 +111,19 @@ public abstract class Stacker : MonoBehaviour
 
             if (currentR < 0)
             {
-                Debug.LogError("StackComplete");
-                RepositionStack(true, initial);
+                RepositionStack(true);
             }
         }
     }
-    public void RefreshGrid(float initial)
+    public void RefreshGrid()
     {
         currentC = 0;
         currentR = 0;
-        gridOffset.y = initial;
-        print(initial);
+        gridOffset.y = InitialYOffset;
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.2f).SetEase(Ease.OutSine);
-            UpdateGridPositions(initial);
+            UpdateGridPositions();
 
 
         }

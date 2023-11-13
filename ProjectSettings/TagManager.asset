@@ -16,10 +16,14 @@ TagManager:
   - UpgradeZone
   - HayLoft
   - Farmer_Stack
-  - Henhouse
   - LS_ProductShelf
   - Crude
   - Egg
+  - MoneyStack
+  - EggStack
+  - MilkStack
+  - Milk
+  - Market
   layers:
   - Default
   - TransparentFX

@@ -7,5 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Cow Override
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: af2bf1146fc6d254aa2bb0f002e692d9, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 3e06fd5cf10e8e24ea97965701906978, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: eb20346ceaa3bbb4d928b344bbf9f835, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 37d3af1e39c02e0409f33acefc0070cb, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e80a477caaa0de14d99a816bc261819a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 0c24d6e31d0ff7a49b5810ba75322215, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 1751e3fae48ce2641ab0581dd13d9688, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 42b1b17391b6f6043b12021461f1031d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 491fb1dd500f65949a4152fb5f575d8b, type: 2}
