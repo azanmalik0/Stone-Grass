@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +10,15 @@ using UnityEngine.UI;
 public class TroughStack : Stacker
 {
     public static event Action OnTroughFull;
-    bool IsLoading;
+    [Title("References")]
+    [SerializeField] GameObject produceTimer;
+    [SerializeField] GameObject crudeCounter;
+    [SerializeField] Text feedCollectedText;
     public int feedCollected;
+    bool IsLoading;
     float delay;
-    public Text feedCollectedText;
-    [SerializeField] GameObject chickenTimer;
-    [SerializeField] GameObject feedCounter;
     public float initialYOffset;
+    int crudeCheckIndex = 1;
     private void Start()
     {
         initialYOffset = gridOffset.y;
@@ -29,9 +32,8 @@ public class TroughStack : Stacker
 
     private void Reset()
     {
-        //GetComponent<BoxCollider>().enabled = true;
-        chickenTimer.SetActive(false);
-        feedCounter.SetActive(true);
+        produceTimer.SetActive(false);
+        crudeCounter.SetActive(true);
     }
 
     private void OnDisable()
@@ -59,16 +61,14 @@ public class TroughStack : Stacker
             IsLoading = false;
         }
     }
-    public int n = 1;
     private void LoadFeedOnTrough(Collider other)
     {
         if (transform.childCount >= maxHayCapacity)
         {
             Debug.LogError("Max Capacity Reached");
-            //GetComponent<BoxCollider>().enabled = false;
             OnTroughFull?.Invoke();
-            chickenTimer.SetActive(true);
-            feedCounter.SetActive(false);
+            produceTimer.SetActive(true);
+            crudeCounter.SetActive(false);
 
 
         }
@@ -81,13 +81,13 @@ public class TroughStack : Stacker
             }
             else if (other.transform.childCount > 0)
             {
-                if (n <= other.transform.childCount)
+                if (crudeCheckIndex <= other.transform.childCount)
                 {
 
-                    if (other.transform.GetChild(other.transform.childCount - n).CompareTag("Crude"))
+                    if (other.transform.GetChild(other.transform.childCount - crudeCheckIndex).CompareTag("Crude"))
                     {
                         IsLoading = true;
-                        Transform feedCell = other.transform.GetChild(other.transform.childCount - n);
+                        Transform feedCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                         DOTween.Complete(feedCell);
                         feedCell.SetParent(this.transform);
                         feedCollectedText.text = transform.childCount.ToString() + "/" + maxHayCapacity.ToString();
@@ -99,14 +99,14 @@ public class TroughStack : Stacker
                     }
                     else
                     {
-                        n++;
+                        crudeCheckIndex++;
                         IsLoading = false;
 
                     }
                 }
                 else
                 {
-                    n=1;
+                    crudeCheckIndex = 1;
                     IsLoading = false;
                 }
             }

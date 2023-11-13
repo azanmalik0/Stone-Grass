@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using Sirenix.Reflection.Editor;
 using System.Collections;
@@ -120,7 +121,7 @@ public abstract class Stacker : MonoBehaviour
         print(initial);
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).localPosition = cellPositions[currentC, currentR];
+            transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.2f).SetEase(Ease.OutSine);
             UpdateGridPositions(initial);
 
 

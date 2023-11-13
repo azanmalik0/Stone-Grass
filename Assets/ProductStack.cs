@@ -8,7 +8,7 @@ public class ProductStack : Stacker
 {
     public float initialYOffset;
     [SerializeField] GameObject hayParent;
-    [SerializeField] GameObject eggPrefab;
+    [SerializeField] GameObject productPrefab;
     float delay;
     public int products;
     private void Start()
@@ -34,13 +34,10 @@ public class ProductStack : Stacker
         {
 
             GameObject feedCell = hayParent.transform.GetChild(hayParent.transform.childCount - 1).gameObject;
-            GameObject egg = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+            GameObject product = Instantiate(productPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
             feedCell.transform.SetParent(null);
             Destroy(feedCell);
-            int feedCollected = hayParent.GetComponent<TroughStack>().feedCollected;
-            //hayParent.GetComponent<TroughStack>().feedCollectedText.text = feedCollected.ToString() + "/" + maxHayCapacity.ToString();
-
-            LoadProductOnShelf(egg);
+            LoadProductOnShelf(product);
             GenerateProduct();
 
         }
