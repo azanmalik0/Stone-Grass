@@ -10,6 +10,7 @@ public class FarmerStack : Stacker
 {
     public static FarmerStack Instance;
     public float initialYOffset;
+    [SerializeField] Transform coinPos;
     bool IsLoading;
     float delay;
     private void Awake()
@@ -100,7 +101,7 @@ public class FarmerStack : Stacker
             Transform money = other.transform.GetChild(other.transform.childCount - 1);
             DOTween.Complete(money);
             money.SetParent(this.transform);
-            money.DOLocalMove(cellPositions[currentC, currentR], 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => Destroy(money.gameObject));
+            money.DOLocalMove(coinPos.position, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => Destroy(money.gameObject));
             delay += 0.01f;
             other.GetComponent<MoneyStack>().ResetGridPositions();
             IsLoading = false;
