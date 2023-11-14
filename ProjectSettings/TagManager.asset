@@ -24,6 +24,8 @@ TagManager:
   - MilkStack
   - Milk
   - Market
+  - Buyer
+  - Queue
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -36,7 +37,16 @@ public class FarmerStack : Stacker
                 LoadProductOnFarmer(other);
             }
         }
+
+        if (other.CompareTag("Market"))
+        {
+            if (!IsLoading)
+            {
+                GetMoneyFromCounter(other);
+            }
+        }
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("HayLoft"))
@@ -48,6 +58,10 @@ public class FarmerStack : Stacker
         {
             IsLoading = false;
             RefreshGrid();
+        }
+        if (other.CompareTag("Market"))
+        {
+            IsLoading = false;
         }
     }
 
@@ -68,6 +82,27 @@ public class FarmerStack : Stacker
             delay += 0.0001f;
             UpdateGridPositions();
             other.GetComponent<HayLoft>().ResetGridPositions();
+            IsLoading = false;
+        }
+    }
+    private void GetMoneyFromCounter(Collider other)
+    {
+
+        if (other.transform.childCount == 0)
+        {
+            IsLoading = false;
+            delay = 0;
+            RefreshGrid();
+        }
+        else if (other.transform.childCount > 0)
+        {
+            IsLoading = true;
+            Transform money = other.transform.GetChild(other.transform.childCount - 1);
+            DOTween.Complete(money);
+            money.SetParent(this.transform);
+            money.DOLocalMove(cellPositions[currentC, currentR], 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => Destroy(money.gameObject));
+            delay += 0.01f;
+            other.GetComponent<MoneyStack>().ResetGridPositions();
             IsLoading = false;
         }
     }

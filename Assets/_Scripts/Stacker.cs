@@ -18,8 +18,8 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected Vector3 gridOffset;
     [HideInInspector] public float InitialYOffset;
     public Vector3[,] cellPositions;
-    protected int currentR = 0;
-    protected int currentC = 0;
+    public int currentR = 0;
+    public int currentC = 0;
 
 
     private void Start()
