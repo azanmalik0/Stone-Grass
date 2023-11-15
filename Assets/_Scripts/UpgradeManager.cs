@@ -7,6 +7,9 @@ using UnityEngine.UI;
 
 public class UpgradeManager : MonoBehaviour
 {
+    [Title("Preferences")]
+    public int carCapacityIncrement;
+    [Title("UI References")]
     [SerializeField] Image UpgradePanel;
     [Title("Saw")]
     [SerializeField] GameObject[] sawBladeUpgrades;
@@ -18,14 +21,14 @@ public class UpgradeManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.OnGameStateChanged += OpenMenu;
+        GameManager.OnGameStateChanged += OpenTruckUpgradeMenu;
     }
 
     public void OnButtonClick(string button)
     {
         if (button == "Exit")
         {
-            CloseMenu();
+            CloseTruckUpgradeMenu();
         }
         if (button == "AddSawBlades")
         {
@@ -39,15 +42,15 @@ public class UpgradeManager : MonoBehaviour
         }
         if (button == "IncreaseCapacity")
         {
-            IncreaseCarCapacity();
+            IncreaseCarCapacity(carCapacityIncrement);
 
         }
 
     }
 
-    void IncreaseCarCapacity()
+    void IncreaseCarCapacity(int capacity)
     {
-        HayStack.instance.maxHayCapacity += 50;
+        HayStack.instance.maxHayCapacity += capacity;
 
     }
     void AddWheels()
@@ -78,12 +81,12 @@ public class UpgradeManager : MonoBehaviour
         }
 
     }
-    void OpenMenu(GameState state)
+    void OpenTruckUpgradeMenu(GameState state)
     {
         if (state == GameState.Upgrading)
             UpgradePanel.gameObject.SetActive(true);
     }
-    void CloseMenu()
+    void CloseTruckUpgradeMenu()
     {
         UpgradePanel.gameObject.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.InGame);

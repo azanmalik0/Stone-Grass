@@ -17,16 +17,8 @@ public class MovementController : MonoBehaviour
     GameState CurrentState;
 
 
-    [SerializeField] Transform upgradeZonePosition;
-    private void OnEnable()
-    {
-        GameManager.OnGameStateChanged += ChangeAvatarPosition;
-    }
-    private void OnDisable()
-    {
-        GameManager.OnGameStateChanged -= ChangeAvatarPosition;
-
-    }
+   
+   
     void Start()
     {
         Init();
@@ -75,15 +67,5 @@ public class MovementController : MonoBehaviour
             }
         }
     }
-    void ChangeAvatarPosition(GameState state)
-    {
-        GameState CurrentState = state;
-        if (CurrentState == GameState.Upgrading)
-        {
-            transform.DOLocalMove(upgradeZonePosition.localPosition, 0.5f).SetEase(Ease.Linear);
-            transform.DOLocalRotate(upgradeZonePosition.localEulerAngles, 0.5f).SetEase(Ease.Linear);
-        }
-
-
-    }
+   
 }

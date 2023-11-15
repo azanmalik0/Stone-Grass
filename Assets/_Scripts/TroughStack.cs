@@ -13,7 +13,7 @@ public class TroughStack : Stacker
     [Title("References")]
     [SerializeField] GameObject produceTimer;
     [SerializeField] GameObject crudeCounter;
-    [SerializeField] Text feedCollectedText;
+    [SerializeField] Text crudeCapacityText;
     public int feedCollected;
     bool IsLoading;
     float delay;
@@ -23,7 +23,7 @@ public class TroughStack : Stacker
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
-        feedCollectedText.text = $"{transform.childCount}/{maxHayCapacity}";
+        crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
     }
     private void OnEnable()
     {
@@ -90,7 +90,7 @@ public class TroughStack : Stacker
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                     DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
-                    feedCollectedText.text = $"{transform.childCount}/{maxHayCapacity}";
+                    crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
                     delay += 0.0001f;
                     UpdateGridPositions();

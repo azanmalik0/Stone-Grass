@@ -26,6 +26,9 @@ TagManager:
   - Market
   - Buyer
   - Queue
+  - Water
+  - Shop Zone
+  - FarmUpgradeZone
   layers:
   - Default
   - TransparentFX

@@ -8,8 +8,9 @@ public class CameraManager : MonoBehaviour
 {
     [SerializeField] Transform followTarget;
     [SerializeField] Vector3 upgradePosition;
+    [SerializeField] Vector3 shopPosition;
     [SerializeField] Vector3 offset;
-    bool IsUpgrading;
+    bool IsInMenu;
     GameManager GM;
 
     private void Start()
@@ -20,17 +21,17 @@ public class CameraManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += SetTarget;
-        GameManager.OnGameStateChanged += ChangeCameraToMenuPosition;
+        GameManager.OnGameStateChanged += ChangeCameraToNewPosition;
     }
     private void OnDisable()
     {
         GameManager.OnGameStateChanged -= SetTarget;
-        GameManager.OnGameStateChanged -= ChangeCameraToMenuPosition;
+        GameManager.OnGameStateChanged -= ChangeCameraToNewPosition;
 
     }
     private void LateUpdate()
     {
-        if (!IsUpgrading)
+        if (!IsInMenu)
             FollowPlayer(followTarget);
     }
     void SetTarget(GameState state)
@@ -42,13 +43,18 @@ public class CameraManager : MonoBehaviour
             followTarget = GM.farmerObject.transform;
 
     }
-    void ChangeCameraToMenuPosition(GameState state)
+    void ChangeCameraToNewPosition(GameState state)
     {
         GameState CurrentState = state;
         if (CurrentState == GameState.Upgrading)
         {
-            IsUpgrading = true;
+            IsInMenu = true;
             transform.DOLocalMove(upgradePosition, 0.5f).SetEase(Ease.Linear);
+        }
+        if (CurrentState == GameState.InShop)
+        {
+            IsInMenu = true;
+            transform.DOLocalMove(shopPosition, 0.5f).SetEase(Ease.Linear);
         }
         if (CurrentState == GameState.InGame)
         {
@@ -56,13 +62,14 @@ public class CameraManager : MonoBehaviour
         }
 
 
+
     }
 
     IEnumerator ChangeCameraToGamePosition()
     {
-        Tween t = transform.DOMove(followTarget.position + offset, 1f).SetEase(Ease.Linear);
+        Tween t = transform.DOMove(followTarget.position + offset, 0.5f).SetEase(Ease.Linear);
         yield return new WaitWhile(() => t.IsPlaying());
-        IsUpgrading = false;
+        IsInMenu = false;
     }
     private void FollowPlayer(Transform target)
     {

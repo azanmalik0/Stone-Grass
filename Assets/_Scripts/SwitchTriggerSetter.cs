@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SwitchTriggerSetter : MonoBehaviour
 {
-   [SerializeField] GameObject tractorTrigger;
-   [SerializeField] GameObject farmerTrigger;
+    [SerializeField] GameObject truckTrigger;
+    [SerializeField] GameObject farmerTrigger;
+
 
     private void OnEnable()
     {
@@ -23,12 +24,12 @@ public class SwitchTriggerSetter : MonoBehaviour
         if (CurrentState == GameState.Farmer)
         {
             farmerTrigger.SetActive(false);
-            tractorTrigger.SetActive(true);
+            truckTrigger.SetActive(true);
         }
         else if (CurrentState == GameState.Tractor)
         {
             farmerTrigger.SetActive(true);
-            tractorTrigger.SetActive(false);
+            truckTrigger.SetActive(false);
 
         }
 

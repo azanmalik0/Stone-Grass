@@ -46,6 +46,6 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(NewState);
     }
 
-   
+
 }
-public enum GameState { Tractor, Farmer, Upgrading, InGame }
+public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade }
