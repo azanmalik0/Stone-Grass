@@ -29,6 +29,7 @@ TagManager:
   - Water
   - Shop Zone
   - FarmUpgradeZone
+  - LevelZone
   layers:
   - Default
   - TransparentFX

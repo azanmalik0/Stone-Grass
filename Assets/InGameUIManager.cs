@@ -8,9 +8,17 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField] Image settingsPanel;
     public void OnButtonClick(string button)
     {
-        if (button == "Settings")
+        if (button == "OpenSettings")
         {
             settingsPanel.gameObject.SetActive(true);
+        }
+        if (button == "ExitSettings")
+        {
+            settingsPanel.gameObject.SetActive(true);
+        }
+        if (button == "PrivacyPolicy")
+        {
+            //=================================
         }
 
     }

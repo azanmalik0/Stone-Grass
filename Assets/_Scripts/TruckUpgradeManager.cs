@@ -31,6 +31,7 @@ public class TruckUpgradeManager : MonoBehaviour
     [TabGroup("Saw Menu")] public Slider rotationSpeed_Slider;
 
     [Title("Preferences")]
+
     [TabGroup("Saw Menu")] public int SawBlades_CR;
     [TabGroup("Saw Menu")] public int SawBlades_CI;
     [TabGroup("Saw Menu")] public int rotationSpeed_CR;
@@ -95,7 +96,6 @@ public class TruckUpgradeManager : MonoBehaviour
         carCapacity_Slider.value = 0;
 
     }
-
     public void OnButtonClick(string button)
     {
         if (button == "Exit")
@@ -124,7 +124,6 @@ public class TruckUpgradeManager : MonoBehaviour
         }
 
     }
-
     private void IncreaseRotationSpeed(int speed)
     {
         if (CurrencyManager.CheckRequiredCoins(rotationSpeed_CR))
@@ -141,7 +140,6 @@ public class TruckUpgradeManager : MonoBehaviour
         }
 
     }
-
     void IncreaseCarCapacity(int increment)
     {
         if (CurrencyManager.CheckRequiredCoins(maxCarCapacity))

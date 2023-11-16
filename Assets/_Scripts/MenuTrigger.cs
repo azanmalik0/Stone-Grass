@@ -19,5 +19,9 @@ public class MenuTrigger : MonoBehaviour
         {
             GameManager.Instance.UpdateGameState(GameState.InFarmUpgrade);
         }
+        if (other.CompareTag("LevelZone") && this.CompareTag("Farmer_Stack"))
+        {
+            GameManager.Instance.UpdateGameState(GameState.InLevelMenu);
+        }
     }
 }

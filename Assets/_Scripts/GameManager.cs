@@ -48,4 +48,4 @@ public class GameManager : MonoBehaviour
 
 
 }
-public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade }
+public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade,InLevelMenu }

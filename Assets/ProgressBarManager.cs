@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,14 @@ using UnityEngine.UI;
 
 public class ProgressBarManager : MonoBehaviour
 {
+    public static event Action OnFirstStarUnlock;
+    public static event Action OnSecondStarUnlock;
     public Slider progresSlider;
     public GameObject unlockedStar1;
     public GameObject unlockedStar2;
     public int totalCrops;
     int crops;
+    bool UnlockOnce;
 
 
     private void OnEnable()
@@ -33,12 +37,24 @@ public class ProgressBarManager : MonoBehaviour
     {
         if (progresSlider.value >= 0.5f)
         {
-            unlockedStar1.SetActive(true);
+            if (!UnlockOnce)
+            {
+                unlockedStar1.SetActive(true);
+                OnFirstStarUnlock?.Invoke();
+                UnlockOnce = true;
+
+            }
 
         }
         if (progresSlider.value >= 1)
         {
-            unlockedStar2.SetActive(true);
+            if (!UnlockOnce)
+            {
+                unlockedStar2.SetActive(true);
+                OnSecondStarUnlock?.Invoke();
+                UnlockOnce = true;
+
+            }
 
         }
 
