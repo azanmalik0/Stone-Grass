@@ -9,7 +9,10 @@ using UnityEngine.UI;
 
 public class TroughStack : Stacker
 {
+
     public static event Action OnTroughFull;
+    public enum TroughType { Chicken, Cow }
+    public TroughType troughType;
     [Title("References")]
     [SerializeField] GameObject produceTimer;
     [SerializeField] GameObject crudeCounter;
@@ -23,16 +26,35 @@ public class TroughStack : Stacker
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
-        crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+        DisplayCrudeCounter();
     }
+
+    private void DisplayCrudeCounter()
+    {
+        if (troughType == TroughType.Chicken)
+        {
+            maxHayCapacity = FarmUpgradeManager.Instance.maxChickenTrayCapacity;
+            crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+
+        }
+        if (troughType == TroughType.Cow)
+        {
+
+            maxHayCapacity = FarmUpgradeManager.Instance.maxCowTrayCapacity;
+            crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+        }
+    }
+
     private void OnEnable()
     {
         Timer.OnTimeOut += Reset;
+        FarmUpgradeManager.OnIncreasingTrayCapcaity += DisplayCrudeCounter;
     }
 
     private void OnDisable()
     {
         Timer.OnTimeOut -= Reset;
+        FarmUpgradeManager.OnIncreasingTrayCapcaity -= DisplayCrudeCounter;
 
     }
     private void Reset()
@@ -90,7 +112,7 @@ public class TroughStack : Stacker
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                     DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
-                    crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+                    DisplayCrudeCounter();
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
                     delay += 0.0001f;
                     UpdateGridPositions();

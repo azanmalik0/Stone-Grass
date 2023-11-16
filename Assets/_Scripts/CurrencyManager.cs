@@ -7,7 +7,7 @@ public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance;
     [SerializeField] TextMeshProUGUI coinText;
-    int coins;
+    static int coins;
 
     public int Coins
     {
@@ -24,6 +24,7 @@ public class CurrencyManager : MonoBehaviour
     private void OnEnable()
     {
         HayStack.OnSellingHarvest += RecieveCoins;
+        FarmUpgradeManager.OnBuyingUpgrade += DeductCoins;
     }
     private void Awake()
     {
@@ -32,7 +33,23 @@ public class CurrencyManager : MonoBehaviour
 
     void RecieveCoins(int value)
     {
-        coinText.text = value.ToString();
+        coins = value;
+        coinText.text = coins.ToString();
 
+    }
+    public static bool CheckRequiredCoins(int required)
+    {
+        if (coins >= required)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    void DeductCoins(int value)
+    {
+        coins -= value;
+        coinText.text = coins.ToString();
     }
 }
