@@ -16,7 +16,7 @@ public class TroughStack : Stacker
     [Title("References")]
     [SerializeField] GameObject produceTimer;
     [SerializeField] GameObject crudeCounter;
-    [SerializeField] Text crudeCapacityText;
+    [SerializeField] Text crudeTroughCapacityText;
     public int feedCollected;
     bool IsLoading;
     float delay;
@@ -26,35 +26,35 @@ public class TroughStack : Stacker
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
-        DisplayCrudeCounter();
+        DisplayCrudeTroughCounter();
     }
 
-    private void DisplayCrudeCounter()
+    private void DisplayCrudeTroughCounter()
     {
         if (troughType == TroughType.Chicken)
         {
             maxHayCapacity = FarmUpgradeManager.Instance.maxChickenTrayCapacity;
-            crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+            crudeTroughCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
 
         }
         if (troughType == TroughType.Cow)
         {
 
             maxHayCapacity = FarmUpgradeManager.Instance.maxCowTrayCapacity;
-            crudeCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+            crudeTroughCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
         }
     }
 
     private void OnEnable()
     {
         Timer.OnTimeOut += Reset;
-        FarmUpgradeManager.OnIncreasingTrayCapcaity += DisplayCrudeCounter;
+        FarmUpgradeManager.OnIncreasingTrayCapcaity += DisplayCrudeTroughCounter;
     }
 
     private void OnDisable()
     {
         Timer.OnTimeOut -= Reset;
-        FarmUpgradeManager.OnIncreasingTrayCapcaity -= DisplayCrudeCounter;
+        FarmUpgradeManager.OnIncreasingTrayCapcaity -= DisplayCrudeTroughCounter;
 
     }
     private void Reset()
@@ -112,7 +112,7 @@ public class TroughStack : Stacker
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                     DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
-                    DisplayCrudeCounter();
+                    DisplayCrudeTroughCounter();
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
                     delay += 0.0001f;
                     UpdateGridPositions();

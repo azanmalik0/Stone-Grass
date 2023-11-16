@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FarmerStack : Stacker
 {
@@ -13,14 +14,29 @@ public class FarmerStack : Stacker
     [SerializeField] Transform coinPos;
     bool IsLoading;
     float delay;
+    [SerializeField] Text farmerCapacityFullText;
     private void Awake()
     {
         Instance = this;
+    }
+    private void OnEnable()
+    {
+        FarmUpgradeManager.OnIncreasingFarmerCapcaity += UpdateMaxFarmerCapacity;
+    }
+    private void OnDisable()
+    {
+        FarmUpgradeManager.OnIncreasingFarmerCapcaity -= UpdateMaxFarmerCapacity;
+
     }
     private void Start()
     {
         CalculateCellPositions();
         SetGridYOffset(gridOffset.y);
+        UpdateMaxFarmerCapacity();
+    }
+    private void UpdateMaxFarmerCapacity()
+    {
+        maxHayCapacity = FarmUpgradeManager.Instance.maxFarmerCapacity;
     }
     private void OnTriggerStay(Collider other)
     {
@@ -68,7 +84,14 @@ public class FarmerStack : Stacker
 
     void LoadFeedOnFarmer(Collider other)
     {
-        if (other.transform.childCount == 0)
+        if (transform.childCount > maxHayCapacity)
+        {
+            RefreshGrid();
+            farmerCapacityFullText.text = "MAX";
+            //Debug.LogError("MaxCapacityReached");
+
+        }
+        else if (other.transform.childCount == 0)
         {
             IsLoading = false;
             RefreshGrid();
@@ -110,6 +133,14 @@ public class FarmerStack : Stacker
 
     public void LoadProductOnFarmer(Collider other)
     {
+        if (transform.childCount > maxHayCapacity)
+        {
+
+            RefreshGrid();
+            farmerCapacityFullText.text = "MAX";
+            //Debug.LogError("MaxCapacityReached");
+
+        }
         if (other.transform.childCount == 0)
         {
             IsLoading = false;

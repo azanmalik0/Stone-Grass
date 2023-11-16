@@ -32,10 +32,25 @@ public class HayStack : Stacker
     {
         instance = this;
     }
+    private void OnEnable()
+    {
+        TruckUpgradeManager.OnIncreasingCarCapacity += UpdateMaxCarCapacity;
+    }
+    private void OnDisable()
+    {
+        TruckUpgradeManager.OnIncreasingCarCapacity -= UpdateMaxCarCapacity;
+
+    }
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
+        UpdateMaxCarCapacity();
+    }
+    private void UpdateMaxCarCapacity()
+    {
+        maxHayCapacity = TruckUpgradeManager.Instance.maxCarCapacity;
+        CapacityBar.Instance.UpdateMaxCapacityUI();
     }
 
     void LoadOnTractor(Collider hay)

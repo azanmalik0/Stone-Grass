@@ -9,12 +9,15 @@ public class FarmUpgradeManager : MonoBehaviour
 {
     public static FarmUpgradeManager Instance;
     public static event Action OnIncreasingTrayCapcaity;
+    public static event Action OnIncreasingFarmerCapcaity;
+    public static event Action OnIncreasingStorageCapcaity;
     public static event Action<int> OnBuyingUpgrade;
     //====================================================
     [SerializeField] Image farmUpgradePanel;
+    //====================================================
     [TabGroup("Collections")][SerializeField] GameObject[] chickens;
-    int currentChickens = 0;
     [TabGroup("Collections")][SerializeField] GameObject[] cows;
+    int currentChickens = 0;
     int currentCows = 0;
     //====================================================
     [Title("Text References")]
@@ -24,7 +27,7 @@ public class FarmUpgradeManager : MonoBehaviour
     [TabGroup("Animals Menu")] public Text cowTray_CT;
     [TabGroup("Animals Menu")] public Text cowNumbers_CT;
 
-    [Title("Filler Image References")]
+    [Title("Slider References")]
     [TabGroup("Animals Menu")] public Slider cowNumbers_Slider;
     [TabGroup("Animals Menu")] public Slider chickenNumbers_Slider;
     [TabGroup("Animals Menu")] public Slider cowTray_Slider;
@@ -46,7 +49,28 @@ public class FarmUpgradeManager : MonoBehaviour
     [TabGroup("Animals Menu")] public int incrementCowTrayCapacity;
     [TabGroup("Animals Menu")] public int incrementChickenTrayCapacity;
     //=========================================================
-    [TabGroup("Capacity Menu")]
+    [Title("Text References")]
+
+    [TabGroup("Capacity Menu")] public Text storageCapacity_CT;
+    [TabGroup("Capacity Menu")] public Text farmerCapacity_CT;
+
+    [Title("Slider References")]
+
+    [TabGroup("Capacity Menu")] public Slider storageCapacity_Slider;
+    [TabGroup("Capacity Menu")] public Slider farmerCapacity_Slider;
+
+    [Title("Preferences")]
+    [TabGroup("Capacity Menu")] public int incrementFarmerCapacity;
+    [TabGroup("Capacity Menu")] public int incrementStorageCapacity;
+    [TabGroup("Capacity Menu")] public int maxStorageCapacity;
+    [TabGroup("Capacity Menu")] public int maxStorageUpgrade;
+    [TabGroup("Capacity Menu")] public int maxStorageCapacity_CR;
+    [TabGroup("Capacity Menu")] public int maxStorageCapacity_CI;
+    [TabGroup("Capacity Menu")] public int maxFarmerCapacity;
+    [TabGroup("Capacity Menu")] public int maxFarmerUpgrade;
+    [TabGroup("Capacity Menu")] public int maxFarmerCapacity_CR;
+    [TabGroup("Capacity Menu")] public int maxFarmerCapacity_CI;
+
 
     private void Awake()
     {
@@ -55,10 +79,10 @@ public class FarmUpgradeManager : MonoBehaviour
     }
     private void Start()
     {
-        Init();
+        SetDefaultValues();
     }
 
-    private void Init()
+    private void SetDefaultValues()
     {
         cowNumbers_CT.text = cowNumbers_CR.ToString();
         chickenNumbers_CT.text = chickenNumbers_CR.ToString();
@@ -75,6 +99,18 @@ public class FarmUpgradeManager : MonoBehaviour
         chickenTray_Slider.maxValue = maxChickenTrayUpgrade;
         chickenTray_Slider.minValue = maxChickenTrayCapacity;
         chickenTray_Slider.value = 0;
+        //=========================================
+        storageCapacity_CT.text = maxStorageCapacity_CR.ToString();
+        farmerCapacity_CT.text = maxFarmerCapacity_CR.ToString();
+        //=========================================
+        storageCapacity_Slider.maxValue = maxStorageUpgrade;
+        storageCapacity_Slider.minValue = maxStorageCapacity;
+        storageCapacity_Slider.value = 0;
+        farmerCapacity_Slider.maxValue = maxFarmerUpgrade;
+        farmerCapacity_Slider.minValue = maxFarmerCapacity;
+        farmerCapacity_Slider.value = 0;
+
+
 
     }
 
@@ -103,6 +139,46 @@ public class FarmUpgradeManager : MonoBehaviour
         if (button == "CowTray")
         {
             IncreaseCowTrayCapacity(incrementCowTrayCapacity);
+        }
+        if (button == "IncreaseStorageCapacity")
+        {
+            IncreaseStorageCapacity(incrementStorageCapacity);
+        }
+        if (button == "IncreaseFarmerCapacity")
+        {
+            IncreaseFarmerCapacity(incrementFarmerCapacity);
+        }
+    }
+
+    private void IncreaseStorageCapacity(int increment)
+    {
+        if (CurrencyManager.CheckRequiredCoins(maxStorageCapacity))
+        {
+            if (maxStorageCapacity < maxStorageUpgrade)
+            {
+                maxStorageCapacity += increment;
+                OnBuyingUpgrade?.Invoke(maxStorageCapacity_CR);
+                maxStorageCapacity_CR += maxStorageCapacity_CI;
+                storageCapacity_CT.text = maxStorageCapacity_CR.ToString();
+                storageCapacity_Slider.value = maxStorageCapacity;
+                OnIncreasingStorageCapcaity?.Invoke();
+            }
+        }
+    }
+    private void IncreaseFarmerCapacity(int increment)
+    {
+        if (CurrencyManager.CheckRequiredCoins(maxFarmerCapacity))
+        {
+
+            if (maxFarmerCapacity < maxFarmerUpgrade)
+            {
+                maxFarmerCapacity += increment;
+                OnBuyingUpgrade?.Invoke(maxFarmerCapacity_CR);
+                maxFarmerCapacity_CR += maxFarmerCapacity_CI;
+                farmerCapacity_CT.text = maxFarmerCapacity_CR.ToString();
+                farmerCapacity_Slider.value = maxFarmerCapacity;
+                OnIncreasingFarmerCapcaity?.Invoke();
+            }
         }
     }
 

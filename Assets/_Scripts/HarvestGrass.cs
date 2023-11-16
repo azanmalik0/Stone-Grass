@@ -6,11 +6,11 @@ using UnityEngine;
 
 public class HarvestGrass : MonoBehaviour
 {
-
+    public static event Action OnCropHarvest;
     [SerializeField] GameObject hayCellPrefab;
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
-    int grassCut;
+    public int grassCut;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -24,6 +24,7 @@ public class HarvestGrass : MonoBehaviour
     private void CutGrass(Collider other)
     {
         grassCut++;
+        OnCropHarvest?.Invoke();
         other.gameObject.SetActive(false);
         if (grassCut >= requiredGrass)
         {

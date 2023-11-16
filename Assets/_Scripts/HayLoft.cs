@@ -1,8 +1,10 @@
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HayLoft : Stacker
 {
@@ -16,21 +18,32 @@ public class HayLoft : Stacker
     int collected = 0;
     bool IsGenerating;
     int hayProcessed;
+    [SerializeField] Text crudeStorageCapacityText;
 
     private void OnEnable()
     {
         HayStack.OnSellingHarvest += GetValue;
+        FarmUpgradeManager.OnIncreasingStorageCapcaity += DisplayCrudeStorageCounter;
     }
     private void OnDisable()
     {
         HayStack.OnSellingHarvest -= GetValue;
+        FarmUpgradeManager.OnIncreasingStorageCapcaity -= DisplayCrudeStorageCounter;
 
     }
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
+        DisplayCrudeStorageCounter();
     }
+
+    private void DisplayCrudeStorageCounter()
+    {
+        maxHayCapacity = FarmUpgradeManager.Instance.maxStorageCapacity;
+        crudeStorageCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+    }
+
     void GetValue(int value)
     {
         collected++;
@@ -61,7 +74,7 @@ public class HayLoft : Stacker
     }
     void LoadOnLoftPlatform(Transform hay)
     {
-        if (hayProcessed >= maxHayCapacity)
+        if (transform.childCount > maxHayCapacity)
         {
             //Debug.LogError("MaxCapacityReached");
 
@@ -69,6 +82,7 @@ public class HayLoft : Stacker
         else
         {
             hayProcessed++;
+            DisplayCrudeStorageCounter();
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
             UpdateGridPositions();

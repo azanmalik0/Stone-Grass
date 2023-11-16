@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance;
-    [SerializeField] TextMeshProUGUI coinText;
-    static int coins;
+    [SerializeField] Text coinText;
+    public static int coins;
 
     public int Coins
     {
