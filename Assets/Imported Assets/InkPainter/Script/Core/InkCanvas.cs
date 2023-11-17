@@ -364,12 +364,27 @@ namespace Es.InkPainter
         {
             foreach (var p in paintSet)
             {
-                if (p.material.HasProperty(p.mainTexturePropertyID))
-                    p.mainTexture = p.material.GetTexture(p.mainTexturePropertyID);
-                if (p.material.HasProperty(p.normalTexturePropertyID))
-                    p.normalTexture = p.material.GetTexture(p.normalTexturePropertyID);
-                if (p.material.HasProperty(p.heightTexturePropertyID))
-                    p.heightTexture = p.material.GetTexture(p.heightTexturePropertyID);
+                if (p.material.name != "Default-Material (Instance)")
+                {
+                    if (p.material.HasProperty(p.mainTexturePropertyID))
+                    {
+                        var loadedTexture = Resources.Load<Texture2D>("hasnat");
+                        if (loadedTexture != null)
+                        {
+                            p.mainTexture = loadedTexture;
+                        }
+                        else
+                        {
+                            p.mainTexture = p.material.GetTexture(p.mainTexturePropertyID);
+                        }
+
+                    }
+                    if (p.material.HasProperty(p.normalTexturePropertyID))
+                        p.normalTexture = p.material.GetTexture(p.normalTexturePropertyID);
+                    if (p.material.HasProperty(p.heightTexturePropertyID))
+                        p.heightTexture = p.material.GetTexture(p.heightTexturePropertyID);
+
+                }
             }
         }
 

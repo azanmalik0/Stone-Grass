@@ -137,7 +137,7 @@ public class TruckUpgradeManager : MonoBehaviour
             rotationSpeed_CR += rotationSpeed_CI;
             rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
             rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
-            //incrementRotationSpeed += incrementRotationSpeed;
+            incrementRotationSpeed += incrementRotationSpeed;
         }
         // }
 

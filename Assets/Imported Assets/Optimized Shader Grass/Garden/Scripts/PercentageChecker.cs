@@ -1,6 +1,6 @@
 
 using UnityEngine;
-
+using System.IO;
 using UnityEngine.UI;
 
 namespace PT.Garden
@@ -81,7 +81,36 @@ namespace PT.Garden
                 Debug.LogError("Win");
             }
         }
+        private void OnDisable()
+        {
+            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat"+1+ ".png");
+        }
+        private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
+        {
+            // Create a temporary RenderTexture to hold the contents of the original RenderTexture
+            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
+            Graphics.Blit(renderTexture, tempRT);
 
+            // Create a Texture2D and read the contents of the temporary RenderTexture into it
+            Texture2D texture2D = new Texture2D(tempRT.width, tempRT.height);
+            RenderTexture.active = tempRT;
+            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
+            texture2D.Apply();
+
+            // Encode the Texture2D to PNG format
+            byte[] bytes = texture2D.EncodeToPNG();
+
+            // Save the bytes to a file in the Resources folder
+            string filePath = Path.Combine(Application.dataPath, "Resources", filename);
+            File.WriteAllBytes(filePath, bytes);
+
+            // Clean up temporary resources
+            DestroyImmediate(texture2D);
+            DestroyImmediate(tempRT);
+
+            // Refresh the Unity Editor to make the new file visible
+            UnityEditor.AssetDatabase.Refresh();
+        }
         private void OnDestroy()
         {
             sumBuffer?.Dispose();
