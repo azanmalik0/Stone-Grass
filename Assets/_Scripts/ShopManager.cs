@@ -21,6 +21,10 @@ public class ShopManager : MonoBehaviour
     {
         GameManager.OnGameStateChanged += OpenShopMenu;
     }
+    private void Start()
+    {
+        SelectSkin(selectedIndex);
+    }
     public void OnButtonClick(string button)
     {
         if (button == "Exit")

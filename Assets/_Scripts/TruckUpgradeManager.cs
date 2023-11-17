@@ -93,7 +93,7 @@ public class TruckUpgradeManager : MonoBehaviour
         wheels_Slider.maxValue = truckWheelUpgrades.Length - 1;
         wheels_Slider.value = currentWheels;
         carCapacity_Slider.maxValue = maxCarCapacityUpgrade;
-        // carCapacity_Slider.minValue = maxCarCapacity;
+        carCapacity_Slider.minValue = maxCarCapacity;
         // carCapacity_Slider.value = 0;
 
     }
@@ -137,7 +137,10 @@ public class TruckUpgradeManager : MonoBehaviour
             rotationSpeed_CR += rotationSpeed_CI;
             rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
             rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
-            incrementRotationSpeed += incrementRotationSpeed;
+        }
+        else
+        {
+            Debug.LogError("MaxRotation");
         }
         // }
 
@@ -154,6 +157,10 @@ public class TruckUpgradeManager : MonoBehaviour
             carCapacity_CT.text = "$" + maxCarCapacity_CR.ToString();
             carCapacity_Slider.value = maxCarCapacity;
             OnIncreasingCarCapacity?.Invoke();
+        }
+        else
+        {
+            Debug.LogError("MaxRotation");
         }
         // }
 

@@ -84,10 +84,10 @@ public class FarmUpgradeManager : MonoBehaviour
 
     private void SetDefaultValues()
     {
-        cowNumbers_CT.text = cowNumbers_CR.ToString();
-        chickenNumbers_CT.text = chickenNumbers_CR.ToString();
-        chickenTray_CT.text = maxChickenTray_CR.ToString();
-        cowTray_CT.text = maxCowTray_CR.ToString();
+        cowNumbers_CT.text = "$" + cowNumbers_CR.ToString();
+        chickenNumbers_CT.text = "$" + chickenNumbers_CR.ToString();
+        chickenTray_CT.text = "$" + maxChickenTray_CR.ToString();
+        cowTray_CT.text = "$" + maxCowTray_CR.ToString();
         //=====================================
         cowNumbers_Slider.maxValue = cows.Length - 1;
         cowNumbers_Slider.value = currentCows;
@@ -100,8 +100,8 @@ public class FarmUpgradeManager : MonoBehaviour
         chickenTray_Slider.minValue = maxChickenTrayCapacity;
         chickenTray_Slider.value = 0;
         //=========================================
-        storageCapacity_CT.text = maxStorageCapacity_CR.ToString();
-        farmerCapacity_CT.text = maxFarmerCapacity_CR.ToString();
+        storageCapacity_CT.text = "$" + maxStorageCapacity_CR.ToString();
+        farmerCapacity_CT.text = "$" + maxFarmerCapacity_CR.ToString();
         //=========================================
         storageCapacity_Slider.maxValue = maxStorageUpgrade;
         storageCapacity_Slider.minValue = maxStorageCapacity;
@@ -152,110 +152,110 @@ public class FarmUpgradeManager : MonoBehaviour
 
     private void IncreaseStorageCapacity(int increment)
     {
-        if (CurrencyManager.CheckRequiredCoins(maxStorageCapacity))
+        // if (CurrencyManager.CheckRequiredCoins(maxStorageCapacity))
+        // {
+        if (maxStorageCapacity < maxStorageUpgrade)
         {
-            if (maxStorageCapacity < maxStorageUpgrade)
-            {
-                maxStorageCapacity += increment;
-                OnBuyingUpgrade?.Invoke(maxStorageCapacity_CR);
-                maxStorageCapacity_CR += maxStorageCapacity_CI;
-                storageCapacity_CT.text = maxStorageCapacity_CR.ToString();
-                storageCapacity_Slider.value = maxStorageCapacity;
-                OnIncreasingStorageCapcaity?.Invoke();
-            }
+            maxStorageCapacity += increment;
+            OnBuyingUpgrade?.Invoke(maxStorageCapacity_CR);
+            maxStorageCapacity_CR += maxStorageCapacity_CI;
+            storageCapacity_CT.text = "$" + maxStorageCapacity_CR.ToString();
+            storageCapacity_Slider.value = maxStorageCapacity;
+            OnIncreasingStorageCapcaity?.Invoke();
         }
+        //}
     }
     private void IncreaseFarmerCapacity(int increment)
     {
-        if (CurrencyManager.CheckRequiredCoins(maxFarmerCapacity))
-        {
+        //if (CurrencyManager.CheckRequiredCoins(maxFarmerCapacity))
+        // {
 
-            if (maxFarmerCapacity < maxFarmerUpgrade)
-            {
-                maxFarmerCapacity += increment;
-                OnBuyingUpgrade?.Invoke(maxFarmerCapacity_CR);
-                maxFarmerCapacity_CR += maxFarmerCapacity_CI;
-                farmerCapacity_CT.text = maxFarmerCapacity_CR.ToString();
-                farmerCapacity_Slider.value = maxFarmerCapacity;
-                OnIncreasingFarmerCapcaity?.Invoke();
-            }
+        if (maxFarmerCapacity < maxFarmerUpgrade)
+        {
+            maxFarmerCapacity += increment;
+            OnBuyingUpgrade?.Invoke(maxFarmerCapacity_CR);
+            maxFarmerCapacity_CR += maxFarmerCapacity_CI;
+            farmerCapacity_CT.text = "$" + maxFarmerCapacity_CR.ToString();
+            farmerCapacity_Slider.value = maxFarmerCapacity;
+            OnIncreasingFarmerCapcaity?.Invoke();
         }
+        //}
     }
 
     void IncreaseCowTrayCapacity(int increment)
     {
-        if (CurrencyManager.CheckRequiredCoins(maxCowTrayCapacity))
-        {
+        // if (CurrencyManager.CheckRequiredCoins(maxCowTrayCapacity))
+        // {
 
-            if (maxCowTrayCapacity <= maxCowTrayUpgrade)
-            {
-                maxCowTrayCapacity += increment;
-                OnBuyingUpgrade?.Invoke(maxCowTray_CR);
-                maxCowTray_CR += maxCowTray_CI;
-                cowTray_CT.text = maxCowTray_CR.ToString();
-                cowTray_Slider.value = maxCowTrayCapacity;
-                OnIncreasingTrayCapcaity?.Invoke();
-            }
+        if (maxCowTrayCapacity <= maxCowTrayUpgrade)
+        {
+            maxCowTrayCapacity += increment;
+            OnBuyingUpgrade?.Invoke(maxCowTray_CR);
+            maxCowTray_CR += maxCowTray_CI;
+            cowTray_CT.text = "$" + maxCowTray_CR.ToString();
+            cowTray_Slider.value = maxCowTrayCapacity;
+            OnIncreasingTrayCapcaity?.Invoke();
         }
+        // }
     }
 
     void IncreaseChickenTrayCapacity(int increment)
     {
-        if (CurrencyManager.CheckRequiredCoins(maxChickenTray_CR))
-        {
+        //if (CurrencyManager.CheckRequiredCoins(maxChickenTray_CR))
+        //{
 
-            if (maxChickenTrayCapacity <= maxChickenTrayUpgrade)
-            {
-                maxChickenTrayCapacity += increment;
-                OnBuyingUpgrade?.Invoke(maxChickenTray_CR);
-                maxChickenTray_CR += maxChickenTray_CI;
-                chickenTray_CT.text = maxChickenTray_CR.ToString();
-                chickenTray_Slider.value = maxChickenTrayCapacity;
-                OnIncreasingTrayCapcaity?.Invoke();
-            }
+        if (maxChickenTrayCapacity <= maxChickenTrayUpgrade)
+        {
+            maxChickenTrayCapacity += increment;
+            OnBuyingUpgrade?.Invoke(maxChickenTray_CR);
+            maxChickenTray_CR += maxChickenTray_CI;
+            chickenTray_CT.text = "$" + maxChickenTray_CR.ToString();
+            chickenTray_Slider.value = maxChickenTrayCapacity;
+            OnIncreasingTrayCapcaity?.Invoke();
         }
+        // }
 
     }
 
     void AddCows()
     {
-        if (CurrencyManager.CheckRequiredCoins(cowNumbers_CR))
-        {
+        // if (CurrencyManager.CheckRequiredCoins(cowNumbers_CR))
+        //{
 
-            if (currentCows < cows.Length - 1)
-            {
-                cows[currentCows + 1].SetActive(true);
-                OnBuyingUpgrade?.Invoke(cowNumbers_CR);
-                cowNumbers_CR += cowNumbers_CI;
-                cowNumbers_CT.text = cowNumbers_CR.ToString();
-                currentCows++;
-                cowNumbers_Slider.value = currentCows;
-            }
-            else
-            {
-                Debug.LogError("MaxCows");
-            }
+        if (currentCows < cows.Length - 1)
+        {
+            cows[currentCows + 1].SetActive(true);
+            OnBuyingUpgrade?.Invoke(cowNumbers_CR);
+            cowNumbers_CR += cowNumbers_CI;
+            cowNumbers_CT.text = "$" + cowNumbers_CR.ToString();
+            currentCows++;
+            cowNumbers_Slider.value = currentCows;
         }
+        else
+        {
+            Debug.LogError("MaxCows");
+        }
+        // }
     }
     void AddChickens()
     {
-        if (CurrencyManager.CheckRequiredCoins(chickenNumbers_CR))
-        {
+        // if (CurrencyManager.CheckRequiredCoins(chickenNumbers_CR))
+        // {
 
-            if (currentChickens < chickens.Length - 1)
-            {
-                chickens[currentChickens + 1].SetActive(true);
-                OnBuyingUpgrade?.Invoke(chickenNumbers_CR);
-                chickenNumbers_CR += chickenNumbers_CI;
-                chickenNumbers_CT.text = chickenNumbers_CR.ToString();
-                currentChickens++;
-                chickenNumbers_Slider.value = currentChickens;
-            }
-            else
-            {
-                Debug.LogError("MaxChickens");
-            }
+        if (currentChickens < chickens.Length - 1)
+        {
+            chickens[currentChickens + 1].SetActive(true);
+            OnBuyingUpgrade?.Invoke(chickenNumbers_CR);
+            chickenNumbers_CR += chickenNumbers_CI;
+            chickenNumbers_CT.text = "$" + chickenNumbers_CR.ToString();
+            currentChickens++;
+            chickenNumbers_Slider.value = currentChickens;
         }
+        else
+        {
+            Debug.LogError("MaxChickens");
+        }
+        // }
 
     }
     void OpenFarmUpgradeMenu(GameState state)
