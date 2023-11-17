@@ -11,7 +11,6 @@ public class HarvestGrass : MonoBehaviour
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
     public int grassCut;
-    public Transform TTmp;
 
     private void OnTriggerEnter(Collider other)
     {

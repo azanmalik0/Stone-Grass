@@ -16,10 +16,14 @@ public class MoneyStack : Stacker
     public int coinsStored;
     [SerializeField] GameObject coinPrefab;
 
+    private void Awake()
+    {
+
+        SetGridYOffset(gridOffset.y);
+    }
     void Start()
     {
         CalculateCellPositions();
-        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
         LoadMoneyStored();
 
@@ -35,11 +39,15 @@ public class MoneyStack : Stacker
     }
     private void LoadMoneyStored()
     {
-        for (int i = 0; i < coinsStored; i++)
+        if (coinsStored>0)
         {
-            GameObject cell = Instantiate(coinPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
 
+            for (int i = 0; i < coinsStored; i++)
+            {
+                GameObject cell = Instantiate(coinPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+
+            }
         }
 
     }

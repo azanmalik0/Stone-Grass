@@ -19,10 +19,14 @@ public class ProductStack : Stacker
     //public int products;
     public int eggsGenerated;
     public int milkGenerated;
+    private void Awake()
+    {
+        SetGridYOffset(gridOffset.y);
+        
+    }
     private void Start()
     {
         CalculateCellPositions();
-        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
         LoadProductStored();
     }
@@ -81,7 +85,8 @@ public class ProductStack : Stacker
             }
             feedCell.transform.SetParent(null);
             hayParent.GetComponent<TroughStack>().feedCollected--;
-            hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().feedCollected);
+            if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
+                hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
             Destroy(feedCell);
             GenerateProduct();
 
@@ -96,7 +101,7 @@ public class ProductStack : Stacker
         }
         if (type == ProductType.Milk)
         {
-            
+
             milkGenerated++;
 
         }

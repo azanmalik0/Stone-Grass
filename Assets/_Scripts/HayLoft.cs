@@ -32,9 +32,13 @@ public class HayLoft : Stacker
         FarmUpgradeManager.OnIncreasingStorageCapcaity -= DisplayCrudeStorageCounter;
 
     }
-    private void Start()
+    private void Awake()
     {
         SetGridYOffset(gridOffset.y);
+
+    }
+    private void Start()
+    {
         ES3AutoSaveMgr.Current.Load();
         LoadFeedStored();
         CalculateCellPositions();
@@ -42,11 +46,15 @@ public class HayLoft : Stacker
     }
     private void LoadFeedStored()
     {
-        for (int i = 0; i < feedStored; i++)
+        if (feedStored > 0)
         {
-            GameObject cell = Instantiate(feedCellPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
 
+            for (int i = 0; i < feedStored; i++)
+            {
+                GameObject cell = Instantiate(feedCellPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+
+            }
         }
     }
 

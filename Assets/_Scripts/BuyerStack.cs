@@ -17,11 +17,14 @@ public class BuyerStack : Stacker
     [SerializeField] GameObject moneyPrefab;
     [SerializeField] splineMove buyerSpline;
 
-
+    private void Awake()
+    {
+        SetGridYOffset(gridOffset.y);
+        
+    }
     void Start()
     {
         CalculateCellPositions();
-        SetGridYOffset(gridOffset.y);
     }
 
     private void OnTriggerStay(Collider other)

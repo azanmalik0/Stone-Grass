@@ -6,20 +6,9 @@ using static SWS.splineMove;
 
 public class RotateSaw : MonoBehaviour
 {
-    public static RotateSaw instance;
     public float rotationSpeed;
-    private void Awake()
-    {
-        instance = this;
-    }
     private void OnEnable()
     {
-        TruckUpgradeManager.OnIncreasingRotationSpeed += IncreaseSpeed;
-    }
-    private void OnDisable()
-    {
-        TruckUpgradeManager.OnIncreasingRotationSpeed -= IncreaseSpeed;
-
     }
     void Update()
     {
@@ -28,15 +17,12 @@ public class RotateSaw : MonoBehaviour
 
     void Rotate()
     {
+        rotationSpeed = RotationSetter.Instance.RotationSpeed;
         float rotationAmount = rotationSpeed * Time.deltaTime;
         transform.Rotate(new Vector3(0, 360, 0), rotationAmount);
 
     }
-    void IncreaseSpeed(int newSpeed)
-    {
-        rotationSpeed += newSpeed;
 
-    }
 
 
 

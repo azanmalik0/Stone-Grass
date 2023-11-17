@@ -16,11 +16,15 @@ public class ProductMarketStack : Stacker
     bool IsLoading;
     float delay = 0;
     [SerializeField] int productCheckIndex;
+    private void Awake()
+    {
+        SetGridYOffset(gridOffset.y);
+
+    }
     void Start()
     {
         productCheckIndex = 1;
         CalculateCellPositions();
-        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
         LoadProductStored();
         SetProductType(productType);
@@ -40,19 +44,25 @@ public class ProductMarketStack : Stacker
 
         if (productType == ProductTypes.Egg)
         {
-            for (int i = 0; i < eggsStored; i++)
+            if (eggsStored > 0)
             {
-                GameObject cell = Instantiate(eggPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
+                for (int i = 0; i < eggsStored; i++)
+                {
+                    GameObject cell = Instantiate(eggPrefab, this.transform);
+                    cell.transform.localPosition = previousPositions[i];
 
+                }
             }
         }
         if (productType == ProductTypes.Milk)
         {
-            for (int i = 0; i < milkStored; i++)
+            if (milkStored > 0)
             {
-                GameObject cell = Instantiate(milkPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
+                for (int i = 0; i < milkStored; i++)
+                {
+                    GameObject cell = Instantiate(milkPrefab, this.transform);
+                    cell.transform.localPosition = previousPositions[i];
+                }
             }
         }
 
@@ -111,19 +121,17 @@ public class ProductMarketStack : Stacker
                     {
                         eggsStored++;
                         other.GetComponent<FarmerStack>().eggCollected--;
-                        if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
-                            other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
 
                     }
                     if (productType == ProductTypes.Milk)
                     {
                         milkStored++;
                         other.GetComponent<FarmerStack>().milkCollected--;
-                        if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
-                            other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
 
                     }
                     product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                        other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     delay += 0.0001f;
                     UpdateGridPositions();

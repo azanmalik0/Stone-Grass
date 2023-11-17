@@ -23,9 +23,13 @@ public class TroughStack : Stacker
     public float initialYOffset;
     int crudeCheckIndex = 1;
     [SerializeField] GameObject feedPrefab;
-    private void Start()
+    private void Awake()
     {
         SetGridYOffset(gridOffset.y);
+
+    }
+    private void Start()
+    {
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
         LoadFeedCollected();
@@ -122,8 +126,6 @@ public class TroughStack : Stacker
                 {
                     feedCollected++;
                     other.GetComponent<FarmerStack>().feedCollected--;
-                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
-                        other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     IsLoading = true;
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                     DOTween.Complete(crudeCell);
@@ -131,6 +133,8 @@ public class TroughStack : Stacker
                     DisplayCrudeTroughCounter();
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
                     previousPositions.Add(cellPositions[currentC, currentR]);
+                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                        other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();

@@ -118,6 +118,7 @@ public abstract class Stacker : SerializedMonoBehaviour
         currentC = 0;
         currentR = 0;
         gridOffset.y = InitialYOffset;
+        print(InitialYOffset+gameObject.name);
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.2f).SetEase(Ease.OutSine);

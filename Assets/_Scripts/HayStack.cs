@@ -33,6 +33,8 @@ public class HayStack : Stacker
 
     private void Awake()
     {
+        print(gridOffset.y);
+        SetGridYOffset(gridOffset.y);
         instance = this;
     }
     private void OnEnable()
@@ -46,7 +48,7 @@ public class HayStack : Stacker
     }
     private void Start()
     {
-        SetGridYOffset(gridOffset.y);
+
         ES3AutoSaveMgr.Current.Load();
         LoadHayCollected();
         CalculateCellPositions();
@@ -55,11 +57,15 @@ public class HayStack : Stacker
 
     private void LoadHayCollected()
     {
-        for (int i = 0; i < hayCollected; i++)
+        if (hayCollected > 0)
         {
-            GameObject cell = Instantiate(hayCellPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
 
+            for (int i = 0; i < hayCollected; i++)
+            {
+                GameObject cell = Instantiate(hayCellPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+
+            }
         }
     }
 
@@ -100,7 +106,6 @@ public class HayStack : Stacker
         while (unloading && transform.childCount > 0)
         {
             hayCollected--;
-            // hayCollectedTmp = hayCollected;
             haySold++;
             OnHayCollect?.Invoke(hayCollected);
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
@@ -112,7 +117,8 @@ public class HayStack : Stacker
                 boilerParticle.Play();
                 OnSellingHarvest?.Invoke(haySold);
             });
-            previousPositions.RemoveAt(hayCollected);
+            //if ((previousPositions.Count - 1) > 0)
+            previousPositions.RemoveAt(previousPositions.Count - 1);
 
             delay += 0.000001f;
             ResetGridPositions();
