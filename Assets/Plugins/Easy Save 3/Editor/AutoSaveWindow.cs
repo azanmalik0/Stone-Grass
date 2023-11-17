@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using ES3Internal;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 namespace ES3Editor
 {
@@ -22,9 +24,18 @@ namespace ES3Editor
 
         private string searchTerm = "";
 
-        public AutoSaveWindow(EditorWindow window) : base("Auto Save", window){}
+        public AutoSaveWindow(EditorWindow window) : base("Auto Save", window)
+        {
+            EditorSceneManager.activeSceneChangedInEditMode += ChangedActiveScene;
+        }
 
-		public override void OnGUI()
+        private void ChangedActiveScene(Scene current, Scene next)
+        {
+            mgr = null;
+            Init();
+        }
+
+        public override void OnGUI()
 		{
 			Init();
 
@@ -88,8 +99,13 @@ namespace ES3Editor
 
                     using (new EditorGUILayout.HorizontalScope(GUILayout.Width(200)))
                     {
+#if UNITY_2022_3_OR_NEWER
+                        searchTerm = GUILayout.TextField(searchTerm, GUI.skin.FindStyle("ToolbarSearchTextField"));
+                        if (GUILayout.Button("", GUI.skin.FindStyle("ToolbarSearchCancelButton")))
+#else
                         searchTerm = GUILayout.TextField(searchTerm, GUI.skin.FindStyle("ToolbarSeachTextField"));
                         if (GUILayout.Button("", GUI.skin.FindStyle("ToolbarSeachCancelButton")))
+#endif
                         {
                             // Remove focus if cleared
                             searchTerm = "";
@@ -112,11 +128,9 @@ namespace ES3Editor
 		public void Init()
 		{
             if (mgr == null)
-            {
-                var mgrs = Resources.FindObjectsOfTypeAll<ES3AutoSaveMgr>();
-                if (mgrs.Length > 0)
-                    mgr = mgrs[0];
-            }
+                foreach (var thisMgr in Resources.FindObjectsOfTypeAll<ES3AutoSaveMgr>())
+                    if (thisMgr != null && thisMgr.gameObject.scene == SceneManager.GetActiveScene())
+                        mgr = thisMgr;
 
             if (hierarchy == null)
                 OnFocus();

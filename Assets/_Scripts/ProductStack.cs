@@ -2,19 +2,52 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProductStack : Stacker
 {
+    public enum ProductType { Egg, Milk }
+    public ProductType type;
     public float initialYOffset;
     [SerializeField] GameObject hayParent;
     [SerializeField] GameObject productPrefab;
+    [SerializeField] GameObject eggPrefab;
+    [SerializeField] GameObject milkPrefab;
+
     float delay;
-    public int products;
+    //public int products;
+    public int eggsGenerated;
+    public int milkGenerated;
     private void Start()
     {
         CalculateCellPositions();
         SetGridYOffset(gridOffset.y);
+        ES3AutoSaveMgr.Current.Load();
+        LoadProductStored();
+    }
+    private void LoadProductStored()
+    {
+
+        if (type == ProductType.Egg)
+        {
+            for (int i = 0; i < eggsGenerated; i++)
+            {
+                GameObject cell = Instantiate(eggPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+
+            }
+        }
+        if (type == ProductType.Milk)
+        {
+            for (int i = 0; i < milkGenerated; i++)
+            {
+                GameObject cell = Instantiate(milkPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+            }
+        }
+
+
     }
 
     private void OnEnable()
@@ -34,21 +67,49 @@ public class ProductStack : Stacker
         {
 
             GameObject feedCell = hayParent.transform.GetChild(hayParent.transform.childCount - 1).gameObject;
-            GameObject product = Instantiate(productPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+            if (type == ProductType.Egg)
+            {
+                GameObject product = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+                LoadProductOnShelf(product);
+
+            }
+            if (type == ProductType.Milk)
+            {
+                GameObject product = Instantiate(milkPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+                LoadProductOnShelf(product);
+
+            }
             feedCell.transform.SetParent(null);
+            hayParent.GetComponent<TroughStack>().feedCollected--;
+            hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().feedCollected);
             Destroy(feedCell);
-            LoadProductOnShelf(product);
             GenerateProduct();
 
         }
     }
     void LoadProductOnShelf(GameObject product)
     {
+        if (type == ProductType.Egg)
+        {
+            eggsGenerated++;
+
+        }
+        if (type == ProductType.Milk)
+        {
+            
+            milkGenerated++;
+
+        }
         product.transform.SetParent(this.transform);
         product.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine);
+        previousPositions.Add(cellPositions[currentC, currentR]);
         delay += 0.001f;
         UpdateGridPositions();
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Load();
     }
 
 

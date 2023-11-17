@@ -15,9 +15,10 @@ public class HayLoft : Stacker
     [SerializeField] Transform feedCellStart;
     [SerializeField] Transform feedCellLast;
     public float initialYOffset;
-    int collected = 0;
+    int feedCollected = 0;
+    int feedGenerated = 0;
+    public int feedStored = 0;
     bool IsGenerating;
-    int hayProcessed;
     [SerializeField] Text crudeStorageCapacityText;
 
     private void OnEnable()
@@ -34,8 +35,19 @@ public class HayLoft : Stacker
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
+        ES3AutoSaveMgr.Current.Load();
+        LoadFeedStored();
         CalculateCellPositions();
         DisplayCrudeStorageCounter();
+    }
+    private void LoadFeedStored()
+    {
+        for (int i = 0; i < feedStored; i++)
+        {
+            GameObject cell = Instantiate(feedCellPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
+        }
     }
 
     private void DisplayCrudeStorageCounter()
@@ -46,9 +58,9 @@ public class HayLoft : Stacker
 
     void GetValue(int value)
     {
-        collected++;
+        feedCollected++;
 
-        if (collected >= requiredHay && !IsGenerating)
+        if (feedCollected >= requiredHay && !IsGenerating)
         {
             IsGenerating = true;
             GenerateFeed();
@@ -56,14 +68,14 @@ public class HayLoft : Stacker
     }
     void GenerateFeed()
     {
-        if (collected < requiredHay)
+        if (feedCollected < requiredHay)
         {
             IsGenerating = false;
         }
         else
         {
 
-            collected -= requiredHay;
+            feedCollected -= requiredHay;
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
             feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
@@ -81,15 +93,20 @@ public class HayLoft : Stacker
         }
         else
         {
-            hayProcessed++;
+            feedStored++;
             DisplayCrudeStorageCounter();
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
+            previousPositions.Add(cellPositions[currentR, currentC]);
             UpdateGridPositions();
 
         }
 
 
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Save();
     }
 
 

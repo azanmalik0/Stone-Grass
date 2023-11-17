@@ -22,11 +22,23 @@ public class TroughStack : Stacker
     float delay;
     public float initialYOffset;
     int crudeCheckIndex = 1;
+    [SerializeField] GameObject feedPrefab;
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
+        ES3AutoSaveMgr.Current.Load();
+        LoadFeedCollected();
         DisplayCrudeTroughCounter();
+    }
+    private void LoadFeedCollected()
+    {
+        for (int i = 0; i < feedCollected; i++)
+        {
+            GameObject cell = Instantiate(feedPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
+        }
     }
 
     private void DisplayCrudeTroughCounter()
@@ -108,12 +120,17 @@ public class TroughStack : Stacker
                 }
                 else
                 {
+                    feedCollected++;
+                    other.GetComponent<FarmerStack>().feedCollected--;
+                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                        other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     IsLoading = true;
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
                     DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
                     DisplayCrudeTroughCounter();
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
+                    previousPositions.Add(cellPositions[currentC, currentR]);
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
@@ -125,6 +142,10 @@ public class TroughStack : Stacker
 
         }
 
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Save();
     }
 
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HayStack : Stacker
 {
@@ -18,15 +19,17 @@ public class HayStack : Stacker
     [Title("Unloading References")]
     [SerializeField] Transform unloadTarget;
     [SerializeField] ParticleSystem boilerParticle;
+    [SerializeField] GameObject hayCellPrefab;
     float delay = 0;
     bool unloading;
     //==============================================
     public float initialYOffset;
     int haySold;
-    [HideInInspector]
-    int hayCollected;
+    public int hayCollected;
+    public int hayCollectedTmp;
     public int HaySold { get => haySold; }
     public int HayCollected { get => hayCollected; }
+
 
     private void Awake()
     {
@@ -44,9 +47,22 @@ public class HayStack : Stacker
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
+        ES3AutoSaveMgr.Current.Load();
+        LoadHayCollected();
         CalculateCellPositions();
         UpdateMaxCarCapacity();
     }
+
+    private void LoadHayCollected()
+    {
+        for (int i = 0; i < hayCollected; i++)
+        {
+            GameObject cell = Instantiate(hayCellPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
+        }
+    }
+
     private void UpdateMaxCarCapacity()
     {
         maxHayCapacity = TruckUpgradeManager.Instance.maxCarCapacity;
@@ -63,10 +79,13 @@ public class HayStack : Stacker
         else
         {
             hayCollected++;
+            //hayCollectedTmp = hayCollected;
+
             OnHayCollect?.Invoke(hayCollected);
             hay.transform.SetParent(this.transform);
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
+            previousPositions.Add(cellPositions[currentR, currentC]);
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
             UpdateGridPositions();
@@ -81,6 +100,7 @@ public class HayStack : Stacker
         while (unloading && transform.childCount > 0)
         {
             hayCollected--;
+            // hayCollectedTmp = hayCollected;
             haySold++;
             OnHayCollect?.Invoke(hayCollected);
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
@@ -92,6 +112,7 @@ public class HayStack : Stacker
                 boilerParticle.Play();
                 OnSellingHarvest?.Invoke(haySold);
             });
+            previousPositions.RemoveAt(hayCollected);
 
             delay += 0.000001f;
             ResetGridPositions();
@@ -121,6 +142,10 @@ public class HayStack : Stacker
             //Debug.LogError("False");
         }
 
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Save();
     }
 
 

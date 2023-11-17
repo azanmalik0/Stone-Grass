@@ -1,8 +1,9 @@
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Stacker : MonoBehaviour
+public abstract class Stacker : SerializedMonoBehaviour
 {
     [Title("General Preferences")]
     public int maxHayCapacity;
@@ -13,7 +14,9 @@ public abstract class Stacker : MonoBehaviour
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset;
     [HideInInspector] public float InitialYOffset;
+    [TableMatrix]
     public Vector3[,] cellPositions;
+    public List<Vector3> previousPositions = new();
     public int currentR = 0;
     public int currentC = 0;
 
@@ -60,7 +63,6 @@ public abstract class Stacker : MonoBehaviour
             for (int col = 0; col < maxColumns; col++)
             {
                 cellPositions[row, col] = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
-
             }
         }
 

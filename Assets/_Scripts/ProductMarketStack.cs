@@ -2,12 +2,17 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static ProductStack;
 
 public class ProductMarketStack : Stacker
 {
     public enum ProductTypes { Egg, Milk }
     public ProductTypes productType;
     public string productString;
+    [SerializeField] GameObject eggPrefab;
+    [SerializeField] GameObject milkPrefab;
+    public int eggsStored;
+    public int milkStored;
     bool IsLoading;
     float delay = 0;
     [SerializeField] int productCheckIndex;
@@ -16,6 +21,8 @@ public class ProductMarketStack : Stacker
         productCheckIndex = 1;
         CalculateCellPositions();
         SetGridYOffset(gridOffset.y);
+        ES3AutoSaveMgr.Current.Load();
+        LoadProductStored();
         SetProductType(productType);
 
     }
@@ -26,6 +33,29 @@ public class ProductMarketStack : Stacker
             productString = "Egg";
         if (product == ProductTypes.Milk)
             productString = "Milk";
+
+    }
+    private void LoadProductStored()
+    {
+
+        if (productType == ProductTypes.Egg)
+        {
+            for (int i = 0; i < eggsStored; i++)
+            {
+                GameObject cell = Instantiate(eggPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+
+            }
+        }
+        if (productType == ProductTypes.Milk)
+        {
+            for (int i = 0; i < milkStored; i++)
+            {
+                GameObject cell = Instantiate(milkPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[i];
+            }
+        }
+
 
     }
 
@@ -72,11 +102,29 @@ public class ProductMarketStack : Stacker
                 }
                 else
                 {
+
                     IsLoading = true;
                     Transform product = other.transform.GetChild(other.transform.childCount - productCheckIndex);
                     DOTween.Complete(product);
                     product.SetParent(this.transform);
+                    if (productType == ProductTypes.Egg)
+                    {
+                        eggsStored++;
+                        other.GetComponent<FarmerStack>().eggCollected--;
+                        if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                            other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
+
+                    }
+                    if (productType == ProductTypes.Milk)
+                    {
+                        milkStored++;
+                        other.GetComponent<FarmerStack>().milkCollected--;
+                        if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                            other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
+
+                    }
                     product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                    previousPositions.Add(cellPositions[currentC, currentR]);
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
@@ -89,5 +137,9 @@ public class ProductMarketStack : Stacker
         }
 
 
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Save();
     }
 }

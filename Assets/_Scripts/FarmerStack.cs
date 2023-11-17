@@ -6,15 +6,23 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static ProductStack;
 
 public class FarmerStack : Stacker
 {
+    public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
     public float initialYOffset;
     [SerializeField] Transform coinPos;
     bool IsLoading;
     float delay;
     [SerializeField] Text farmerCapacityFullText;
+    public int feedCollected;
+    public int milkCollected;
+    public int eggCollected;
+    [SerializeField] GameObject feedPrefab;
+    [SerializeField] GameObject eggPrefab;
+    [SerializeField] GameObject milkPrefab;
     private void Awake()
     {
         Instance = this;
@@ -32,7 +40,35 @@ public class FarmerStack : Stacker
     {
         CalculateCellPositions();
         SetGridYOffset(gridOffset.y);
+        ES3AutoSaveMgr.Current.Load();
+        LoadFeedStored();
+        LoadProductStored();
         UpdateMaxFarmerCapacity();
+    }
+    private void LoadFeedStored()
+    {
+
+        for (int i = 0; i < feedCollected; i++)
+        {
+            GameObject cell = Instantiate(feedPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
+        }
+
+    }
+    private void LoadProductStored()
+    {
+        for (int i = 0; i < eggCollected; i++)
+        {
+            GameObject cell = Instantiate(eggPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+        }
+        for (int i = 0; i < milkCollected; i++)
+        {
+            GameObject cell = Instantiate(milkPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
+        }
     }
     private void UpdateMaxFarmerCapacity()
     {
@@ -98,11 +134,15 @@ public class FarmerStack : Stacker
         }
         else if (other.transform.childCount > 0)
         {
+            feedCollected++;
+            other.GetComponent<HayLoft>().feedStored--;
+            other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().feedStored);
             IsLoading = true;
             Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
             DOTween.Complete(feedCell);
             feedCell.SetParent(this.transform);
             feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => feedCell.localRotation = Quaternion.identity);
+            previousPositions.Add(cellPositions[currentC, currentR]);
             delay += 0.0001f;
             UpdateGridPositions();
             other.GetComponent<HayLoft>().ResetGridPositions();
@@ -120,6 +160,7 @@ public class FarmerStack : Stacker
         }
         else if (other.transform.childCount > 0)
         {
+            OnMoneyCollect?.Invoke();
             IsLoading = true;
             Transform money = other.transform.GetChild(other.transform.childCount - 1);
             DOTween.Complete(money);
@@ -148,6 +189,20 @@ public class FarmerStack : Stacker
         }
         else if (other.transform.childCount > 0)
         {
+            if (other.GetComponent<ProductStack>().type == ProductType.Egg)
+            {
+                eggCollected++;
+                other.GetComponent<ProductStack>().eggsGenerated--;
+                other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().eggsGenerated);
+
+            }
+            if (other.GetComponent<ProductStack>().type == ProductType.Milk)
+            {
+
+                milkCollected++;
+                other.GetComponent<ProductStack>().milkGenerated--;
+                other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().milkGenerated);
+            }
             IsLoading = true;
             Transform product = other.transform.GetChild(other.transform.childCount - 1);
             DOTween.Complete(product);
@@ -158,6 +213,10 @@ public class FarmerStack : Stacker
             other.GetComponent<ProductStack>().ResetGridPositions();
             IsLoading = false;
         }
+    }
+    private void OnApplicationQuit()
+    {
+        ES3AutoSaveMgr.Current.Save();
     }
 
 

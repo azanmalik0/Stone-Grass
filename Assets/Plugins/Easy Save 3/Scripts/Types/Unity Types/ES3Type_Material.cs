@@ -15,6 +15,9 @@ namespace ES3Types
 		{
 			var instance = (UnityEngine.Material)obj;
 
+            // Uncomment if you want "instance" to be removed from the name.
+            //instance.name = instance.name.Replace(" (Instance)", "");
+
 			writer.WriteProperty("name", instance.name);
 			writer.WriteProperty("shader", instance.shader);
 			writer.WriteProperty("renderQueue", instance.renderQueue, ES3Type_int.Instance);
@@ -541,7 +544,9 @@ namespace ES3Types
                         instance.renderQueue = reader.Read<System.Int32>(ES3Type_int.Instance);
                         break;
                     case "shaderKeywords":
-                        instance.shaderKeywords = reader.Read<System.String[]>();
+                        var keywords = reader.Read<System.String[]>();
+                        foreach (var keyword in keywords)
+                            instance.EnableKeyword(keyword);
                         break;
                     case "globalIlluminationFlags":
                         instance.globalIlluminationFlags = reader.Read<UnityEngine.MaterialGlobalIlluminationFlags>();
