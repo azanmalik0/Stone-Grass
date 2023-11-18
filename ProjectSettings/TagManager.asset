@@ -30,6 +30,10 @@ TagManager:
   - Shop Zone
   - FarmUpgradeZone
   - LevelZone
+  - FarmUnlock
+  - HenhouseUnlock
+  - MarketUnlock
+  - BarnUnlock
   layers:
   - Default
   - TransparentFX

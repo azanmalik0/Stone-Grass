@@ -9,19 +9,6 @@ public class CurrencyManager : MonoBehaviour
     public static CurrencyManager Instance;
     [SerializeField] Text coinText;
     public static int coins;
-
-    public int Coins
-    {
-        get
-        {
-            return coins;
-        }
-        set
-        {
-            coins = value;
-        }
-    }
-
     private void OnEnable()
     {
         HayStack.OnSellingHarvest += RecieveCoins;
@@ -48,9 +35,12 @@ public class CurrencyManager : MonoBehaviour
             return false;
     }
 
-    void DeductCoins(int value)
+    public void DeductCoins(int value)
     {
+        // if (value > 0)
+        // {
         coins -= value;
         coinText.text = coins.ToString();
+        // }
     }
 }
