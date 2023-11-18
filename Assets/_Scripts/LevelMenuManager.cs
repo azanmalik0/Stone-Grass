@@ -1,3 +1,4 @@
+using PT.Garden;
 using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,13 +16,15 @@ public class LevelMenuManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenLevelSelectionMenu;
-        ProgressBarManager.OnFirstStarUnlock += UnlockNextLevel;
+        //ProgressBarManager.OnFirstStarUnlock += UnlockNextLevel;
+        PercentageChecker.OnFirstStarUnlock += UnlockNextLevel;
     }
     private void OnDisable()
     {
 
         GameManager.OnGameStateChanged -= OpenLevelSelectionMenu;
-        ProgressBarManager.OnFirstStarUnlock -= UnlockNextLevel;
+       // ProgressBarManager.OnFirstStarUnlock -= UnlockNextLevel;
+        PercentageChecker.OnFirstStarUnlock -= UnlockNextLevel;
     }
     public void OnButtonClick(string button)
     {

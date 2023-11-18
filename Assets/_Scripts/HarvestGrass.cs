@@ -1,8 +1,10 @@
 using DG.Tweening;
+using PT.Garden;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class HarvestGrass : MonoBehaviour
 {
@@ -11,26 +13,47 @@ public class HarvestGrass : MonoBehaviour
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
     public int grassCut;
-
-    private void OnTriggerEnter(Collider other)
+    private void OnEnable()
     {
-        if (other.CompareTag("Wheat"))
-        {
-            CutGrass(other);
-
-        }
+        GrassPatchActivator.OnGrassCut += GenerateHay;
     }
-    private void CutGrass(Collider other)
+    private void OnDisable()
+    {
+
+        GrassPatchActivator.OnGrassCut -= GenerateHay;
+    }
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Wheat"))
+    //    {
+    //        CutGrass(other);
+
+    //    }
+    //}
+    //private void CutGrass(Collider other)
+    //{
+    //    grassCut++;
+    //    OnCropHarvest?.Invoke();
+    //    other.gameObject.SetActive(false);
+    //    if (grassCut >= requiredGrass)
+    //    {
+    //        grassCut = 0;
+    //        GameObject hayCell = Instantiate(hayCellPrefab, other.transform.position, Quaternion.identity);
+    //        hayCell.transform.DOJump(other.transform.position + jumpOffset, 3, 1, 1);
+    //    }
+
+    //}
+
+    void GenerateHay()
     {
         grassCut++;
-        OnCropHarvest?.Invoke();
-        other.gameObject.SetActive(false);
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            GameObject hayCell = Instantiate(hayCellPrefab, other.transform.position, Quaternion.identity);
-            hayCell.transform.DOJump(other.transform.position + jumpOffset, 3, 1, 1);
+            //OnCropHarvest?.Invoke();
+            GameObject hayCell = Instantiate(hayCellPrefab, transform.position, Quaternion.identity);
+            hayCell.transform.DOJump(transform.position, 2, 1, 1);
         }
-
     }
 }

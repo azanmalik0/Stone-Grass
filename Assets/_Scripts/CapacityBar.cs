@@ -34,13 +34,13 @@ public class CapacityBar : MonoBehaviour
     void UpdateCapacityBar(int value)
     {
         _slider.value = value;
-        collected.text = HayStack.instance.HayCollected.ToString() + " /" + HayStack.instance.maxHayCapacity.ToString();
+        collected.text = HayStack.instance.HayCollected.ToString() + "/" + HayStack.instance.maxHayCapacity.ToString();
 
     }
 
     public void UpdateMaxCapacityUI()
     {
-        collected.text = HayStack.instance.HayCollected.ToString() + " /" + HayStack.instance.maxHayCapacity.ToString();
+        collected.text = HayStack.instance.HayCollected.ToString() + "/" + HayStack.instance.maxHayCapacity.ToString();
 
     }
 }

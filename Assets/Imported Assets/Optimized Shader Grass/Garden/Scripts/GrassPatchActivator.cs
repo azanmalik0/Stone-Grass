@@ -4,11 +4,20 @@ using UnityEngine;
 using Es.InkPainter;
 using System;
 using System.Diagnostics;
+using Sirenix.OdinInspector;
+using DG.Tweening;
 
 namespace PT.Garden
 {
     public class GrassPatchActivator : MonoBehaviour
     {
+        [Title("New")]
+        public static event Action OnGrassCut;
+        [SerializeField] Transform cutter;
+        //[SerializeField] int grassCut;
+        //[SerializeField] int requiredGrass;
+        //[SerializeField] GameObject hayCellPrefab;
+        //================================
         [System.Serializable]
         public struct PixelChange
         {
@@ -19,10 +28,10 @@ namespace PT.Garden
             public float g;
             public float b;
         }
+        [Space]
 
         public ComputeShader computeShader;
         public PixelChange[] results;
-
         [SerializeField] private GameObject grassParticle;
         [SerializeField] private Transform uv00, uv11;
         private ParticleSystem[] particlePool;
@@ -143,6 +152,7 @@ namespace PT.Garden
                     {
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
+                            OnGrassCut?.Invoke();
                             print("======================================>");
                             Vector3 pos = new()
                             {
@@ -150,7 +160,7 @@ namespace PT.Garden
                                 z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
                                 y = transform.position.y + 0.5f
                             };
-                            DoParticle(pos, new Color(pt.r, pt.g, pt.b));
+                            DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
                         }
                     }
                 }

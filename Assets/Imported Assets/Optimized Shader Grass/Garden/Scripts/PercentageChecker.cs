@@ -2,11 +2,25 @@
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
+using System;
 
 namespace PT.Garden
 {
     public class PercentageChecker : MonoBehaviour
     {
+
+        [Title("New")]
+        public static event Action OnFirstStarUnlock;
+        public static event Action OnSecondStarUnlock;
+        public GameObject unlockedStar1;
+        public GameObject unlockedStar2;
+        bool UnlockOnce;
+        [Space]
+        //==============================================
+
+
+
         [SerializeField] private float percentage;
         private float[] results;
 
@@ -75,15 +89,38 @@ namespace PT.Garden
 
             percentage = sum / results.Length;
             _filledSlider.fillAmount = percentage;
+            CheckStarUnlock();
+        }
 
+        private void CheckStarUnlock()
+        {
+            if (percentage > 0.5)
+            {
+                if (!UnlockOnce)
+                {
+                    unlockedStar1.SetActive(true);
+                    OnFirstStarUnlock?.Invoke();
+                    UnlockOnce = true;
+
+                }
+                if (!UnlockOnce)
+                {
+                    unlockedStar2.SetActive(true);
+                    OnSecondStarUnlock?.Invoke();
+                    UnlockOnce = true;
+
+                }
+
+            }
             if (percentage > 0.95)
             {
                 Debug.LogError("Win");
             }
         }
-        private void OnDisable()
+
+        private void OnApplicationQuit()
         {
-            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat"+1+ ".png");
+            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + 1 + ".png");
         }
         private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
         {

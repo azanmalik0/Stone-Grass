@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("currentSawBlades", "currentWheels", "SawBlades_CR", "rotationSpeed_CR", "wheels_CR", "maxCarCapacity_CR")]
+	[ES3PropertiesAttribute("currentSawBlades", "currentWheels", "SawBlades_CR", "rotationSpeed_CR", "wheels_CR", "maxCarCapacity", "maxCarCapacity_CR")]
 	public class ES3UserType_TruckUpgradeManager : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -21,6 +21,7 @@ namespace ES3Types
 			writer.WriteProperty("SawBlades_CR", instance.SawBlades_CR, ES3Type_int.Instance);
 			writer.WriteProperty("rotationSpeed_CR", instance.rotationSpeed_CR, ES3Type_int.Instance);
 			writer.WriteProperty("wheels_CR", instance.wheels_CR, ES3Type_int.Instance);
+			writer.WriteProperty("maxCarCapacity", instance.maxCarCapacity, ES3Type_int.Instance);
 			writer.WriteProperty("maxCarCapacity_CR", instance.maxCarCapacity_CR, ES3Type_int.Instance);
 		}
 
@@ -46,6 +47,9 @@ namespace ES3Types
 						break;
 					case "wheels_CR":
 						instance.wheels_CR = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "maxCarCapacity":
+						instance.maxCarCapacity = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "maxCarCapacity_CR":
 						instance.maxCarCapacity_CR = reader.Read<System.Int32>(ES3Type_int.Instance);
