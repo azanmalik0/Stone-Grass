@@ -68,10 +68,10 @@ namespace PT.Garden
             }
         }
 
-        [Obsolete]
+
         private void DoParticle(Vector3 position, Color c)
         {
-            
+
             print("Particle");
             ParticleSystem p = particlePool[particleIndex];
             particleIndex = (particleIndex + 1) % 40;
@@ -113,7 +113,6 @@ namespace PT.Garden
             catch { }
         }
 
-        [Obsolete]
         private void Update()
         {
             if (_isSetUp && _hasBeeIn)
@@ -125,7 +124,7 @@ namespace PT.Garden
                 }
                 else
                 {
-                            //print("Here1");
+                    //print("Here1");
                     RenderTexture curRT = CopyTexture(renderTexture);
 
                     computeShader.SetBuffer(0, "results", resultsBFF);

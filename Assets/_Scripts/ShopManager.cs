@@ -7,23 +7,41 @@ using UnityEngine.UI;
 public class ShopManager : MonoBehaviour
 {
 
+    [SerializeField] Image shopPanel;
+    //===================================
+    [Title("Select Button References")]
+    public Button[] previewButtons;
+    [Title("Select Button References")]
+    public GameObject[] selectButtons;
+    [Title("Skin Objects")]
+    public GameObject[] truckSkins;
+    [Title("Text References")]
+    public Text[] skins_CT;
+    [Title("Value Collections")]
+    public int[] skins_CR;
+    //===================================
     private int selectedIndex = 0;
     private int previousSelectedIndex = 0;
     private int previewIndex = 0;
-    [Title("UI References")]
-    [SerializeField] Image shopPanel;
-    [Space]
-    public Button[] previewButtons;
-    public Button[] selectButtons;
-    [Title("Skins")]
-    [SerializeField] GameObject[] truckSkins;
+
+
+
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenShopMenu;
     }
     private void Start()
     {
-        SelectSkin(selectedIndex);
+        UpdateSkinVisibility();
+        SetDeafult();
+    }
+    void SetDeafult()
+    {
+        for (int i = 0; i < skins_CT.Length; i++)
+        {
+            skins_CT[i].text = "$" + skins_CR[i].ToString();
+
+        }
     }
     public void OnButtonClick(string button)
     {
@@ -54,9 +72,13 @@ public class ShopManager : MonoBehaviour
     }
     public void SelectSkin(int index)
     {
-        previousSelectedIndex = selectedIndex;
-        selectedIndex = index;
-        UpdateSkinVisibility();
+        if (CurrencyManager.CheckRequiredCoins(skins_CR[index]))
+        {
+            selectButtons[index].SetActive(false);
+            previousSelectedIndex = selectedIndex;
+            selectedIndex = index;
+            UpdateSkinVisibility();
+        }
     }
     void UpdateSkinVisibility()
     {
