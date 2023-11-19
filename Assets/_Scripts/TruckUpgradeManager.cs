@@ -30,6 +30,11 @@ public class TruckUpgradeManager : MonoBehaviour
     [TabGroup("Saw Menu")] public Slider sawBlades_Slider;
     [TabGroup("Saw Menu")] public Slider rotationSpeed_Slider;
 
+    [Title("Maxed UI References")]
+
+    [TabGroup("Saw Menu")] public GameObject sawBlades_maxed;
+    [TabGroup("Saw Menu")] public GameObject rotationSpeed_maxed;
+
     [Title("Preferences")]
 
     [TabGroup("Saw Menu")] public int SawBlades_CR;
@@ -50,6 +55,11 @@ public class TruckUpgradeManager : MonoBehaviour
     [TabGroup("Truck Menu")] public Slider carCapacity_Slider;
     [TabGroup("Truck Menu")] public Slider wheels_Slider;
 
+    [Title("Maxed UI References")]
+
+    [TabGroup("Truck Menu")] public GameObject carCapacity_maxed;
+    [TabGroup("Truck Menu")] public GameObject wheels_maxed;
+
     [Title("Preferences")]
 
     [TabGroup("Truck Menu")] public int incrementCarCapacity;
@@ -68,6 +78,12 @@ public class TruckUpgradeManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenTruckUpgradeMenu;
+       // CurrencyManager.OnCurrencyRecieve += CheckTextColor;
+    }
+    private void OnDisable()
+    {
+       // CurrencyManager.OnCurrencyRecieve -= CheckTextColor;
+        GameManager.OnGameStateChanged -= OpenTruckUpgradeMenu;
     }
     private void Start()
     {
@@ -77,26 +93,32 @@ public class TruckUpgradeManager : MonoBehaviour
 
     private void SetDefaultValues()
     {
+        CheckTextColor();
 
+        //===========================================
         sawBlades_CT.text = "$" + SawBlades_CR.ToString();
         rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
+        wheels_CT.text = "$" + wheels_CR.ToString();
+        carCapacity_CT.text = "$" + maxCarCapacity_CR.ToString();
         //===========================================
         sawBlades_Slider.maxValue = sawBladeUpgrades.Length - 1;
         sawBlades_Slider.value = currentSawBlades;
         rotationSpeed_Slider.maxValue = maxRotationSpeedUpgrade;
-        //rotationSpeed_Slider.minValue = RotationSetter.Instance.RotationSpeed;
-        // rotationSpeed_Slider.value = 0;
-        //================================================
-        wheels_CT.text = "$" + wheels_CR.ToString();
-        carCapacity_CT.text = "$" + maxCarCapacity_CR.ToString();
-        //================================================
         wheels_Slider.maxValue = truckWheelUpgrades.Length - 1;
         wheels_Slider.value = currentWheels;
         carCapacity_Slider.maxValue = maxCarCapacityUpgrade;
         carCapacity_Slider.minValue = maxCarCapacity;
-        // carCapacity_Slider.value = 0;
 
     }
+
+    private void CheckTextColor()
+    {
+        CurrencyManager.UpdateAffordabilityStatus(sawBlades_CT, SawBlades_CR);
+        CurrencyManager.UpdateAffordabilityStatus(carCapacity_CT, maxCarCapacity);
+        CurrencyManager.UpdateAffordabilityStatus(rotationSpeed_CT, rotationSpeed_CR);
+        CurrencyManager.UpdateAffordabilityStatus(wheels_CT, wheels_CR);
+    }
+
     public void OnButtonClick(string button)
     {
         if (button == "Exit")
@@ -127,91 +149,108 @@ public class TruckUpgradeManager : MonoBehaviour
     }
     private void IncreaseRotationSpeed(int speed)
     {
-        //if (CurrencyManager.CheckRequiredCoins(rotationSpeed_CR))
-        // {
-        if (RotationSetter.Instance.RotationSpeed < maxRotationSpeedUpgrade)
+        if (CurrencyManager.CheckRequiredCoins(rotationSpeed_CR))
         {
-
-            OnIncreasingRotationSpeed?.Invoke(speed);
-            OnBuyingUpgrade?.Invoke(rotationSpeed_CR);
-            rotationSpeed_CR += rotationSpeed_CI;
-            rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
-            rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
+            if (RotationSetter.Instance.RotationSpeed < maxRotationSpeedUpgrade)
+            {
+                if (RotationSetter.Instance.RotationSpeed == (maxRotationSpeedUpgrade - speed))
+                    rotationSpeed_maxed.SetActive(true);
+                OnIncreasingRotationSpeed?.Invoke(speed);
+                OnBuyingUpgrade?.Invoke(rotationSpeed_CR);
+                rotationSpeed_CR += rotationSpeed_CI;
+                rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
+                rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
+                CheckTextColor();
+            }
+            else
+            {
+                Debug.LogError("MaxRotation");
+            }
         }
-        else
-        {
-            Debug.LogError("MaxRotation");
-        }
-        // }
 
     }
     void IncreaseCarCapacity(int increment)
     {
-        // if (CurrencyManager.CheckRequiredCoins(maxCarCapacity))
-        // {
-        if (maxCarCapacity < maxCarCapacityUpgrade)
+        if (CurrencyManager.CheckRequiredCoins(maxCarCapacity))
         {
-            maxCarCapacity += increment;
-            OnBuyingUpgrade?.Invoke(maxCarCapacity_CR);
-            maxCarCapacity_CR += maxCarCapacity_CI;
-            carCapacity_CT.text = "$" + maxCarCapacity_CR.ToString();
-            carCapacity_Slider.value = maxCarCapacity;
-            OnIncreasingCarCapacity?.Invoke();
+            if (maxCarCapacity < maxCarCapacityUpgrade)
+            {
+                if (maxCarCapacity == (maxCarCapacityUpgrade - increment))
+                    carCapacity_maxed.SetActive(true);
+                maxCarCapacity += increment;
+                OnBuyingUpgrade?.Invoke(maxCarCapacity_CR);
+                maxCarCapacity_CR += maxCarCapacity_CI;
+                carCapacity_CT.text = "$" + maxCarCapacity_CR.ToString();
+                carCapacity_Slider.value = maxCarCapacity;
+                OnIncreasingCarCapacity?.Invoke();
+                CheckTextColor();
+            }
+            else
+            {
+                Debug.LogError("MaxRotation");
+            }
         }
-        else
-        {
-            Debug.LogError("MaxRotation");
-        }
-        // }
 
 
     }
     void AddWheels()
     {
-        // if (CurrencyManager.CheckRequiredCoins(wheels_CR))
-        // {
-        if (currentWheels < truckWheelUpgrades.Length - 1)
+        if (CurrencyManager.CheckRequiredCoins(wheels_CR))
         {
-            truckWheelUpgrades[currentWheels].SetActive(false);
-            truckWheelUpgrades[currentWheels + 1].SetActive(true);
-            OnBuyingUpgrade?.Invoke(wheels_CR);
-            wheels_CR += wheels_CI;
-            wheels_CT.text = "$" + wheels_CR.ToString();
-            currentWheels++;
-            wheels_Slider.value = currentWheels;
+            if (currentWheels < truckWheelUpgrades.Length - 1)
+            {
+                if (currentWheels == (truckWheelUpgrades.Length - 2))
+                    wheels_maxed.SetActive(true);
+                truckWheelUpgrades[currentWheels].SetActive(false);
+                truckWheelUpgrades[currentWheels + 1].SetActive(true);
+                OnBuyingUpgrade?.Invoke(wheels_CR);
+                wheels_CR += wheels_CI;
+                wheels_CT.text = "$" + wheels_CR.ToString();
+                currentWheels++;
+                wheels_Slider.value = currentWheels;
+                CheckTextColor();
+            }
+            else
+            {
+                Debug.LogError("MaxWheels");
+            }
         }
-        else
-        {
-            Debug.LogError("MaxWheels");
-        }
-        // }
 
     }
     void AddBlades()
     {
-        // if (CurrencyManager.CheckRequiredCoins(SawBlades_CR))
-        // {
-        if (currentSawBlades < sawBladeUpgrades.Length - 1)
+        if (CurrencyManager.CheckRequiredCoins(SawBlades_CR))
         {
-            sawBladeUpgrades[currentSawBlades].SetActive(false);
-            sawBladeUpgrades[currentSawBlades + 1].SetActive(true);
-            OnBuyingUpgrade?.Invoke(SawBlades_CR);
-            SawBlades_CR += SawBlades_CI;
-            sawBlades_CT.text = "$" + SawBlades_CR.ToString();
-            currentSawBlades++;
-            sawBlades_Slider.value = currentSawBlades;
+            if (currentSawBlades < sawBladeUpgrades.Length - 1)
+            {
+                if (currentSawBlades == (sawBladeUpgrades.Length - 2))
+                    sawBlades_maxed.SetActive(true);
+
+                sawBladeUpgrades[currentSawBlades].SetActive(false);
+                sawBladeUpgrades[currentSawBlades + 1].SetActive(true);
+                OnBuyingUpgrade?.Invoke(SawBlades_CR);
+                SawBlades_CR += SawBlades_CI;
+                sawBlades_CT.text = "$" + SawBlades_CR.ToString();
+                currentSawBlades++;
+                sawBlades_Slider.value = currentSawBlades;
+                CheckTextColor();
+
+            }
+            else
+            {
+                Debug.LogError("MaxBlades");
+            }
         }
-        else
-        {
-            Debug.LogError("MaxBlades");
-        }
-        // }
 
     }
     void OpenTruckUpgradeMenu(GameState state)
     {
         if (state == GameState.Upgrading)
+        {
+            CheckTextColor();
             truckUpgradePanel.gameObject.SetActive(true);
+
+        }
     }
     void CloseTruckUpgradeMenu()
     {

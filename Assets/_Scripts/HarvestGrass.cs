@@ -1,10 +1,7 @@
 using DG.Tweening;
 using PT.Garden;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class HarvestGrass : MonoBehaviour
 {
@@ -13,6 +10,7 @@ public class HarvestGrass : MonoBehaviour
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
     public int grassCut;
+    [SerializeField] GameObject[] hayCellPrefab1;
     private void OnEnable()
     {
         GrassPatchActivator.OnGrassCut += GenerateHay;
@@ -23,14 +21,33 @@ public class HarvestGrass : MonoBehaviour
         GrassPatchActivator.OnGrassCut -= GenerateHay;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Wheat"))
-    //    {
-    //        CutGrass(other);
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Blue"))
+        {
 
-    //    }
-    //}
+
+            hayCellPrefab = hayCellPrefab1[0];
+        }
+        else if (other.CompareTag("Pink"))
+        {
+
+
+            hayCellPrefab = hayCellPrefab1[1];
+        }
+        else if (other.CompareTag("Green"))
+        {
+
+            hayCellPrefab = hayCellPrefab1[2];
+
+        }
+        else if (other.CompareTag("Autumn"))
+        {
+
+            hayCellPrefab = hayCellPrefab1[3];
+
+        }
+    }
     //private void CutGrass(Collider other)
     //{
     //    grassCut++;

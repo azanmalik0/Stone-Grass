@@ -34,6 +34,15 @@ public class ShopManager : MonoBehaviour
     {
         UpdateSkinVisibility();
         SetDeafult();
+        CheckTextColor();
+    }
+    private void CheckTextColor()
+    {
+        for (int i = 0; i < skins_CT.Length; i++)
+        {
+            CurrencyManager.UpdateAffordabilityStatus(skins_CT[i], skins_CR[i]);
+        }
+
     }
     void SetDeafult()
     {
@@ -54,7 +63,11 @@ public class ShopManager : MonoBehaviour
     void OpenShopMenu(GameState state)
     {
         if (state == GameState.InShop)
+        {
             shopPanel.gameObject.SetActive(true);
+            CheckTextColor();
+
+        }
     }
     void CloseShopMenu()
     {
@@ -78,6 +91,8 @@ public class ShopManager : MonoBehaviour
             previousSelectedIndex = selectedIndex;
             selectedIndex = index;
             UpdateSkinVisibility();
+            CurrencyManager.Instance.DeductCoins(skins_CR[index]);
+            CheckTextColor();
         }
     }
     void UpdateSkinVisibility()

@@ -124,7 +124,9 @@ public class LockedAreasManager : MonoBehaviour
                 print(CurrencyManager.coins);
                 Debug.LogError("here");
                 GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                coin.transform.DOJump(marketCoinPos.position, 2, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
+                float randomAngle = UnityEngine.Random.Range(0, 360);
+                coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
+                coin.transform.DOJump(marketCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
                 delay += 0.01f;
                 CurrencyManager.Instance.DeductCoins(1);
                 yield return null;
@@ -156,7 +158,9 @@ public class LockedAreasManager : MonoBehaviour
                 print(CurrencyManager.coins);
                 Debug.LogError("here");
                 GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                coin.transform.DOJump(henhouseCoinPos.position, 2, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
+                float randomAngle = UnityEngine.Random.Range(0, 360);
+                coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
+                coin.transform.DOJump(henhouseCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
                 delay += 0.01f;
                 CurrencyManager.Instance.DeductCoins(1);
                 yield return null;
@@ -187,7 +191,9 @@ public class LockedAreasManager : MonoBehaviour
                 print(CurrencyManager.coins);
                 Debug.LogError("here");
                 GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                coin.transform.DOJump(farmCoinPos.position, 2, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
+                float randomAngle = UnityEngine.Random.Range(0, 360);
+                coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
+                coin.transform.DOJump(farmCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
                 delay += 0.01f;
                 CurrencyManager.Instance.DeductCoins(1);
                 yield return null;
@@ -218,7 +224,9 @@ public class LockedAreasManager : MonoBehaviour
                 print(CurrencyManager.coins);
                 Debug.LogError("here");
                 GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                coin.transform.DOJump(barnCoinPos.position, 2, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
+                float randomAngle = UnityEngine.Random.Range(0, 360);
+                coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
+                coin.transform.DOJump(barnCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
                 delay += 0.01f;
                 CurrencyManager.Instance.DeductCoins(1);
                 yield return null;

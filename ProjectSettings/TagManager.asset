@@ -34,6 +34,11 @@ TagManager:
   - HenhouseUnlock
   - MarketUnlock
   - BarnUnlock
+  - Blue
+  - Brown
+  - Green
+  - Autumn
+  - Pink
   layers:
   - Default
   - TransparentFX
@@ -41,8 +46,8 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
-  - 
+  - PathDraw
+  - Animals
   - 
   - 
   - 

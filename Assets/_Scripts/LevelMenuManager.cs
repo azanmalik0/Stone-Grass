@@ -11,20 +11,19 @@ public class LevelMenuManager : MonoBehaviour
     [TabGroup("Collections")][SerializeField] GameObject[] levelButtons;
     //===============================================
     [SerializeField] Image levelSelectionPanel;
+    [SerializeField] GameObject loadingPanel;
     //===============================================
     [SerializeField] int currentLevel = 0;
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenLevelSelectionMenu;
-        //ProgressBarManager.OnFirstStarUnlock += UnlockNextLevel;
-        PercentageChecker.OnFirstStarUnlock += UnlockNextLevel;
+        PercentageChecker.OnFirstStarUnlock += UnlockNextLevelButton;
     }
     private void OnDisable()
     {
 
         GameManager.OnGameStateChanged -= OpenLevelSelectionMenu;
-       // ProgressBarManager.OnFirstStarUnlock -= UnlockNextLevel;
-        PercentageChecker.OnFirstStarUnlock -= UnlockNextLevel;
+        PercentageChecker.OnFirstStarUnlock -= UnlockNextLevelButton;
     }
     public void OnButtonClick(string button)
     {
@@ -38,6 +37,7 @@ public class LevelMenuManager : MonoBehaviour
 
     public void LoadLevel(int level)
     {
+
         if (currentLevel != level)
         {
 
@@ -45,6 +45,8 @@ public class LevelMenuManager : MonoBehaviour
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
         }
+        loadingPanel.SetActive(true);
+        ES3AutoSaveMgr.Current.Save();
 
     }
 
@@ -59,7 +61,7 @@ public class LevelMenuManager : MonoBehaviour
         GameManager.Instance.UpdateGameState(GameState.InGame);
     }
 
-    void UnlockNextLevel()
+    void UnlockNextLevelButton()
     {
         levelButtons[currentLevel + 1].transform.GetChild(1).gameObject.SetActive(false);
         levelButtons[currentLevel + 1].GetComponent<Button>().enabled = true;

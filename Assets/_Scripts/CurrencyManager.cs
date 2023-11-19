@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 public class CurrencyManager : MonoBehaviour
 {
     public static CurrencyManager Instance;
+    public static event Action OnCurrencyRecieve;
     [SerializeField] Text coinText;
     public static int coins;
     private void OnEnable()
@@ -18,11 +20,16 @@ public class CurrencyManager : MonoBehaviour
     {
         Instance = this;
     }
+    private void Start()
+    {
+        coinText.text = coins.ToString();
+    }
 
     void RecieveCoins(int value)
     {
         coins = value;
         coinText.text = coins.ToString();
+        OnCurrencyRecieve?.Invoke();
 
     }
     public static bool CheckRequiredCoins(int required)
@@ -37,10 +44,16 @@ public class CurrencyManager : MonoBehaviour
 
     public void DeductCoins(int value)
     {
-        // if (value > 0)
-        // {
         coins -= value;
         coinText.text = coins.ToString();
-        // }
+
+    }
+    public static void UpdateAffordabilityStatus(Text text, int value)
+    {
+        if (!CheckRequiredCoins(value))
+            text.color = Color.red;
+        else
+            text.color = Color.black;
+
     }
 }

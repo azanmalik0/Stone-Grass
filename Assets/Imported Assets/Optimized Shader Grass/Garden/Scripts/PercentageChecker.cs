@@ -22,7 +22,7 @@ namespace PT.Garden
 
 
         [SerializeField] private float percentage;
-        private float[] results;
+        [SerializeField] private float[] results;
 
         [SerializeField] private ComputeShader _cs;
         //[SerializeField] private Color _refree;
@@ -146,7 +146,10 @@ namespace PT.Garden
             DestroyImmediate(tempRT);
 
             // Refresh the Unity Editor to make the new file visible
+#if UNITY_EDITOR
+
             UnityEditor.AssetDatabase.Refresh();
+#endif
         }
         private void OnDestroy()
         {

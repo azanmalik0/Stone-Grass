@@ -12,7 +12,6 @@ public class FarmerStack : Stacker
 {
     public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
-    //public float initialYOffset;
     [SerializeField] Transform coinPos;
     bool IsLoading;
     float delay;
@@ -23,6 +22,7 @@ public class FarmerStack : Stacker
     [SerializeField] GameObject feedPrefab;
     [SerializeField] GameObject eggPrefab;
     [SerializeField] GameObject milkPrefab;
+
     private void Awake()
     {
         SetGridYOffset(gridOffset.y);
@@ -41,71 +41,36 @@ public class FarmerStack : Stacker
     {
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
-        LoadFeedStored();
+        LoadStack();
         //LoadProductStored();
         UpdateMaxFarmerCapacity();
         RefreshGrid();
     }
-    private void LoadFeedStored()
+    private void LoadStack()
     {
-        if (feedCollected > 0)
-        {
-            for (int i = 0; i < feedCollected; i++)
-            {
-                GameObject cell = Instantiate(feedPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
-                if (i == feedCollected - 1)
-                {
-                    LoadEggs();
 
-                }
-            }
+        for (int i = 0; i < feedCollected; i++)
+        {
+            GameObject cell = Instantiate(feedPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
+
         }
-        else
-            LoadEggs();
-
-        //RefreshGrid();
-
-    }
-    private void LoadEggs()
-    {
-        if (eggCollected > 0)
+        for (int i = 0; i < eggCollected; i++)
         {
+            GameObject cell = Instantiate(eggPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
 
-            for (int i = 0; i < eggCollected; i++)
-            {
-                GameObject cell = Instantiate(eggPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
-                if (i == eggCollected - 1)
-                {
-                    LoadMilk();
-
-                }
-            }
         }
-        else
-            LoadMilk();
-        //RefreshGrid();
-    }
-
-    private void LoadMilk()
-    {
-        if (milkCollected > 0)
+        for (int i = 0; i < milkCollected; i++)
         {
+            GameObject cell = Instantiate(milkPrefab, this.transform);
+            cell.transform.localPosition = previousPositions[i];
 
-            for (int i = 0; i < milkCollected; i++)
-            {
-                GameObject cell = Instantiate(milkPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
-                if(i==milkCollected-1)
-                {
-                    RefreshGrid();
-                }
-            }
         }
 
-    }
+        RefreshGrid();
 
+    }
     private void UpdateMaxFarmerCapacity()
     {
         maxHayCapacity = FarmUpgradeManager.Instance.maxFarmerCapacity;
@@ -118,6 +83,8 @@ public class FarmerStack : Stacker
             {
                 LoadFeedOnFarmer(other);
             }
+
+
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
@@ -135,7 +102,6 @@ public class FarmerStack : Stacker
             }
         }
     }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("HayLoft"))
@@ -153,20 +119,18 @@ public class FarmerStack : Stacker
             IsLoading = false;
         }
     }
-
     void LoadFeedOnFarmer(Collider other)
     {
         if (transform.childCount > maxHayCapacity)
         {
             RefreshGrid();
             farmerCapacityFullText.text = "MAX";
-            //Debug.LogError("MaxCapacityReached");
 
         }
         else if (other.transform.childCount == 0)
         {
             IsLoading = false;
-           // RefreshGrid();
+            RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -182,6 +146,7 @@ public class FarmerStack : Stacker
             previousPositions.Add(cellPositions[currentC, currentR]);
             delay += 0.0001f;
             UpdateGridPositions();
+            //RefreshGrid();
             other.GetComponent<HayLoft>().ResetGridPositions();
             IsLoading = false;
         }
@@ -193,7 +158,6 @@ public class FarmerStack : Stacker
         {
             IsLoading = false;
             delay = 0;
-            RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -208,7 +172,6 @@ public class FarmerStack : Stacker
             IsLoading = false;
         }
     }
-
     public void LoadProductOnFarmer(Collider other)
     {
         if (transform.childCount > maxHayCapacity)
@@ -222,7 +185,7 @@ public class FarmerStack : Stacker
         if (other.transform.childCount == 0)
         {
             IsLoading = false;
-           // RefreshGrid();
+            RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -248,6 +211,7 @@ public class FarmerStack : Stacker
                 other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
             delay += 0.0001f;
             UpdateGridPositions();
+           // RefreshGrid();
             other.GetComponent<ProductStack>().ResetGridPositions();
             IsLoading = false;
         }

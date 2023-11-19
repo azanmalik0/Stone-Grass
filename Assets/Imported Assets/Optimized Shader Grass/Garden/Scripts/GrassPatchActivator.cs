@@ -32,9 +32,9 @@ namespace PT.Garden
 
         public ComputeShader computeShader;
         public PixelChange[] results;
-        [SerializeField] private GameObject grassParticle;
-        [SerializeField] private Transform uv00, uv11;
-        private ParticleSystem[] particlePool;
+       // [SerializeField] private GameObject grassParticle;
+       // [SerializeField] private Transform uv00, uv11;
+       // private ParticleSystem[] particlePool;
         private int particleIndex = 0;
         [SerializeField] private InkCanvas _removeCanvas, _windCanvas;
         [SerializeField] private MeshRenderer _mr;
@@ -52,13 +52,13 @@ namespace PT.Garden
 
             if (_isSetUp)
             {
-                particlePool = new ParticleSystem[40];
-                for (int i = 0; i < 40; i++)
-                {
-                    particlePool[i] = Instantiate(grassParticle).GetComponent<ParticleSystem>();
-                    particlePool[i].transform.parent = transform;
-                    particlePool[i].gameObject.SetActive(false);
-                }
+                //particlePool = new ParticleSystem[40];
+                //for (int i = 0; i < 40; i++)
+                //{
+                //    particlePool[i] = Instantiate(grassParticle).GetComponent<ParticleSystem>();
+                //    particlePool[i].transform.parent = transform;
+                //    particlePool[i].gameObject.SetActive(false);
+                //}
 
                 Material _mainMaterial = _mr.materials[0];
 
@@ -78,19 +78,19 @@ namespace PT.Garden
         }
 
 
-        private void DoParticle(Vector3 position, Color c)
-        {
+        //private void DoParticle(Vector3 position, Color c)
+        //{
 
-            print("Particle");
-            ParticleSystem p = particlePool[particleIndex];
-            particleIndex = (particleIndex + 1) % 40;
-            p.startColor = c;
-            p.gameObject.SetActive(true);
-            p.Stop();
-            p.Play();
-            p.transform.position = position;
-            p.transform.forward = Vector3.up;
-        }
+        //    print("Particle");
+        //    ParticleSystem p = particlePool[particleIndex];
+        //    particleIndex = (particleIndex + 1) % 40;
+        //    p.startColor = c;
+        //    p.gameObject.SetActive(true);
+        //    p.Stop();
+        //    p.Play();
+        //    p.transform.position = position;
+        //    p.transform.forward = Vector3.up;
+        //}
 
         private void OnTriggerEnter(Collider other)
         {
@@ -153,14 +153,14 @@ namespace PT.Garden
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
                             OnGrassCut?.Invoke();
-                            print("======================================>");
-                            Vector3 pos = new()
-                            {
-                                x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
-                                z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
-                                y = transform.position.y + 0.5f
-                            };
-                            DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
+                           // print("======================================>");
+                           // Vector3 pos = new()
+                           // {
+                           //     x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
+                           //     z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
+                           //     y = transform.position.y + 0.5f
+                           // };
+                           //// DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
                         }
                     }
                 }

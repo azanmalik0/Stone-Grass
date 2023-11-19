@@ -48,7 +48,6 @@ public class HayLoft : Stacker
     {
         if (feedStored > 0)
         {
-
             for (int i = 0; i < feedStored; i++)
             {
                 GameObject cell = Instantiate(feedCellPrefab, this.transform);

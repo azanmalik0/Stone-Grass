@@ -54,7 +54,6 @@ public class MoneyStack : Stacker
 
     void GenerateMoney()
     {
-        Debug.LogError("Generate");
         for (int i = 0; i < 3; i++)
         {
             GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
