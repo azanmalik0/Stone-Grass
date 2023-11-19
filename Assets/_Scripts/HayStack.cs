@@ -42,7 +42,6 @@ public class HayStack : Stacker
 
     private void Awake()
     {
-        print(gridOffset.y);
         SetGridYOffset(gridOffset.y);
         instance = this;
     }

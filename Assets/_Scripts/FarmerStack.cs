@@ -121,10 +121,10 @@ public class FarmerStack : Stacker
     }
     void LoadFeedOnFarmer(Collider other)
     {
-        if (transform.childCount > maxHayCapacity)
+        if (transform.childCount >= maxHayCapacity)
         {
             RefreshGrid();
-            farmerCapacityFullText.text = "MAX";
+            AnimateMax();
 
         }
         else if (other.transform.childCount == 0)
@@ -151,6 +151,14 @@ public class FarmerStack : Stacker
             IsLoading = false;
         }
     }
+
+    private void AnimateMax()
+    {
+        farmerCapacityFullText.gameObject.SetActive(true);
+        if (!DOTween.IsTweening(farmerCapacityFullText))
+            farmerCapacityFullText.DOColor(new Color32(255, 255, 255, 0), 0.5f).SetLoops(5, LoopType.Yoyo).SetEase(Ease.InOutSine).OnComplete(() => farmerCapacityFullText.gameObject.SetActive(false));
+    }
+
     private void GetMoneyFromCounter(Collider other)
     {
 
@@ -211,7 +219,7 @@ public class FarmerStack : Stacker
                 other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
             delay += 0.0001f;
             UpdateGridPositions();
-           // RefreshGrid();
+            // RefreshGrid();
             other.GetComponent<ProductStack>().ResetGridPositions();
             IsLoading = false;
         }

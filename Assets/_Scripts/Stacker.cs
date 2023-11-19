@@ -34,14 +34,14 @@ public abstract class Stacker : SerializedMonoBehaviour
         if (!Reverse)
         {
 
-            gridOffset.y += 0.2f;
+            gridOffset.y += 0.3f;
             currentC = 0;
             currentR = 0;
         }
         else
         {
             if (gridOffset.y > InitialYOffset)
-                gridOffset.y -= 0.2f;
+                gridOffset.y -= 0.3f;
             else
                 gridOffset.y -= InitialYOffset;
             currentC = maxColumns - 1;
@@ -118,7 +118,6 @@ public abstract class Stacker : SerializedMonoBehaviour
         currentC = 0;
         currentR = 0;
         gridOffset.y = InitialYOffset;
-        print(InitialYOffset+gameObject.name);
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.2f).SetEase(Ease.OutSine);
