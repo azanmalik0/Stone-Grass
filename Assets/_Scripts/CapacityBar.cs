@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class CapacityBar : MonoBehaviour
 {
     public static CapacityBar Instance;
-    [SerializeField] Slider _slider;
+     public Slider _slider;
     [SerializeField] Text collected;
 
     private void Awake()
@@ -17,7 +17,7 @@ public class CapacityBar : MonoBehaviour
     }
     private void Start()
     {
-        _slider.maxValue = HayStack.instance.maxHayCapacity;
+       // _slider.maxValue = HayStack.instance.maxHayCapacity;
     }
 
     private void OnEnable()

@@ -42,7 +42,6 @@ public class FarmerStack : Stacker
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
         LoadStack();
-        //LoadProductStored();
         UpdateMaxFarmerCapacity();
         RefreshGrid();
     }
@@ -219,7 +218,7 @@ public class FarmerStack : Stacker
                 other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
             delay += 0.0001f;
             UpdateGridPositions();
-            // RefreshGrid();
+            RefreshGrid();
             other.GetComponent<ProductStack>().ResetGridPositions();
             IsLoading = false;
         }

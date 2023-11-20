@@ -7,7 +7,7 @@ public class InGameUIManager : MonoBehaviour
 {
     [SerializeField] Image settingsPanel;
     [SerializeField] GameObject inGameUI;
-    [SerializeField] GameObject joyStick;
+    [SerializeField] GameObject joyStickStopper;
 
     private void OnEnable()
     {
@@ -40,12 +40,16 @@ public class InGameUIManager : MonoBehaviour
     {
         if ((state == GameState.UnlockingArea))
         {
-            joyStick.SetActive(false);
+            joyStickStopper.SetActive(true);
             inGameUI.SetActive(false);
+            GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = true;
+            GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else
         {
-            joyStick.SetActive(true);
+            joyStickStopper.SetActive(false);
+            GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = false;
+            GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = false;
             inGameUI.SetActive(true);
         }
 

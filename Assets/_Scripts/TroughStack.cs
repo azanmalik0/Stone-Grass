@@ -25,14 +25,14 @@ public class TroughStack : Stacker
     [SerializeField] GameObject feedPrefab;
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
 
     }
     private void Start()
     {
+        SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
-        LoadFeedCollected();
+       LoadFeedCollected();
         DisplayCrudeTroughCounter();
     }
     private void LoadFeedCollected()

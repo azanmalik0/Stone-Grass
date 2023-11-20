@@ -18,11 +18,11 @@ public class ProductMarketStack : Stacker
     [SerializeField] int productCheckIndex;
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
 
     }
     void Start()
     {
+        SetGridYOffset(gridOffset.y);
         productCheckIndex = 1;
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
@@ -109,6 +109,7 @@ public class ProductMarketStack : Stacker
                 {
                     productCheckIndex++;
                     IsLoading = false;
+                    Debug.LogError("=> " + productCheckIndex);
                 }
                 else
                 {

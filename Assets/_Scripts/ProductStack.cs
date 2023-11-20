@@ -21,11 +21,11 @@ public class ProductStack : Stacker
     public int milkGenerated;
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
         
     }
     private void Start()
     {
+        SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
         LoadProductStored();

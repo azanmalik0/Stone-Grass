@@ -15,10 +15,10 @@ public class HayLoft : Stacker
     [SerializeField] Transform feedCellStart;
     [SerializeField] Transform feedCellLast;
     public float initialYOffset;
-    int feedCollected = 0;
+    public int feedCollected = 0;
     int feedGenerated = 0;
     public int feedStored = 0;
-    bool IsGenerating;
+     public bool IsGenerating;
     [SerializeField] Text crudeStorageCapacityText;
 
     private void OnEnable()
@@ -34,11 +34,11 @@ public class HayLoft : Stacker
     }
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
 
     }
     private void Start()
     {
+        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
         LoadFeedStored();
         CalculateCellPositions();
@@ -78,24 +78,27 @@ public class HayLoft : Stacker
     private void Update()
     {
         DisplayCrudeStorageCounter();
+        
     }
     void GenerateFeed()
     {
 
         for (int i = 0; i < maxHayCapacity; i++)
         {
+
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
             feedCell.transform.DOLocalMove(feedCellLast.position, 1f).SetEase(Ease.Linear).SetDelay(generateDelay).OnComplete(() => LoadOnLoftPlatform(feedCell.transform));
             generateDelay += 1f;
+            
 
         }
 
     }
     void LoadOnLoftPlatform(Transform hay)
     {
-        if (transform.childCount > maxHayCapacity)
+        if (transform.childCount >= maxHayCapacity)
         {
-
+            IsGenerating = false;
         }
         else
         {
