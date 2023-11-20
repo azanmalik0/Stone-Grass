@@ -7,6 +7,17 @@ public class InGameUIManager : MonoBehaviour
 {
     [SerializeField] Image settingsPanel;
     [SerializeField] GameObject inGameUI;
+    [SerializeField] GameObject joyStick;
+
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += SetjoyStickState;
+    }
+    private void OnDisable()
+    {
+
+        GameManager.OnGameStateChanged -= SetjoyStickState;
+    }
     public void OnButtonClick(string button)
     {
         if (button == "OpenSettings")
@@ -22,6 +33,20 @@ public class InGameUIManager : MonoBehaviour
         if (button == "PrivacyPolicy")
         {
             //=================================
+        }
+
+    }
+    void SetjoyStickState(GameState state)
+    {
+        if ((state == GameState.UnlockingArea))
+        {
+            joyStick.SetActive(false);
+            inGameUI.SetActive(false);
+        }
+        else
+        {
+            joyStick.SetActive(true);
+            inGameUI.SetActive(true);
         }
 
     }

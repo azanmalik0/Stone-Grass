@@ -60,17 +60,25 @@ public class CameraManager : MonoBehaviour
         {
             StartCoroutine(ChangeCameraToGamePosition());
         }
+        if (CurrentState == GameState.UnlockingArea)
+        {
+            IsInMenu = true;
+
+        }
 
 
 
     }
-
+    public float waitForUnlock;
     IEnumerator ChangeCameraToGamePosition()
     {
-        Tween t = transform.DOMove(followTarget.position + offset, 0.5f).SetEase(Ease.Linear);
-        yield return new WaitWhile(() => t.IsPlaying());
+        Tween tm = transform.DOMove(followTarget.position + offset, 0.5f).SetEase(Ease.Linear);
+        Tween tr = transform.DORotate(new Vector3(47.97f, 0, 0), 0.5f).SetEase(Ease.Linear);
+        //yield return new WaitUntil(() => tm.IsComplete());
+        yield return new WaitForSeconds(0.5f);
         IsInMenu = false;
     }
+
     private void FollowPlayer(Transform target)
     {
         transform.position = target.position + offset;

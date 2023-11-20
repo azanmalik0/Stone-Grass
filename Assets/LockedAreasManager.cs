@@ -18,6 +18,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseInActive;
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseActive;
     [TabGroup("Henhouse")][SerializeField] ParticleSystem henhouse_smokeParticle;
+    [TabGroup("Henhouse")][SerializeField] BoxCollider henhouse_collider;
     [Title("Preferences")]
     [TabGroup("Henhouse")][SerializeField] int henhouseLocked_CR;
     [TabGroup("Henhouse")][ReadOnly][SerializeField] int henhouseLocked_RM;
@@ -29,6 +30,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Farm")][SerializeField] GameObject farmInActive;
     [TabGroup("Farm")][SerializeField] GameObject farmActive;
     [TabGroup("Farm")][SerializeField] ParticleSystem farm_smokeParticle;
+    [TabGroup("Farm")][SerializeField] BoxCollider farm_collider;
     [Title("Preferences")]
     [TabGroup("Farm")][SerializeField] int farmLocked_CR;
     [TabGroup("Farm")][ReadOnly][SerializeField] int farmLocked_RM;
@@ -40,6 +42,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Barn")][SerializeField] GameObject barnInActive;
     [TabGroup("Barn")][SerializeField] GameObject barnActive;
     [TabGroup("Barn")][SerializeField] ParticleSystem barn_smokeParticle;
+    [TabGroup("Barn")][SerializeField] BoxCollider barn_collider;
     [Title("Preferences")]
     [TabGroup("Barn")][SerializeField] int barnLocked_CR;
     [TabGroup("Barn")][ReadOnly][SerializeField] int barnLocked_RM;
@@ -51,6 +54,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Market")][SerializeField] GameObject marketInActive;
     [TabGroup("Market")][SerializeField] GameObject marketActive;
     [TabGroup("Market")][SerializeField] ParticleSystem market_smokeParticle;
+    [TabGroup("Market")][SerializeField] BoxCollider market_collider;
     [Title("Preferences")]
     [TabGroup("Market")][SerializeField] int marketLocked_CR;
     [TabGroup("Market")][ReadOnly][SerializeField] int marketLocked_RM;
@@ -134,6 +138,7 @@ public class LockedAreasManager : MonoBehaviour
             }
             else
             {
+                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                 StartCoroutine(UnlockArea("Market"));
                 break;
 
@@ -144,7 +149,6 @@ public class LockedAreasManager : MonoBehaviour
             marketLockedPanel.DOScale(new Vector3(0.00582442f, 0.00582442f, 0.00582442f), 0.1f).SetDelay(0.5f).SetLoops(CurrencyManager.coins, LoopType.Yoyo);
         delay = 0;
     }
-
     IEnumerator GiveCoinsToHenhouse()
     {
         Debug.LogError("here");
@@ -168,6 +172,7 @@ public class LockedAreasManager : MonoBehaviour
             }
             else
             {
+                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                 StartCoroutine(UnlockArea("Henhouse"));
                 break;
 
@@ -201,6 +206,7 @@ public class LockedAreasManager : MonoBehaviour
             }
             else
             {
+                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                 StartCoroutine(UnlockArea("Farm"));
                 break;
 
@@ -234,6 +240,7 @@ public class LockedAreasManager : MonoBehaviour
             }
             else
             {
+                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                 StartCoroutine(UnlockArea("Barn"));
                 break;
 
@@ -249,39 +256,62 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (area == "Henhouse")
         {
-
-            henhouse_smokeParticle.Play();
             henhouseInActive.SetActive(false);
+            Camera.main.transform.DOMove(new Vector3(2.6f, 4.973701f, -8.43f), 1f).SetEase(Ease.Linear);
+            Camera.main.transform.DORotate(new Vector3(16.2f, -77.05f, 0.547f), 1f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(1);
+            henhouse_smokeParticle.Play();
             yield return new WaitForSeconds(1);
             henhouseActive.SetActive(true);
-            henhouseActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear);
+            henhouse_collider.enabled = false;
+            henhouseActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(()=> henhouse_collider.enabled = true);
+            yield return new WaitForSeconds(1);
+            GameManager.Instance.UpdateGameState(GameState.InGame);
         }
         if (area == "Farm")
         {
 
-            farm_smokeParticle.Play();
             farmInActive.SetActive(false);
+            Camera.main.transform.DOMove(new Vector3(-3.07585239f, 6.00184631f, -10.0817223f), 1f).SetEase(Ease.Linear);
+            Camera.main.transform.DORotate(new Vector3(12.1820517f, 12.1642532f, 0.529350638f), 1f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(1);
+            farm_smokeParticle.Play();
             yield return new WaitForSeconds(1);
             farmActive.SetActive(true);
-            farmActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear);
+            farm_collider.enabled = false;
+            farmActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => farm_collider.enabled = true);
+            yield return new WaitForSeconds(1);
+            GameManager.Instance.UpdateGameState(GameState.InGame);
         }
         if (area == "Barn")
         {
 
-            barn_smokeParticle.Play();
             barnInActive.SetActive(false);
+            Camera.main.transform.DOMove(new Vector3(-4.11999989f, 6.71000004f, -0.150000006f), 1f).SetEase(Ease.Linear);
+            Camera.main.transform.DORotate(new Vector3(17.2778378f, 104.517273f, 0.542637885f), 1f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(1);
+            barn_smokeParticle.Play();
             yield return new WaitForSeconds(1);
             barnActive.SetActive(true);
-            barnActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear);
+            barn_collider.enabled = false;
+            barnActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => barn_collider.enabled = true);
+            yield return new WaitForSeconds(1);
+            GameManager.Instance.UpdateGameState(GameState.InGame);
         }
         if (area == "Market")
         {
 
-            market_smokeParticle.Play();
             marketInActive.SetActive(false);
+            Camera.main.transform.DOMove(new Vector3(-2.88000011f, 5.21999979f, 1.11000001f), 1f).SetEase(Ease.Linear);
+            Camera.main.transform.DORotate(new Vector3(17.3302288f, 161.742752f, 359.360199f), 1f).SetEase(Ease.Linear);
+            yield return new WaitForSeconds(1);
+            market_smokeParticle.Play();
             yield return new WaitForSeconds(1);
             marketActive.SetActive(true);
-            marketActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear);
+            market_collider.enabled = false;
+            marketActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => market_collider.enabled = true);
+            yield return new WaitForSeconds(1);
+            GameManager.Instance.UpdateGameState(GameState.InGame);
         }
     }
 }
