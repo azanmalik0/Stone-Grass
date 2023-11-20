@@ -42,7 +42,7 @@ public class HayLoft : Stacker
         ES3AutoSaveMgr.Current.Load();
         LoadFeedStored();
         CalculateCellPositions();
-        DisplayCrudeStorageCounter();
+        // DisplayCrudeStorageCounter();
     }
     private void LoadFeedStored()
     {
@@ -70,40 +70,38 @@ public class HayLoft : Stacker
         if (feedCollected >= requiredHay && !IsGenerating)
         {
             IsGenerating = true;
+            feedCollected = 0;
             GenerateFeed();
         }
     }
+    float generateDelay;
+    private void Update()
+    {
+        DisplayCrudeStorageCounter();
+    }
     void GenerateFeed()
     {
-        if (feedCollected < requiredHay)
-        {
-            IsGenerating = false;
-        }
-        else
-        {
 
-            feedCollected -= requiredHay;
+        for (int i = 0; i < maxHayCapacity; i++)
+        {
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-            feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                LoadOnLoftPlatform(feedCell.transform);
-                GenerateFeed();
-            });
+            feedCell.transform.DOLocalMove(feedCellLast.position, 1f).SetEase(Ease.Linear).SetDelay(generateDelay).OnComplete(() => LoadOnLoftPlatform(feedCell.transform));
+            generateDelay += 1f;
+
         }
+
     }
     void LoadOnLoftPlatform(Transform hay)
     {
         if (transform.childCount > maxHayCapacity)
         {
-            //Debug.LogError("MaxCapacityReached");
 
         }
         else
         {
             feedStored++;
-            DisplayCrudeStorageCounter();
             hay.transform.SetParent(this.transform);
-            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.5f).SetEase(Ease.Linear);
+            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() => hay.transform.SetParent(this.transform));
             previousPositions.Add(cellPositions[currentR, currentC]);
             UpdateGridPositions();
 
