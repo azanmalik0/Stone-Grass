@@ -368,7 +368,7 @@ namespace Es.InkPainter
                 {
                     if (p.material.HasProperty(p.mainTexturePropertyID))
                     {
-                        var loadedTexture = Resources.Load<Texture2D>("hasnat");
+                        var loadedTexture = Resources.Load<Texture2D>("hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel"));
                         if (loadedTexture != null)
                         {
                             p.mainTexture = loadedTexture;

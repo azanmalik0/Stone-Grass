@@ -52,7 +52,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GrassTex:
-        m_Texture: {fileID: 2800000, guid: d0c7f9a31746f3949ae671fab3502ed7, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8d68f229112966b4c9217c3e633f5e11, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -64,7 +64,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NoGrassTex:
-        m_Texture: {fileID: 2800000, guid: 2ae7a3f254531854fb2c3fe66ceeb568, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1a67d5da7a8307e47bfdba483f5cd327, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:

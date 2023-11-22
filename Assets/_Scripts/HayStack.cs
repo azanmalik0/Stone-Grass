@@ -44,6 +44,7 @@ public class HayStack : Stacker
 
     private void Awake()
     {
+        SetGridYOffset(gridOffset.y);
         instance = this;
     }
     private void OnEnable()
@@ -57,13 +58,10 @@ public class HayStack : Stacker
     }
     private void Start()
     {
-
-        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
         LoadHayCollected();
         CalculateCellPositions();
         UpdateMaxCarCapacity();
-        //ChangeHayColor();
     }
     private void LoadHayCollected()
     {
@@ -83,10 +81,6 @@ public class HayStack : Stacker
         maxHayCapacity = TruckUpgradeManager.Instance.maxCarCapacity;
         CapacityBar.Instance._slider.maxValue = maxHayCapacity;
         CapacityBar.Instance.UpdateMaxCapacityUI();
-    }
-    private void Update()
-    {
-        //CheckCapacityFull();
     }
 
     void LoadOnTractor(Collider hay)
@@ -151,13 +145,11 @@ public class HayStack : Stacker
 
     IEnumerator UnloadFromTruck()
     {
-
         while (unloading && transform.childCount > 0)
         {
-
             hayCollected--;
             haySold++;
-            OnHayCollect?.Invoke(hayCollected);
+            OnHayCollect?.Invoke(HayCollected);
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
             hayCell.GetComponent<BoxCollider>().enabled = false;
             hayCell.transform.SetParent(null);
@@ -166,7 +158,8 @@ public class HayStack : Stacker
             {
                 Destroy(hayCell);
                 boilerParticle.Play();
-                OnSellingHarvest?.Invoke(haySold);
+                CurrencyManager.Instance.RecieveCoins(haySold);
+
             });
             if ((previousPositions.Count - 1) > 0)
                 previousPositions.RemoveAt(previousPositions.Count - 1);
@@ -176,6 +169,7 @@ public class HayStack : Stacker
             yield return null;
 
         }
+        OnSellingHarvest?.Invoke(haySold);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -195,7 +189,6 @@ public class HayStack : Stacker
         if (other.CompareTag("Unload"))
         {
             unloading = false;
-            //Debug.LogError("False");
         }
 
     }

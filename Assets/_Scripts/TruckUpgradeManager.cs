@@ -73,16 +73,17 @@ public class TruckUpgradeManager : MonoBehaviour
 
     private void Awake()
     {
+        carCapacity_Slider.minValue = maxCarCapacity;
         Instance = this;
     }
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenTruckUpgradeMenu;
-       // CurrencyManager.OnCurrencyRecieve += CheckTextColor;
+        // CurrencyManager.OnCurrencyRecieve += CheckTextColor;
     }
     private void OnDisable()
     {
-       // CurrencyManager.OnCurrencyRecieve -= CheckTextColor;
+        // CurrencyManager.OnCurrencyRecieve -= CheckTextColor;
         GameManager.OnGameStateChanged -= OpenTruckUpgradeMenu;
     }
     private void Start()
@@ -107,7 +108,7 @@ public class TruckUpgradeManager : MonoBehaviour
         wheels_Slider.maxValue = truckWheelUpgrades.Length - 1;
         wheels_Slider.value = currentWheels;
         carCapacity_Slider.maxValue = maxCarCapacityUpgrade;
-        carCapacity_Slider.minValue = maxCarCapacity;
+        carCapacity_Slider.value = maxCarCapacity;
 
     }
 

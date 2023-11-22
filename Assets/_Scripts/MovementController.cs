@@ -1,4 +1,5 @@
 using DG.Tweening;
+using PT.Garden;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,14 +18,22 @@ public class MovementController : MonoBehaviour
     GameState CurrentState;
 
 
-   
-   
+
+
     void Start()
     {
         Init();
 
     }
+    private void OnEnable()
+    {
+        GameManager.OnGameStateChanged += SlowDownTruck;
+    }
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged += SlowDownTruck;
 
+    }
     private void Init()
     {
         rb = GetComponent<Rigidbody>();
@@ -67,5 +76,13 @@ public class MovementController : MonoBehaviour
             }
         }
     }
-   
+
+    void SlowDownTruck(GameState state)
+    {
+        if (state == GameState.CuttingGrass)
+            movementSpeed = 250;
+        else if (state == GameState.NotCuttingGrass)
+            movementSpeed = 500;
+    }
+
 }

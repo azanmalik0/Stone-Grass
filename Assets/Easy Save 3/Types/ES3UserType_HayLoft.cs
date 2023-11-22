@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("feedStored", "gridOffset", "previousPositions", "currentR", "currentC")]
+	[ES3PropertiesAttribute("feedGenerated", "feedStored", "gridOffset", "previousPositions", "currentR", "currentC")]
 	public class ES3UserType_HayLoft : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,6 +16,7 @@ namespace ES3Types
 		{
 			var instance = (HayLoft)obj;
 			
+			writer.WritePrivateField("feedGenerated", instance);
 			writer.WriteProperty("feedStored", instance.feedStored, ES3Type_int.Instance);
 			writer.WritePrivateField("gridOffset", instance);
 			writer.WriteProperty("previousPositions", instance.previousPositions, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<UnityEngine.Vector3>)));
@@ -31,6 +32,9 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
+					case "feedGenerated":
+					instance = (HayLoft)reader.SetPrivateField("feedGenerated", reader.Read<System.Int32>(), instance);
+					break;
 					case "feedStored":
 						instance.feedStored = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;

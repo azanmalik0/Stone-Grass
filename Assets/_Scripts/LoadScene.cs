@@ -28,6 +28,7 @@ public class LoadScene : MonoBehaviour
 
     IEnumerator LoadSceneAsync(int sceneID)
     {
+        ES3AutoSaveMgr.Current.Save();
         yield return new WaitForSeconds(2f);
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
         while (!operation.isDone)

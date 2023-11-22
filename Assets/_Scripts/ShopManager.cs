@@ -11,6 +11,8 @@ public class ShopManager : MonoBehaviour
     //===================================
     [Title("Select Button References")]
     public Button[] previewButtons;
+    [Title("Buy Button References")]
+    public GameObject[] BuyButtons;
     [Title("Select Button References")]
     public GameObject[] selectButtons;
     [Title("Skin Objects")]
@@ -20,8 +22,8 @@ public class ShopManager : MonoBehaviour
     [Title("Value Collections")]
     public int[] skins_CR;
     //===================================
-    private int selectedIndex = 0;
-    private int previousSelectedIndex = 0;
+    public int selectedIndex = 0;
+    public int previousSelectedIndex = 0;
     private int previewIndex = 0;
 
 
@@ -32,6 +34,7 @@ public class ShopManager : MonoBehaviour
     }
     private void Start()
     {
+        ES3AutoSaveMgr.Current.Load();
         UpdateSkinVisibility();
         SetDeafult();
         CheckTextColor();
@@ -64,6 +67,7 @@ public class ShopManager : MonoBehaviour
     {
         if (state == GameState.InShop)
         {
+            if(shopPanel != null)
             shopPanel.gameObject.SetActive(true);
             CheckTextColor();
 
@@ -73,27 +77,46 @@ public class ShopManager : MonoBehaviour
     {
         shopPanel.gameObject.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.InGame);
-        if (selectedIndex == previousSelectedIndex)
-        {
-            ApplySkin(previousSelectedIndex);
-        }
-
+        ApplySkin(selectedIndex);
     }
     public void PreviewSkin(int index)
     {
         ApplySkin(index);
     }
-    public void SelectSkin(int index)
+    public void BuySkin(int index)
     {
         if (CurrencyManager.CheckRequiredCoins(skins_CR[index]))
         {
-            selectButtons[index].SetActive(false);
+            for (int i = 0; i < selectButtons.Length; i++)
+            {
+                if (i == index)
+                    selectButtons[i].GetComponentInChildren<Text>().text = "Selected";
+                else
+                    selectButtons[i].GetComponentInChildren<Text>().text = "Use";
+
+            }
+            BuyButtons[index].SetActive(false);
             previousSelectedIndex = selectedIndex;
             selectedIndex = index;
             UpdateSkinVisibility();
             CurrencyManager.Instance.DeductCoins(skins_CR[index]);
             CheckTextColor();
         }
+    }
+    public void SelectSkin(int index)
+    {
+        for (int i = 0; i < selectButtons.Length; i++)
+        {
+            if (i == index)
+                selectButtons[i].GetComponentInChildren<Text>().text = "Selected";
+            else
+                selectButtons[i].GetComponentInChildren<Text>().text = "Use";
+
+        }
+        previousSelectedIndex = selectedIndex;
+        selectedIndex = index;
+        UpdateSkinVisibility();
+
     }
     void UpdateSkinVisibility()
     {

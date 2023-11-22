@@ -39,11 +39,10 @@ public class FarmerStack : Stacker
     }
     private void Start()
     {
-        CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
+        CalculateCellPositions();
         LoadStack();
         UpdateMaxFarmerCapacity();
-        RefreshGrid();
     }
     private void LoadStack()
     {

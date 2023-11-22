@@ -32,9 +32,9 @@ namespace PT.Garden
 
         public ComputeShader computeShader;
         public PixelChange[] results;
-       // [SerializeField] private GameObject grassParticle;
-       // [SerializeField] private Transform uv00, uv11;
-       // private ParticleSystem[] particlePool;
+        // [SerializeField] private GameObject grassParticle;
+        // [SerializeField] private Transform uv00, uv11;
+        // private ParticleSystem[] particlePool;
         private int particleIndex = 0;
         [SerializeField] private InkCanvas _removeCanvas, _windCanvas;
         [SerializeField] private MeshRenderer _mr;
@@ -121,20 +121,24 @@ namespace PT.Garden
             }
             catch { }
         }
-
+        float delay = 2f;
+        RenderTexture curRT;
         private void Update()
         {
             if (_isSetUp && _hasBeeIn)
             {
                 if (!_hasCopy)
                 {
+                    if(renderTexture != null)
                     lastRenderTexture = CopyTexture(renderTexture);
                     _hasCopy = true;
                 }
                 else
                 {
                     //print("Here1");
-                    RenderTexture curRT = CopyTexture(renderTexture);
+                   
+                    if (renderTexture != null)
+                         curRT = CopyTexture(renderTexture);
 
                     computeShader.SetBuffer(0, "results", resultsBFF);
                     computeShader.SetFloat("width", curRT.width);
@@ -148,25 +152,39 @@ namespace PT.Garden
                     resultsBFF.GetData(results);
 
                     lastRenderTexture = curRT;
+                    IsCutting = false;
                     foreach (PixelChange pt in results)
                     {
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
+                            IsCutting = true;
                             OnGrassCut?.Invoke();
-                           // print("======================================>");
-                           // Vector3 pos = new()
-                           // {
-                           //     x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
-                           //     z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
-                           //     y = transform.position.y + 0.5f
-                           // };
-                           //// DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
+                            GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
+                            // UnityEngine.Debug.Log("Anadar");
+                            // print("======================================>");
+                            // Vector3 pos = new()
+                            // {
+                            //     x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
+                            //     z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
+                            //     y = transform.position.y + 0.5f
+                            // };
+                            //// DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
+                        }
+                        else
+                        {
+                            if (!IsCutting)
+                            {
+                                DOTween.Sequence()
+                                    .AppendCallback(() => GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass))
+                                    .SetDelay(delay);
+                            }
+
                         }
                     }
                 }
             }
         }
-
+        bool IsCutting;
         private RenderTexture CopyTexture(RenderTexture t)
         {
             RenderTexture newrt = new(t)

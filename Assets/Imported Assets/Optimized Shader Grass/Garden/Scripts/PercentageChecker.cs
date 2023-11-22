@@ -50,7 +50,7 @@ namespace PT.Garden
             results = new float[_texture.width * _texture.height];
             sumBuffer = new ComputeBuffer(results.Length, sizeof(float));
         }
-
+        public float trp;
         private void Update()
         {
             //_run = false;
@@ -59,6 +59,7 @@ namespace PT.Garden
 
             // get the texture
             _texture = _mainMaterial.GetTexture(_txid);
+
             RenderTexture t = (RenderTexture)_texture;
 
             RenderTexture rt = new(t.width, t.height, t.depth, t.format)
@@ -87,9 +88,25 @@ namespace PT.Garden
                 sum += results[i];
             }
 
-            percentage = sum / results.Length;
+            if (percentage >= -trp && percentage < 0.2)
+            {
+                percentage = (sum / results.Length) - trp;
+            }
+            else if (percentage > 0.2 && percentage < 0.6)
+            {
+                percentage = (sum / results.Length) - trp / 2;
+            }
+            else if (percentage > 0.6 && percentage < 0.8)
+            {
+                percentage = (sum / results.Length) - trp / 4;
+            }
+            else if (percentage > 0.8)
+            {
+                percentage = (sum / results.Length);
+            }
             _filledSlider.fillAmount = percentage;
             CheckStarUnlock();
+
         }
 
         private void CheckStarUnlock()
@@ -118,9 +135,16 @@ namespace PT.Garden
             }
         }
 
-        private void OnApplicationQuit()
+
+        //private void OnApplicationQuit()
+        //{
+        //SaveRenderTextureToResourcesFolder((RenderTexture) _texture, "hasnat" + LevelMenuManager.currentLevel + ".png");
+        //}
+
+        private void OnDisable()
         {
-            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + 1 + ".png");
+             SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
+            Debug.LogError("=================================");
         }
         private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
         {
@@ -153,7 +177,11 @@ namespace PT.Garden
         }
         private void OnDestroy()
         {
+           
+
             sumBuffer?.Dispose();
+
+           
         }
     }
 }

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class ProgressBarManager : MonoBehaviour
 {
-    public static event Action OnFirstStarUnlock;
-    public static event Action OnSecondStarUnlock;
+    //public static event Action OnFirstStarUnlock;
+  //  public static event Action OnSecondStarUnlock;
     public Slider progresSlider;
     public GameObject unlockedStar1;
     public GameObject unlockedStar2;
@@ -40,7 +40,7 @@ public class ProgressBarManager : MonoBehaviour
             if (!UnlockOnce)
             {
                 unlockedStar1.SetActive(true);
-                OnFirstStarUnlock?.Invoke();
+              //  OnFirstStarUnlock?.Invoke();
                 UnlockOnce = true;
 
             }
@@ -51,7 +51,7 @@ public class ProgressBarManager : MonoBehaviour
             if (!UnlockOnce)
             {
                 unlockedStar2.SetActive(true);
-                OnSecondStarUnlock?.Invoke();
+             //   OnSecondStarUnlock?.Invoke();
                 UnlockOnce = true;
 
             }

@@ -61,7 +61,7 @@ public class HarvestGrass : MonoBehaviour
     //    }
 
     //}
-
+    float delay = 1;
     void GenerateHay()
     {
         grassCut++;
@@ -71,6 +71,12 @@ public class HarvestGrass : MonoBehaviour
             //OnCropHarvest?.Invoke();
             GameObject hayCell = Instantiate(hayCellPrefab, transform.position, Quaternion.identity);
             hayCell.transform.DOJump(transform.position, 2, 1, 1);
+           
+           
+
         }
+      
     }
+
+
 }

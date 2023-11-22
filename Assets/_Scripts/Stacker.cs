@@ -43,7 +43,7 @@ public abstract class Stacker : SerializedMonoBehaviour
             if (gridOffset.y > InitialYOffset)
                 gridOffset.y -= 0.3f;
             else
-                gridOffset.y -= InitialYOffset;
+                gridOffset.y = InitialYOffset;
             currentC = maxColumns - 1;
             currentR = maxRows - 1;
 
