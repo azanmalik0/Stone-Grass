@@ -27,7 +27,8 @@ public class HayStack : Stacker
     bool unloading;
     //==============================================
     //public float initialYOffset;
-    int haySold;
+    [HideInInspector]
+    public int haySold;
     public int hayCollected;
     public int hayCollectedTmp;
     bool IsFull;
@@ -166,10 +167,13 @@ public class HayStack : Stacker
 
             delay += 0.000001f;
             ResetGridPositions();
+
+            OnSellingHarvest?.Invoke(haySold);
             yield return null;
 
         }
-        OnSellingHarvest?.Invoke(haySold);
+                       ///////////////////   yahan send krta
+
     }
     private void OnTriggerEnter(Collider other)
     {

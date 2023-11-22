@@ -69,7 +69,6 @@ public class CameraManager : MonoBehaviour
 
 
     }
-    public float waitForUnlock;
     IEnumerator ChangeCameraToGamePosition()
     {
         Tween tm = transform.DOMove(followTarget.position + offset, 0.5f).SetEase(Ease.Linear);

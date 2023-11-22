@@ -24,7 +24,12 @@ public class MenuTrigger : MonoBehaviour
         {
             GameManager.Instance.UpdateGameState(GameState.InLevelMenu);
         }
-        else if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
+       
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
             OnEnteringLockedZone?.Invoke(LockedAreas.Henhouse);
         }

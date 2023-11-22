@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,7 @@ public class HayLoft : Stacker
     int feedGenerated = 0;
     public int feedStored = 0;
     public bool IsGenerating;
+    public bool FeedStorageFull = false;
     [SerializeField] Text crudeStorageCapacityText;
 
 
@@ -46,7 +48,8 @@ public class HayLoft : Stacker
         LoadFeedStored();
         CalculateCellPositions();
         feedGeneratedText.text = feedGenerated.ToString();
-        GenerateFeed();
+        //if (!FeedStorageFull)
+        //    GenerateFeed();
         // DisplayCrudeStorageCounter();
     }
     private void LoadFeedStored()
@@ -67,71 +70,93 @@ public class HayLoft : Stacker
         maxHayCapacity = FarmUpgradeManager.Instance.maxStorageCapacity;
         crudeStorageCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
     }
-
+   
+   int comingFeed;
+ 
     void GetValue(int value)
     {
-        if (value > 0 && !IsGenerating)
+
+
+        comingFeed++;
+
+        if(comingFeed == 10)
         {
-            feedGenerated = (int)(value * 0.0333f);
-            IsGenerating = true;
+          
+            comingFeed = 0;
+            feedGenerated++;
+          
             feedGeneratedText.text = feedGenerated.ToString();
-            GenerateFeed();
+
+            if (!FeedStorageFull)
+            {
+                GenerateFeed();
+                Debug.LogError("Katoooo");
+            }
+
+             HayStack.instance.haySold = 0;
+
+
+
+
+
         }
 
+       
+
+        
+
     }
-    float generateDelay;
+
+
     private void Update()
     {
         DisplayCrudeStorageCounter();
 
     }
+    
     void GenerateFeed()
     {
-        if (feedGenerated > 0)
-        {
+       
+        
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
             feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).SetDelay(1).OnComplete(() =>
             {
-                LoadOnLoftPlatform(feedCell.transform);
                 feedGenerated--;
+
+                 LoadOnLoftPlatform(feedCell.transform);
+
+
+
+                if (feedGenerated <= 0)
+                {
+                    feedGenerated = 0;
+                }
+
+                
+
                 feedGeneratedText.text = feedGenerated.ToString();
-                GenerateFeed();
-
             });
-        }
+        
+      
     }
-    //===================OLD=================================
-    //void GenerateFeed()
-    //{
-    //    feedGenerated++;
-    //    feedGeneratedText.text = feedGenerated.ToString();
-
-    //    GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-    //    feedCell.transform.DOLocalMove(feedCellLast.position, 1f).SetEase(Ease.Linear).SetDelay(generateDelay).OnComplete(() =>
-    //    {
-    //        LoadOnLoftPlatform(feedCell.transform);
-    //        GenerateFeed();
-    //        feedGenerated--;
-    //        feedGeneratedText.text = feedGenerated.ToString();
-    //        // generateDelay += 1f;
-
-    //    });
-    //}
-    //=======================================================
+   
     void LoadOnLoftPlatform(Transform hay)
     {
-        if (transform.childCount >= maxHayCapacity)
+        if (transform.childCount >= maxHayCapacity )
         {
-            IsGenerating = false;
+           // IsGenerating = false;
+           FeedStorageFull = true;
+            Debug.LogError("Feed full ho gayi");
         }
         else
         {
+
             feedStored++;
             hay.transform.SetParent(this.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() => hay.transform.SetParent(this.transform));
             previousPositions.Add(cellPositions[currentR, currentC]);
             UpdateGridPositions();
-
+            FeedStorageFull = false;
         }
 
 
