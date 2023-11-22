@@ -9,21 +9,22 @@ using UnityEngine.UI;
 
 public class HayLoft : Stacker
 {
-    [Title("General")]
-    public int requiredHay;
     [Title("References")]
     [SerializeField] GameObject feedCellPrefab;
     [SerializeField] Transform feedCellStart;
     [SerializeField] Transform feedCellLast;
+    //================================
     [SerializeField] Text feedGeneratedText;
-    // [SerializeField] HayStack hayStackScript;
-    public float initialYOffset;
-    public int feedCollected = 0;
-    int feedGenerated = 0;
-    public int feedStored = 0;
-    public bool IsGenerating;
-    public bool FeedStorageFull = false;
     [SerializeField] Text crudeStorageCapacityText;
+    //=================================
+    public int requiredHay;
+    public int hayStored;
+    public int feedStored;
+    public int feedGenerated;
+
+    public bool FeedStorageFull;
+    public bool IsGenerating;
+    public bool IsFunctional;
 
 
     private void OnEnable()
@@ -37,10 +38,7 @@ public class HayLoft : Stacker
         FarmUpgradeManager.OnIncreasingStorageCapcaity -= DisplayCrudeStorageCounter;
 
     }
-    private void Awake()
-    {
 
-    }
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
@@ -48,9 +46,7 @@ public class HayLoft : Stacker
         LoadFeedStored();
         CalculateCellPositions();
         feedGeneratedText.text = feedGenerated.ToString();
-        //if (!FeedStorageFull)
-        //    GenerateFeed();
-        // DisplayCrudeStorageCounter();
+        DisplayCrudeStorageCounter();
     }
     private void LoadFeedStored()
     {
@@ -64,103 +60,81 @@ public class HayLoft : Stacker
             }
         }
     }
-
-    private void DisplayCrudeStorageCounter()
+    public void DisplayCrudeStorageCounter()
     {
         maxHayCapacity = FarmUpgradeManager.Instance.maxStorageCapacity;
-        crudeStorageCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+        crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
     }
-   
-   int comingFeed;
- 
+    private void LateUpdate()
+    {
+        //DisplayCrudeStorageCounter();
+        if (transform.childCount < maxHayCapacity)
+        {
+            StartHayLoft();
+        }
+
+    }
+    int temp;
     void GetValue(int value)
     {
-
-
-        comingFeed++;
-
-        if(comingFeed == 10)
+        hayStored++;
+        if (hayStored >= 1)
         {
-          
-            comingFeed = 0;
             feedGenerated++;
-          
             feedGeneratedText.text = feedGenerated.ToString();
-
-            if (!FeedStorageFull)
+            hayStored = 0;
+            if (!IsFunctional)
             {
-                GenerateFeed();
-                Debug.LogError("Katoooo");
+                IsFunctional = true;
+                StartHayLoft();
             }
 
-             HayStack.instance.haySold = 0;
-
-
-
-
-
         }
-
-       
-
-        
-
     }
 
 
-    private void Update()
-    {
-        DisplayCrudeStorageCounter();
 
-    }
-    
-    void GenerateFeed()
+    public void StartHayLoft()
     {
-       
-        
+        if (feedGenerated >= 1 && !IsGenerating)
+        {
+            IsGenerating = true;
+            // Debug.LogError("B");
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-            feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).SetDelay(1).OnComplete(() =>
+            feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
             {
-                feedGenerated--;
-
-                 LoadOnLoftPlatform(feedCell.transform);
-
-
-
-                if (feedGenerated <= 0)
+                feedCell.transform.SetParent(this.transform);
+                feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() =>
                 {
-                    feedGenerated = 0;
-                }
+                    feedGenerated--;
+                    if (feedGenerated < 0)
+                    {
+                        feedGenerated = 0;
 
-                
+                    }
+                    feedGeneratedText.text = feedGenerated.ToString();
+                    feedStored++;
+                    crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
+                    previousPositions.Add(cellPositions[currentR, currentC]);
+                    UpdateGridPositions();
+                    if (feedStored < maxHayCapacity)
+                    {
+                        if (feedGenerated == 0)
+                        {
+                            feedGenerated = 0;
+                            IsFunctional = false;
+                        }
+                        
+                    }
+                    IsGenerating = false;
 
-                feedGeneratedText.text = feedGenerated.ToString();
+                });
+
             });
-        
-      
-    }
-   
-    void LoadOnLoftPlatform(Transform hay)
-    {
-        if (transform.childCount >= maxHayCapacity )
-        {
-           // IsGenerating = false;
-           FeedStorageFull = true;
-            Debug.LogError("Feed full ho gayi");
-        }
-        else
-        {
-
-            feedStored++;
-            hay.transform.SetParent(this.transform);
-            hay.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() => hay.transform.SetParent(this.transform));
-            previousPositions.Add(cellPositions[currentR, currentC]);
-            UpdateGridPositions();
-            FeedStorageFull = false;
         }
 
-
     }
+
     private void OnApplicationQuit()
     {
         ES3AutoSaveMgr.Current.Save();

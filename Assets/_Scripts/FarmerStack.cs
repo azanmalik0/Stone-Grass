@@ -146,10 +146,20 @@ public class FarmerStack : Stacker
             UpdateGridPositions();
             //RefreshGrid();
             other.GetComponent<HayLoft>().ResetGridPositions();
+            other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
+            //if (!HasStarted)
+            //{
+            //    HasStarted = true;
+            //    Debug.LogError("not come here again");
+
+
+            //    other.GetComponent<HayLoft>().StartHayLoft();
+            //}
+
             IsLoading = false;
         }
     }
-
+    public bool HasStarted;
     private void AnimateMax()
     {
         farmerCapacityFullText.gameObject.SetActive(true);
