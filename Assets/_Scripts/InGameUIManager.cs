@@ -40,15 +40,15 @@ public class InGameUIManager : MonoBehaviour
     {
         if ((state == GameState.UnlockingArea))
         {
-            joyStickStopper.SetActive(true);
+            //joyStickStopper.SetActive(true);
             inGameUI.SetActive(false);
-            GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = true;
+            //GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = true;
             GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else
         {
-            joyStickStopper.SetActive(false);
-            GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = false;
+            //joyStickStopper.SetActive(false);
+           // GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = false;
             GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = false;
             inGameUI.SetActive(true);
         }

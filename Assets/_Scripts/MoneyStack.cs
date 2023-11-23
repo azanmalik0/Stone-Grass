@@ -19,12 +19,12 @@ public class MoneyStack : Stacker
     private void Awake()
     {
 
-        SetGridYOffset(gridOffset.y);
     }
     void Start()
     {
-        CalculateCellPositions();
+        SetGridYOffset(gridOffset.y);
         ES3AutoSaveMgr.Current.Load();
+        CalculateCellPositions();
         LoadMoneyStored();
 
     }
@@ -39,7 +39,7 @@ public class MoneyStack : Stacker
     }
     private void LoadMoneyStored()
     {
-        if (coinsStored>0)
+        if (coinsStored > 0)
         {
 
             for (int i = 0; i < coinsStored; i++)

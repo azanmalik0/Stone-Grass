@@ -16,7 +16,7 @@ namespace ES3Types
 		{
 			var instance = (TroughStack)obj;
 			
-			writer.WriteProperty("feedCollected", instance.feedCollected, ES3Type_int.Instance);
+			writer.WriteProperty("feedCollected", instance.feedStored, ES3Type_int.Instance);
 			writer.WritePrivateField("gridOffset", instance);
 			writer.WriteProperty("previousPositions", instance.previousPositions, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<UnityEngine.Vector3>)));
 			writer.WriteProperty("currentR", instance.currentR, ES3Type_int.Instance);
@@ -32,7 +32,7 @@ namespace ES3Types
 				{
 					
 					case "feedCollected":
-						instance.feedCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						instance.feedStored = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "gridOffset":
 					instance = (TroughStack)reader.SetPrivateField("gridOffset", reader.Read<UnityEngine.Vector3>(), instance);

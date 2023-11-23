@@ -20,7 +20,7 @@ public class BuyerStack : Stacker
     private void Awake()
     {
         SetGridYOffset(gridOffset.y);
-        
+
     }
     void Start()
     {
@@ -44,7 +44,7 @@ public class BuyerStack : Stacker
 
         if (other.CompareTag("Market"))
         {
-            RefreshGrid();
+            //RefreshGrid();
             delay = 0;
         }
     }
@@ -66,8 +66,9 @@ public class BuyerStack : Stacker
         buyerSpline.Pause();
         animator.SetBool("IsWalking", false);
 
-        if (transform.childCount > maxHayCapacity)
+        if (transform.childCount >= maxHayCapacity)
         {
+            Debug.LogError("Bought");
             OnProductBought?.Invoke();
             yield return new WaitForSeconds(2);
             buyerSpline.Resume();

@@ -75,6 +75,7 @@ public class ProductMarketStack : Stacker
         {
             if (!IsLoading)
             {
+                IsLoading = true;
                 LoadProductOnMarketShelf(other);
             }
         }
@@ -84,6 +85,7 @@ public class ProductMarketStack : Stacker
     {
         if (other.CompareTag("Farmer_Stack"))
         {
+            other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
             delay = 0;
         }
@@ -91,10 +93,10 @@ public class ProductMarketStack : Stacker
 
     void LoadProductOnMarketShelf(Collider other)
     {
-        if (transform.childCount >= maxHayCapacity)
+
+        if (other.transform.childCount <= 0)
         {
-
-
+            other.GetComponent<FarmerStack>().RefreshGrid();
         }
         else if (other.transform.childCount > 0)
         {
@@ -109,14 +111,12 @@ public class ProductMarketStack : Stacker
                 {
                     productCheckIndex++;
                     IsLoading = false;
-                   // Debug.LogError("=> " + productCheckIndex);
                 }
                 else
                 {
 
-                    IsLoading = true;
                     Transform product = other.transform.GetChild(other.transform.childCount - productCheckIndex);
-                    DOTween.Complete(product);
+                    //DOTween.Complete(product);
                     product.SetParent(this.transform);
                     if (productType == ProductTypes.Egg)
                     {
@@ -130,14 +130,14 @@ public class ProductMarketStack : Stacker
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
-                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
-                    other.GetComponent<FarmerStack>().RefreshGrid();
+                    //other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }

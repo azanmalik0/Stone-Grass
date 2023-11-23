@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class MenuTrigger : MonoBehaviour
 {
-    public static event Action<LockedAreas> OnEnteringLockedZone;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("UpgradeZone"))
@@ -27,24 +26,7 @@ public class MenuTrigger : MonoBehaviour
        
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
-        {
-            OnEnteringLockedZone?.Invoke(LockedAreas.Henhouse);
-        }
-        else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
-        {
-            OnEnteringLockedZone?.Invoke(LockedAreas.Farm);
-        }
-        else if (other.CompareTag("BarnUnlock") && this.CompareTag("Farmer_Stack"))
-        {
-            OnEnteringLockedZone?.Invoke(LockedAreas.Barn);
-        }
-        else if (other.CompareTag("MarketUnlock") && this.CompareTag("Farmer_Stack"))
-        {
-            OnEnteringLockedZone?.Invoke(LockedAreas.Market);
-        }
-    }
+  
+   
 }
-public enum LockedAreas { Farm, Henhouse, Barn, Market }
+

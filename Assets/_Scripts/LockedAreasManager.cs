@@ -3,11 +3,13 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LockedAreasManager : MonoBehaviour
 {
+    public static LockedAreasManager Instance;
     [SerializeField] Transform farmerCoinPos;
     [SerializeField] GameObject coinPrefab;
     //=======================================================
@@ -19,6 +21,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseActive;
     [TabGroup("Henhouse")][SerializeField] ParticleSystem henhouse_smokeParticle;
     [TabGroup("Henhouse")][SerializeField] BoxCollider henhouse_collider;
+    [TabGroup("Henhouse")][SerializeField] GameObject henhouse_unlockZone;
     [Title("Preferences")]
     [TabGroup("Henhouse")][SerializeField] int henhouseLocked_CR;
     [TabGroup("Henhouse")][ReadOnly][SerializeField] int henhouseLocked_RM;
@@ -31,6 +34,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Farm")][SerializeField] GameObject farmActive;
     [TabGroup("Farm")][SerializeField] ParticleSystem farm_smokeParticle;
     [TabGroup("Farm")][SerializeField] BoxCollider farm_collider;
+    [TabGroup("Farm")][SerializeField] GameObject farm_unlockZone;
     [Title("Preferences")]
     [TabGroup("Farm")][SerializeField] int farmLocked_CR;
     [TabGroup("Farm")][ReadOnly][SerializeField] int farmLocked_RM;
@@ -43,6 +47,7 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Barn")][SerializeField] GameObject barnActive;
     [TabGroup("Barn")][SerializeField] ParticleSystem barn_smokeParticle;
     [TabGroup("Barn")][SerializeField] BoxCollider barn_collider;
+    [TabGroup("Barn")][SerializeField] GameObject barn_unlockZone;
     [Title("Preferences")]
     [TabGroup("Barn")][SerializeField] int barnLocked_CR;
     [TabGroup("Barn")][ReadOnly][SerializeField] int barnLocked_RM;
@@ -55,21 +60,21 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Market")][SerializeField] GameObject marketActive;
     [TabGroup("Market")][SerializeField] ParticleSystem market_smokeParticle;
     [TabGroup("Market")][SerializeField] BoxCollider market_collider;
+    [TabGroup("Market")][SerializeField] GameObject market_unlockZone;
     [Title("Preferences")]
     [TabGroup("Market")][SerializeField] int marketLocked_CR;
     [TabGroup("Market")][ReadOnly][SerializeField] int marketLocked_RM;
     //==============================================================
-    float delay;
-    bool Loading;
-    private void OnEnable()
+    private void Awake()
     {
-        MenuTrigger.OnEnteringLockedZone += UpdateUnlockProgress;
+        Instance = this;
     }
-    private void OnDisable()
-    {
-        MenuTrigger.OnEnteringLockedZone -= UpdateUnlockProgress;
+    public bool Loading;
+    public bool barnUnlocked;
+    public bool farmUnlocked;
+    public bool marketUnlocked;
+    public bool henhouseUnlocked;
 
-    }
     private void Start()
     {
         henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
@@ -77,256 +82,233 @@ public class LockedAreasManager : MonoBehaviour
         barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
         marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
     }
-
-    void UpdateUnlockProgress(LockedAreas area)
+    private void OnTriggerStay(Collider other)
     {
-        switch (area)
+        if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
-            case LockedAreas.Farm:
-                if (!Loading)
-                {
-                    Loading = true;
-                    GiveCoinsToFarm();
-                }
-                break;
-            case LockedAreas.Henhouse:
-                if (!Loading)
-                {
-                    Loading = true;
-                    GiveCoinsToHenhouse();
-                }
-                break;
-            case LockedAreas.Barn:
-                if (!Loading)
-                {
-                    Loading = true;
-                    GiveCoinsToBarn();
-                }
-                break;
-            case LockedAreas.Market:
-                if (!Loading)
-                {
-                    Loading = true;
-                   GiveCoinsToMarket();
-                }
-                break;
-            default:
-                break;
+            if (!Loading)
+            {
+                Loading = true;
+                GiveCoinsToHenhouse();
+            }
+
+        }
+        else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            if (!Loading)
+            {
+                Loading = true;
+                GiveCoinsToFarm();
+            }
+        }
+        else if (other.CompareTag("BarnUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            if (!Loading)
+            {
+                Loading = true;
+                GiveCoinsToBarn();
+            }
+        }
+        else if (other.CompareTag("MarketUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            if (!Loading)
+            {
+                Loading = true;
+                GiveCoinsToMarket();
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            Loading = false;
+        }
+        else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            Loading = false;
+        }
+        else if (other.CompareTag("BarnUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            Loading = false;
+        }
+        else if (other.CompareTag("MarketUnlock") && this.CompareTag("Farmer_Stack"))
+        {
+            Loading = false;
         }
 
     }
-  void GiveCoinsToMarket()
+    void GiveCoinsToMarket()
     {
-        if (Loading)
+
+        if (CurrencyManager.coins > 0)
         {
-            if (CurrencyManager.coins > 0 && (marketLocked_RM < marketLocked_CR))
+            if (marketLocked_RM < marketLocked_CR)
             {
                 marketLocked_RM++;
                 marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
-
-                print(CurrencyManager.coins);
-                //GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                //float randomAngle = UnityEngine.Random.Range(0, 360);
-                //coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
-                //coin.transform.DOJump(henhouseCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
-                //delay += 0.01f;
-                //if (!DOTween.IsTweening(henhouseLockedPanel) && CurrencyManager.coins > 0)
-                // NeedToAnim = true;
-                //henhouseLockedPanel.GetComponent<DOTweenAnimation>().DOPlay();
-
-                // henhouseLockedPanel.DOScale(new Vector3(1, 1, 1), 0.15f).SetLoops(1, LoopType.Yoyo);
                 CurrencyManager.Instance.DeductCoins(1);
-                
                 Loading = false;
+
             }
             else
             {
-                // henhouseLockedPanel.gameObject.SetActive(false);
-                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                // NeedToAnim = false;
-                UnlockArea("Market");
-                // break;
+                if (!marketUnlocked)
+                {
+
+                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
+                    UnlockArea("Market");
+                }
 
             }
+
+
+
+
         }
     }
-
     void GiveCoinsToHenhouse()
     {
-        // while (Loading && CurrencyManager.coins > 0)
-        // {
 
-        if (Loading)
+
+
+        if (CurrencyManager.coins > 0)
         {
-            if (CurrencyManager.coins > 0 && (henhouseLocked_RM < henhouseLocked_CR))
+            if (henhouseLocked_RM < henhouseLocked_CR)
             {
+
                 henhouseLocked_RM++;
                 henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
-
-                //GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                //float randomAngle = UnityEngine.Random.Range(0, 360);
-                //coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
-                //coin.transform.DOJump(henhouseCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
-                //delay += 0.01f;
-                //if (!DOTween.IsTweening(henhouseLockedPanel) && CurrencyManager.coins > 0)
-                // NeedToAnim = true;
-                //henhouseLockedPanel.GetComponent<DOTweenAnimation>().DOPlay();
-
-                // henhouseLockedPanel.DOScale(new Vector3(1, 1, 1), 0.15f).SetLoops(1, LoopType.Yoyo);
                 CurrencyManager.Instance.DeductCoins(1);
-                
                 Loading = false;
+
             }
             else
             {
-                // henhouseLockedPanel.gameObject.SetActive(false);
-                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                // NeedToAnim = false;
-               UnlockArea("Henhouse");
-                // break;
 
+                if (!henhouseUnlocked)
+                {
+                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
+                    UnlockArea("Henhouse");
+                }
             }
+
+
         }
 
-        // }
-        // Loading = false;
-        //if (!DOTween.IsTweening(henhouseLockedPanel) && CurrencyManager.coins > 0)
-        //    henhouseLockedPanel.DOScale(new Vector3(0.00582442f, 0.00582442f, 0.00582442f), 0.1f).SetDelay(0.25f).SetLoops(CurrencyManager.coins, LoopType.Yoyo);
-        // delay = 0;
+
+
+
     }
     void GiveCoinsToFarm()
     {
-        if (Loading)
+        // Debug.LogError("Coins available = > " + CurrencyManager.coins);
+        if (CurrencyManager.coins > 0)
         {
-            if (CurrencyManager.coins > 0 && (farmLocked_RM < farmLocked_CR))
+            if (farmLocked_RM < farmLocked_CR)
             {
                 farmLocked_RM++;
                 farmLocked_CT.text = farmLocked_RM + "/" + farmLocked_CR;
-
-                //GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                //float randomAngle = UnityEngine.Random.Range(0, 360);
-                //coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
-                //coin.transform.DOJump(henhouseCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
-                //delay += 0.01f;
-                //if (!DOTween.IsTweening(henhouseLockedPanel) && CurrencyManager.coins > 0)
-                // NeedToAnim = true;
-                //henhouseLockedPanel.GetComponent<DOTweenAnimation>().DOPlay();
-
-                // henhouseLockedPanel.DOScale(new Vector3(1, 1, 1), 0.15f).SetLoops(1, LoopType.Yoyo);
                 CurrencyManager.Instance.DeductCoins(1);
-                
                 Loading = false;
+
             }
             else
             {
-                // henhouseLockedPanel.gameObject.SetActive(false);
-                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                // NeedToAnim = false;
-                UnlockArea("Farm");
-                // break;
-
+                if (!farmUnlocked)
+                {
+                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
+                    UnlockArea("Farm");
+                }
             }
+
+
         }
+
+
     }
     void GiveCoinsToBarn()
     {
-        if (Loading)
+        if (CurrencyManager.coins > 0)
         {
-            if (CurrencyManager.coins > 0 && (barnLocked_RM < barnLocked_CR))
+            Debug.LogError("Coins hain");
+            if (barnLocked_RM < barnLocked_CR)
             {
                 barnLocked_RM++;
                 barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
-
-                //GameObject coin = Instantiate(coinPrefab, farmerCoinPos.position, Quaternion.identity);
-                //float randomAngle = UnityEngine.Random.Range(0, 360);
-                //coin.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 0.5f).SetEase(Ease.OutQuad);
-                //coin.transform.DOJump(henhouseCoinPos.position, 3, 1, 0.5f).SetDelay(delay).OnComplete(() => Destroy(coin));
-                //delay += 0.01f;
-                //if (!DOTween.IsTweening(henhouseLockedPanel) && CurrencyManager.coins > 0)
-                // NeedToAnim = true;
-                //henhouseLockedPanel.GetComponent<DOTweenAnimation>().DOPlay();
-
-                // henhouseLockedPanel.DOScale(new Vector3(1, 1, 1), 0.15f).SetLoops(1, LoopType.Yoyo);
+                Debug.LogError("requirent kam hai");
                 CurrencyManager.Instance.DeductCoins(1);
-                
                 Loading = false;
+
             }
             else
             {
-                // henhouseLockedPanel.gameObject.SetActive(false);
-                GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                // NeedToAnim = false;
-                UnlockArea("Barn");
-                // break;
+                if (!barnUnlocked)
+                {
+
+                    Debug.LogError("requirent full hai");
+                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
+                    UnlockArea("Barn");
+                }
+
 
             }
-        }
-    }
 
+        }
+        else
+        {
+            Debug.LogError("idhr");
+
+        }
+
+
+    }
     private void UnlockArea(string area)
     {
-        Loading = false;
         if (area == "Henhouse")
         {
             henhouseInActive.SetActive(false);
-            //Camera.main.transform.DOMove(new Vector3(2.6f, 4.973701f, -8.43f), 1f).SetEase(Ease.Linear);
-            //Camera.main.transform.DORotate(new Vector3(16.2f, -77.05f, 0.547f), 1f).SetEase(Ease.Linear);
-            //  yield return new WaitForSeconds(1);
             henhouse_smokeParticle.Play();
-            // yield return new WaitForSeconds(1);
             henhouseActive.SetActive(true);
-            //henhouse_collider.enabled = false;
-            //  henhouseActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(()=> henhouse_collider.enabled = true);
-            //  yield return new WaitForSeconds(1);
+            market_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
+            henhouseUnlocked = true;
+            Loading = false;
         }
         if (area == "Farm")
         {
-
             farmInActive.SetActive(false);
-            //Camera.main.transform.DOMove(new Vector3(-3.07585239f, 6.00184631f, -10.0817223f), 1f).SetEase(Ease.Linear);
-            //Camera.main.transform.DORotate(new Vector3(12.1820517f, 12.1642532f, 0.529350638f), 1f).SetEase(Ease.Linear);
-            // yield return new WaitForSeconds(1);
             farm_smokeParticle.Play();
-            // yield return new WaitForSeconds(1);
             farmActive.SetActive(true);
-            //farm_collider.enabled = false;
-            //  farmActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => farm_collider.enabled = true);
-            //  yield return new WaitForSeconds(1);
             GameManager.Instance.UpdateGameState(GameState.InGame);
+            farmUnlocked = true;
+            Loading = false;
         }
         if (area == "Barn")
         {
 
             barnInActive.SetActive(false);
-            //Camera.main.transform.DOMove(new Vector3(-4.11999989f, 6.71000004f, -0.150000006f), 1f).SetEase(Ease.Linear);
-            //Camera.main.transform.DORotate(new Vector3(17.2778378f, 104.517273f, 0.542637885f), 1f).SetEase(Ease.Linear);
-            // yield return new WaitForSeconds(1);
             barn_smokeParticle.Play();
-            // yield return new WaitForSeconds(1);
             barnActive.SetActive(true);
-            // barn_collider.enabled = false;
-            // barnActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => barn_collider.enabled = true);
-            // yield return new WaitForSeconds(1);
+            farm_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
+            barnUnlocked = true;
+            Loading = false;
         }
         if (area == "Market")
         {
 
             marketInActive.SetActive(false);
-            //Camera.main.transform.DOMove(new Vector3(-2.88000011f, 5.21999979f, 1.11000001f), 1f).SetEase(Ease.Linear);
-            //Camera.main.transform.DORotate(new Vector3(17.3302288f, 161.742752f, 359.360199f), 1f).SetEase(Ease.Linear);
-            //  yield return new WaitForSeconds(1);
             market_smokeParticle.Play();
-            // yield return new WaitForSeconds(1);
             marketActive.SetActive(true);
-            //market_collider.enabled = false;
-            //  marketActive.transform.DOPunchScale(new Vector3(0.5f, 0.5f, 0f), 2f, vibrato: 2).SetEase(Ease.Linear).OnComplete(() => market_collider.enabled = true);
-            //  yield return new WaitForSeconds(1);
+            barn_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
+            marketUnlocked = true;
+            Loading = false;
         }
 
-        
+
     }
+
 
 }

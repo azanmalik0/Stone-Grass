@@ -159,7 +159,7 @@ public class HayStack : Stacker
             {
                 Destroy(hayCell);
                 boilerParticle.Play();
-                CurrencyManager.Instance.RecieveCoins(haySold);
+                CurrencyManager.Instance.RecieveCoins(1);
 
             });
             if ((previousPositions.Count - 1) > 0)

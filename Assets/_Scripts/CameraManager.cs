@@ -62,7 +62,7 @@ public class CameraManager : MonoBehaviour
         }
         if (CurrentState == GameState.UnlockingArea)
         {
-            IsInMenu = true;
+            //IsInMenu = true;
 
         }
 

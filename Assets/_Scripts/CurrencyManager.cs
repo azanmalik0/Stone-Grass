@@ -22,13 +22,15 @@ public class CurrencyManager : MonoBehaviour
     }
     private void Start()
     {
-       // RecieveCoins(1000);
+         RecieveCoins(1000);
+        coins = PlayerPrefs.GetInt("Coins");
         coinText.text = coins.ToString();
     }
 
-   public void RecieveCoins(int value)
+    public void RecieveCoins(int value)
     {
-        coins = value;
+        coins += value;
+        PlayerPrefs.SetInt("Coins", coins);
         coinText.text = coins.ToString();
         OnCurrencyRecieve?.Invoke();
 
@@ -46,6 +48,8 @@ public class CurrencyManager : MonoBehaviour
     public void DeductCoins(int value)
     {
         coins -= value;
+        PlayerPrefs.SetInt("Coins", coins);
+        Debug.LogError("Coins after deduction = > " + PlayerPrefs.GetInt("Coins"));
         coinText.text = coins.ToString();
 
     }

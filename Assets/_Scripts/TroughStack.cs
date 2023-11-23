@@ -17,12 +17,14 @@ public class TroughStack : Stacker
     [SerializeField] GameObject produceTimer;
     [SerializeField] GameObject crudeCounter;
     [SerializeField] Text crudeTroughCapacityText;
-    public int feedCollected;
+    public int feedStored;
     bool IsLoading;
     float delay;
     public float initialYOffset;
     int crudeCheckIndex = 1;
     [SerializeField] GameObject feedPrefab;
+
+
     private void Awake()
     {
 
@@ -32,12 +34,12 @@ public class TroughStack : Stacker
         SetGridYOffset(gridOffset.y);
         CalculateCellPositions();
         ES3AutoSaveMgr.Current.Load();
-       LoadFeedCollected();
+        LoadFeedCollected();
         DisplayCrudeTroughCounter();
     }
     private void LoadFeedCollected()
     {
-        for (int i = 0; i < feedCollected; i++)
+        for (int i = 0; i < feedStored; i++)
         {
             GameObject cell = Instantiate(feedPrefab, this.transform);
             cell.transform.localPosition = previousPositions[i];
@@ -45,19 +47,19 @@ public class TroughStack : Stacker
         }
     }
 
-    private void DisplayCrudeTroughCounter()
+    public void DisplayCrudeTroughCounter()
     {
         if (troughType == TroughType.Chicken)
         {
             maxHayCapacity = FarmUpgradeManager.Instance.maxChickenTrayCapacity;
-            crudeTroughCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+            crudeTroughCapacityText.text = $"{feedStored}/{maxHayCapacity}";
 
         }
         if (troughType == TroughType.Cow)
         {
 
             maxHayCapacity = FarmUpgradeManager.Instance.maxCowTrayCapacity;
-            crudeTroughCapacityText.text = $"{transform.childCount}/{maxHayCapacity}";
+            crudeTroughCapacityText.text = $"{feedStored}/{maxHayCapacity}";
         }
     }
 
@@ -86,6 +88,7 @@ public class TroughStack : Stacker
         {
             if (!IsLoading)
             {
+                IsLoading = true;
                 LoadFeedOnTrough(other);
             }
         }
@@ -101,14 +104,21 @@ public class TroughStack : Stacker
     }
     private void LoadFeedOnTrough(Collider other)
     {
-        if (transform.childCount >= maxHayCapacity)
+        if (feedStored >= maxHayCapacity)
         {
+            IsLoading = false;
             OnTroughFull?.Invoke();
             produceTimer.SetActive(true);
             crudeCounter.SetActive(false);
 
         }
-        else if (other.transform.childCount > 0)
+        else if (other.GetComponent<FarmerStack>().feedCollected <= 0)
+        {
+
+            other.GetComponent<FarmerStack>().RefreshGrid();
+            IsLoading = false;
+        }
+        else if (other.GetComponent<FarmerStack>().feedCollected > 0)
         {
             if (crudeCheckIndex > other.transform.childCount)
             {
@@ -124,21 +134,20 @@ public class TroughStack : Stacker
                 }
                 else
                 {
-                    feedCollected++;
+                    feedStored++;
                     other.GetComponent<FarmerStack>().feedCollected--;
-                    IsLoading = true;
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
-                    DOTween.Complete(crudeCell);
+                    //DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
                     DisplayCrudeTroughCounter();
-                    crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => crudeCell.localRotation = Quaternion.identity);
-                    previousPositions.Add(cellPositions[currentC, currentR]);
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
-                    delay += 0.0001f;
+                    crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
+                    crudeCell.localRotation = Quaternion.identity;
+                    previousPositions.Add(cellPositions[currentC, currentR]);
                     UpdateGridPositions();
+                    delay += 0.0001f;
                     other.GetComponent<FarmerStack>().ResetGridPositions();
-                    other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }

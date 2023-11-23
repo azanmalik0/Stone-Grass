@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("henhouseLocked_CR", "farmLocked_CR", "barnLocked_CR", "marketLocked_CR")]
+	[ES3PropertiesAttribute("henhouseLocked_RM", "farmLocked_RM", "barnLocked_RM", "marketLocked_RM")]
 	public class ES3UserType_LockedAreasManager : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,10 +16,10 @@ namespace ES3Types
 		{
 			var instance = (LockedAreasManager)obj;
 			
-			writer.WritePrivateField("henhouseLocked_CR", instance);
-			writer.WritePrivateField("farmLocked_CR", instance);
-			writer.WritePrivateField("barnLocked_CR", instance);
-			writer.WritePrivateField("marketLocked_CR", instance);
+			writer.WritePrivateField("henhouseLocked_RM", instance);
+			writer.WritePrivateField("farmLocked_RM", instance);
+			writer.WritePrivateField("barnLocked_RM", instance);
+			writer.WritePrivateField("marketLocked_RM", instance);
 		}
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
@@ -30,17 +30,17 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "henhouseLocked_CR":
-					instance = (LockedAreasManager)reader.SetPrivateField("henhouseLocked_CR", reader.Read<System.Int32>(), instance);
+					case "henhouseLocked_RM":
+					instance = (LockedAreasManager)reader.SetPrivateField("henhouseLocked_RM", reader.Read<System.Int32>(), instance);
 					break;
-					case "farmLocked_CR":
-					instance = (LockedAreasManager)reader.SetPrivateField("farmLocked_CR", reader.Read<System.Int32>(), instance);
+					case "farmLocked_RM":
+					instance = (LockedAreasManager)reader.SetPrivateField("farmLocked_RM", reader.Read<System.Int32>(), instance);
 					break;
-					case "barnLocked_CR":
-					instance = (LockedAreasManager)reader.SetPrivateField("barnLocked_CR", reader.Read<System.Int32>(), instance);
+					case "barnLocked_RM":
+					instance = (LockedAreasManager)reader.SetPrivateField("barnLocked_RM", reader.Read<System.Int32>(), instance);
 					break;
-					case "marketLocked_CR":
-					instance = (LockedAreasManager)reader.SetPrivateField("marketLocked_CR", reader.Read<System.Int32>(), instance);
+					case "marketLocked_RM":
+					instance = (LockedAreasManager)reader.SetPrivateField("marketLocked_RM", reader.Read<System.Int32>(), instance);
 					break;
 					default:
 						reader.Skip();

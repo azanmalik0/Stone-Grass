@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+       // DOTween.SetTweensCapacity(10000000,10000000);
     }
     void Start()
     {

@@ -15,7 +15,8 @@ namespace PT.Garden
         public static event Action OnSecondStarUnlock;
         public GameObject unlockedStar1;
         public GameObject unlockedStar2;
-        bool UnlockOnce;
+        bool UnlockOnce1;
+        bool UnlockOnce2;
         [Space]
         //==============================================
 
@@ -113,24 +114,24 @@ namespace PT.Garden
         {
             if (percentage > 0.5)
             {
-                if (!UnlockOnce)
+                unlockedStar1.SetActive(true);
+                if (!UnlockOnce1)
                 {
-                    unlockedStar1.SetActive(true);
                     OnFirstStarUnlock?.Invoke();
-                    UnlockOnce = true;
-
-                }
-                if (!UnlockOnce)
-                {
-                    unlockedStar2.SetActive(true);
-                    OnSecondStarUnlock?.Invoke();
-                    UnlockOnce = true;
+                    UnlockOnce1 = true;
 
                 }
 
             }
             if (percentage > 0.95)
             {
+                unlockedStar2.SetActive(true);
+                if (!UnlockOnce2)
+                {
+                    OnSecondStarUnlock?.Invoke();
+                    UnlockOnce2 = true;
+
+                }
                 Debug.LogError("Win");
             }
         }
@@ -143,7 +144,7 @@ namespace PT.Garden
 
         private void OnDisable()
         {
-             SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
+            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
             Debug.LogError("=================================");
         }
         private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
@@ -177,11 +178,11 @@ namespace PT.Garden
         }
         private void OnDestroy()
         {
-           
+
 
             sumBuffer?.Dispose();
 
-           
+
         }
     }
 }

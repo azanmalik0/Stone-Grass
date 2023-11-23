@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("percentage")]
+	[ES3PropertiesAttribute("UnlockOnce1", "UnlockOnce2", "percentage")]
 	public class ES3UserType_PercentageChecker : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,6 +16,8 @@ namespace ES3Types
 		{
 			var instance = (PT.Garden.PercentageChecker)obj;
 			
+			writer.WritePrivateField("UnlockOnce1", instance);
+			writer.WritePrivateField("UnlockOnce2", instance);
 			writer.WritePrivateField("percentage", instance);
 		}
 
@@ -27,6 +29,12 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
+					case "UnlockOnce1":
+					instance = (PT.Garden.PercentageChecker)reader.SetPrivateField("UnlockOnce1", reader.Read<System.Boolean>(), instance);
+					break;
+					case "UnlockOnce2":
+					instance = (PT.Garden.PercentageChecker)reader.SetPrivateField("UnlockOnce2", reader.Read<System.Boolean>(), instance);
+					break;
 					case "percentage":
 					instance = (PT.Garden.PercentageChecker)reader.SetPrivateField("percentage", reader.Read<System.Single>(), instance);
 					break;

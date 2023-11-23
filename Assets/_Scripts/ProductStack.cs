@@ -19,9 +19,10 @@ public class ProductStack : Stacker
     //public int products;
     public int eggsGenerated;
     public int milkGenerated;
+    bool IsLoading;
     private void Awake()
     {
-        
+
     }
     private void Start()
     {
@@ -53,7 +54,6 @@ public class ProductStack : Stacker
 
 
     }
-
     private void OnEnable()
     {
         Timer.OnTimeOut += GenerateProduct;
@@ -74,17 +74,26 @@ public class ProductStack : Stacker
             if (type == ProductType.Egg)
             {
                 GameObject product = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
-                LoadProductOnShelf(product);
+                if (!IsLoading)
+                {
+                    IsLoading = true;
+                    LoadProductOnShelf(product);
+                }
 
             }
             if (type == ProductType.Milk)
             {
                 GameObject product = Instantiate(milkPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
-                LoadProductOnShelf(product);
+                if (!IsLoading)
+                {
+                    IsLoading = true;
+                    LoadProductOnShelf(product);
+                }
 
             }
             feedCell.transform.SetParent(null);
-            hayParent.GetComponent<TroughStack>().feedCollected--;
+            hayParent.GetComponent<TroughStack>().feedStored--;
+            hayParent.GetComponent<TroughStack>().DisplayCrudeTroughCounter();
             if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
                 hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
             Destroy(feedCell);
@@ -94,6 +103,9 @@ public class ProductStack : Stacker
     }
     void LoadProductOnShelf(GameObject product)
     {
+        product.transform.SetParent(this.transform);
+        product.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
+
         if (type == ProductType.Egg)
         {
             eggsGenerated++;
@@ -105,12 +117,11 @@ public class ProductStack : Stacker
             milkGenerated++;
 
         }
-        product.transform.SetParent(this.transform);
-        product.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine);
         previousPositions.Add(cellPositions[currentC, currentR]);
         delay += 0.001f;
         UpdateGridPositions();
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
+        IsLoading = false;
     }
     private void OnApplicationQuit()
     {

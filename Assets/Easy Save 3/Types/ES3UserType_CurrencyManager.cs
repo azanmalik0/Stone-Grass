@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("coins")]
+	[ES3PropertiesAttribute()]
 	public class ES3UserType_CurrencyManager : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,6 @@ namespace ES3Types
 		{
 			var instance = (CurrencyManager)obj;
 			
-			writer.WriteProperty("coins", CurrencyManager.coins, ES3Type_int.Instance);
 		}
 
 		protected override void ReadComponent<T>(ES3Reader reader, object obj)
@@ -27,9 +26,6 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "coins":
-						CurrencyManager.coins = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
 					default:
 						reader.Skip();
 						break;

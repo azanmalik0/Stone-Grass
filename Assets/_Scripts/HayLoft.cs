@@ -68,13 +68,12 @@ public class HayLoft : Stacker
     private void LateUpdate()
     {
         //DisplayCrudeStorageCounter();
-        if (transform.childCount < maxHayCapacity)
+        if (feedStored < maxHayCapacity)
         {
             StartHayLoft();
         }
 
     }
-    int temp;
     void GetValue(int value)
     {
         hayStored++;
@@ -91,9 +90,6 @@ public class HayLoft : Stacker
 
         }
     }
-
-
-
     public void StartHayLoft()
     {
         if (feedGenerated >= 1 && !IsGenerating)
@@ -101,7 +97,7 @@ public class HayLoft : Stacker
             IsGenerating = true;
             // Debug.LogError("B");
             GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-            feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
+            feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
             {
                 feedCell.transform.SetParent(this.transform);
                 feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() =>
@@ -134,7 +130,6 @@ public class HayLoft : Stacker
         }
 
     }
-
     private void OnApplicationQuit()
     {
         ES3AutoSaveMgr.Current.Save();
