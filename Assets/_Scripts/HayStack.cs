@@ -99,6 +99,7 @@ public class HayStack : Stacker
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             previousPositions.Add(cellPositions[currentR, currentC]);
+            ES3AutoSaveMgr.Current.Save();
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
             UpdateGridPositions();
@@ -161,6 +162,7 @@ public class HayStack : Stacker
             });
             if ((previousPositions.Count - 1) > 0)
                 previousPositions.RemoveAt(previousPositions.Count - 1);
+            ES3AutoSaveMgr.Current.Save();
 
             delay += 0.000001f;
             ResetGridPositions();

@@ -110,7 +110,7 @@ public class AIWander : MonoBehaviour
     {
         if (animal == animalType)
         {
-            Debug.LogError("GOTOTARGETPOSITION" + gameObject.name);
+            //Debug.LogError("GOTOTARGETPOSITION" + gameObject.name);
             StopCoroutine(Wander());
             animator.SetBool("IsWalking", true);
             StartCoroutine(MoveToTarget(animal));
@@ -130,7 +130,7 @@ public class AIWander : MonoBehaviour
     {
         if (animal == animalType)
         {
-            Debug.LogError("BacktoWandering" + gameObject.name);
+            //Debug.LogError("BacktoWandering" + gameObject.name);
             isWandering = false;
             animator.SetBool("IsEating", false);
             animator.SetBool("IsWalking", true);

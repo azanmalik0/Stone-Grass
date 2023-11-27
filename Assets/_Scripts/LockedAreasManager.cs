@@ -231,37 +231,22 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (CurrencyManager.coins > 0)
         {
-            Debug.LogError("Coins hain");
             if (barnLocked_RM < barnLocked_CR)
             {
                 barnLocked_RM++;
                 barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
-                Debug.LogError("requirent kam hai");
                 CurrencyManager.Instance.DeductCoins(1);
                 Loading = false;
-
             }
             else
             {
                 if (!barnUnlocked)
                 {
-
-                    Debug.LogError("requirent full hai");
                     GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                     UnlockArea("Barn");
                 }
-
-
             }
-
         }
-        else
-        {
-            Debug.LogError("idhr");
-
-        }
-
-
     }
     private void UnlockArea(string area)
     {

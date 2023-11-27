@@ -97,7 +97,7 @@ public class LevelMenuManager : MonoBehaviour
         if(currentLevel == PlayerPrefs.GetInt("TotalLevelsUnlocked"))
         {
             PlayerPrefs.SetInt("TotalLevelsUnlocked" , PlayerPrefs.GetInt("TotalLevelsUnlocked") + 1);
-            Debug.LogError(" Level Barh gaya ");
+            //Debug.LogError(" Level Barh gaya ");
             for (int i = 0; i <= PlayerPrefs.GetInt("TotalLevelsUnlocked"); i++)
             {
                 levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
@@ -106,7 +106,7 @@ public class LevelMenuManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError(" Turr ja Turr ja ");
+            //Debug.LogError(" Turr ja Turr ja ");
         }
            
         

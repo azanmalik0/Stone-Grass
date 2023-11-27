@@ -49,7 +49,7 @@ public class CurrencyManager : MonoBehaviour
     {
         coins -= value;
         PlayerPrefs.SetInt("Coins", coins);
-        Debug.LogError("Coins after deduction = > " + PlayerPrefs.GetInt("Coins"));
+        //Debug.LogError("Coins after deduction = > " + PlayerPrefs.GetInt("Coins"));
         coinText.text = coins.ToString();
 
     }

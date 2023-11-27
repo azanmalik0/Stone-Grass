@@ -10,20 +10,20 @@ using static ProductStack;
 
 public class FarmerStack : Stacker
 {
-   // public static event Action OnMoneyCollect;
+    // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
-    [SerializeField] Transform coinPos;
-    bool IsLoading;
-    float delay;
-    [SerializeField] Text farmerCapacityFullText;
     public int feedCollected;
     public int milkCollected;
     public int eggCollected;
+    [Title("References")]
+    [SerializeField] Transform coinPos;
+    [SerializeField] Text farmerCapacityFullText;
     [SerializeField] GameObject feedPrefab;
     [SerializeField] GameObject eggPrefab;
     [SerializeField] GameObject milkPrefab;
-
-
+    //====================================
+    float delay;
+    bool IsLoading;
     private void Awake()
     {
         SetGridYOffset(gridOffset.y);
@@ -144,8 +144,8 @@ public class FarmerStack : Stacker
             feedCell.SetParent(this.transform);
             if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) > 0)
                 other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
-            feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.1f).SetDelay(delay).SetEase(Ease.OutSine);
-            //RefreshGrid();
+            feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.3f).SetDelay(delay).SetEase(Ease.OutSine);
+            RefreshGrid();
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentC, currentR]);
@@ -162,7 +162,6 @@ public class FarmerStack : Stacker
         if (!DOTween.IsTweening(farmerCapacityFullText))
             farmerCapacityFullText.DOColor(new Color32(255, 255, 255, 0), 0.5f).SetLoops(5, LoopType.Yoyo).SetEase(Ease.InOutSine).OnComplete(() => farmerCapacityFullText.gameObject.SetActive(false));
     }
-
     private void GetMoneyFromCounter(Collider other)
     {
 
@@ -266,14 +265,11 @@ public class FarmerStack : Stacker
         for (int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.1f).SetEase(Ease.OutQuint);
-            //transform.GetChild(i).localPosition = cellPositions[currentC, currentR];
             UpdateGridPositions();
 
 
         }
     }
-
-
     private void OnApplicationQuit()
     {
         ES3AutoSaveMgr.Current.Save();

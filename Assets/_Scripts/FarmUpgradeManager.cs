@@ -275,7 +275,7 @@ public class FarmUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxCows");
+                //Debug.LogError("MaxCows");
             }
         }
     }
@@ -298,7 +298,7 @@ public class FarmUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxChickens");
+                //Debug.LogError("MaxChickens");
             }
         }
 

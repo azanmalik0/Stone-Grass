@@ -163,7 +163,7 @@ public class TruckUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxRotation");
+                //Debug.LogError("MaxRotation");
             }
         }
 
@@ -186,7 +186,7 @@ public class TruckUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxRotation");
+                //Debug.LogError("MaxRotation");
             }
         }
 
@@ -211,7 +211,7 @@ public class TruckUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxWheels");
+                //Debug.LogError("MaxWheels");
             }
         }
 
@@ -237,7 +237,7 @@ public class TruckUpgradeManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError("MaxBlades");
+                //Debug.LogError("MaxBlades");
             }
         }
 

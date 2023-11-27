@@ -68,7 +68,7 @@ public class BuyerStack : Stacker
 
         if (transform.childCount >= maxHayCapacity)
         {
-            Debug.LogError("Bought");
+            //Debug.LogError("Bought");
             OnProductBought?.Invoke();
             yield return new WaitForSeconds(2);
             buyerSpline.Resume();

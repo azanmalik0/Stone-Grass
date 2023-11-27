@@ -15,10 +15,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        // DOTween.SetTweensCapacity(10000000,10000000);
     }
     void Start()
     {
+        ES3AutoSaveMgr.Current.Load();
+        //DOTween.SetTweensCapacity(1000, 900000);
         Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
     }
