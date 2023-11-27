@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 public class TroughStack : Stacker
 {
-
-    public static event Action OnTroughFull;
+    public AnimalType animalType;
+    public static event Action<AnimalType> OnTroughFull;
     public enum TroughType { Chicken, Cow }
     public TroughType troughType;
     [Title("References")]
@@ -24,11 +24,6 @@ public class TroughStack : Stacker
     int crudeCheckIndex = 1;
     [SerializeField] GameObject feedPrefab;
 
-
-    private void Awake()
-    {
-
-    }
     private void Start()
     {
         SetGridYOffset(gridOffset.y);
@@ -46,7 +41,6 @@ public class TroughStack : Stacker
 
         }
     }
-
     public void DisplayCrudeTroughCounter()
     {
         if (troughType == TroughType.Chicken)
@@ -62,26 +56,26 @@ public class TroughStack : Stacker
             crudeTroughCapacityText.text = $"{feedStored}/{maxHayCapacity}";
         }
     }
-
     private void OnEnable()
     {
-        Timer.OnTimeOut += Reset;
+        Timer.OnTimeOut += ResetObjects;
         FarmUpgradeManager.OnIncreasingTrayCapcaity += DisplayCrudeTroughCounter;
     }
-
     private void OnDisable()
     {
-        Timer.OnTimeOut -= Reset;
+        Timer.OnTimeOut -= ResetObjects;
         FarmUpgradeManager.OnIncreasingTrayCapcaity -= DisplayCrudeTroughCounter;
 
     }
-    private void Reset()
+    private void ResetObjects(AnimalType animal)
     {
-        produceTimer.SetActive(false);
-        crudeCounter.SetActive(true);
+        if (animal == animalType)
+        {
+            IsLoading = false;
+            produceTimer.SetActive(false);
+            crudeCounter.SetActive(true);
+        }
     }
-
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Farmer_Stack"))
@@ -106,8 +100,10 @@ public class TroughStack : Stacker
     {
         if (feedStored >= maxHayCapacity)
         {
-            IsLoading = false;
-            OnTroughFull?.Invoke();
+            if (animalType == AnimalType.Chicken)
+                OnTroughFull?.Invoke(AnimalType.Chicken);
+            if (animalType == AnimalType.Cow)
+                OnTroughFull?.Invoke(AnimalType.Cow);
             produceTimer.SetActive(true);
             crudeCounter.SetActive(false);
 
@@ -162,6 +158,7 @@ public class TroughStack : Stacker
     }
 
 }
+public enum AnimalType { Cow, Chicken }
 
 
 

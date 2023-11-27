@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,7 @@ using UnityEngine.AI;
 
 public class AIWander : MonoBehaviour
 {
+    public AnimalType animalType;
     private NavMeshAgent agent;
     private Animator animator;
     private bool isWandering;
@@ -84,7 +86,6 @@ public class AIWander : MonoBehaviour
             yield return new WaitForSeconds(wanderInterval);
         }
     }
-
     private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
     {
         Vector3 randomDirection = Random.insideUnitSphere * radius;
@@ -95,7 +96,6 @@ public class AIWander : MonoBehaviour
 
         return hit.position;
     }
-
     private void Update()
     {
         if (isWandering && !agent.pathPending && agent.remainingDistance < 0.1f)
@@ -106,29 +106,37 @@ public class AIWander : MonoBehaviour
 
         animator.SetBool("Turn", isIdleHeadTurn);
     }
-
-    public void GoToTargetPosition()
+    public void GoToTargetPosition(AnimalType animal)
     {
-        StopCoroutine(Wander());
-        animator.SetBool("IsWalking", true);
-        StartCoroutine(MoveToTarget());
+        if (animal == animalType)
+        {
+            Debug.LogError("GOTOTARGETPOSITION" + gameObject.name);
+            StopCoroutine(Wander());
+            animator.SetBool("IsWalking", true);
+            StartCoroutine(MoveToTarget(animal));
+        }
     }
-
-    private IEnumerator MoveToTarget()
+    private IEnumerator MoveToTarget(AnimalType animal)
     {
         agent.SetDestination(targetPosition.position);
         yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance < 0.1f);
-        transform.eulerAngles = new(0, 90, 0);
+        if (animal == AnimalType.Chicken)
+            transform.eulerAngles = new(0, 90, 0);
+        else if (animal == AnimalType.Cow)
+            transform.eulerAngles = new(0, 0, 0);
         animator.SetBool("IsEating", true);
     }
-
-    void BacktoWandering()
+    void BacktoWandering(AnimalType animal)
     {
-        Debug.LogError("BacktoWandering");
-        isWandering = false;
-        animator.SetBool("IsEating", false);
-        animator.SetBool("IsWalking", true);
-        StopCoroutine(MoveToTarget());
-        StartCoroutine(Wander());
+        if (animal == animalType)
+        {
+            Debug.LogError("BacktoWandering" + gameObject.name);
+            isWandering = false;
+            animator.SetBool("IsEating", false);
+            animator.SetBool("IsWalking", true);
+            StopCoroutine(MoveToTarget(animal));
+            StartCoroutine(Wander());
+        }
     }
 }
+

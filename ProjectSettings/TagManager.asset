@@ -39,6 +39,8 @@ TagManager:
   - Green
   - Autumn
   - Pink
+  - Cow
+  - Chicken
   layers:
   - Default
   - TransparentFX

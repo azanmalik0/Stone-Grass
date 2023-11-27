@@ -14,7 +14,7 @@ public class HayStack : Stacker
 
     public static event Action<int> OnSellingHarvest;
     public static event Action<int> OnHayCollect;
-    public static event Action OnReachingHayloft;
+    //public static event Action OnReachingHayloft;
 
     //==============================================
     [Title("Unloading References")]

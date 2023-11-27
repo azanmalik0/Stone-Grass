@@ -35,7 +35,7 @@ namespace PT.Garden
         // [SerializeField] private GameObject grassParticle;
         // [SerializeField] private Transform uv00, uv11;
         // private ParticleSystem[] particlePool;
-        private int particleIndex = 0;
+        // private int particleIndex = 0;
         [SerializeField] private InkCanvas _removeCanvas, _windCanvas;
         [SerializeField] private MeshRenderer _mr;
         private bool _hasBeeIn = false, _hasCopy = false;
@@ -129,16 +129,16 @@ namespace PT.Garden
             {
                 if (!_hasCopy)
                 {
-                    if(renderTexture != null)
-                    lastRenderTexture = CopyTexture(renderTexture);
+                    if (renderTexture != null)
+                        lastRenderTexture = CopyTexture(renderTexture);
                     _hasCopy = true;
                 }
                 else
                 {
                     //print("Here1");
-                   
+
                     if (renderTexture != null)
-                         curRT = CopyTexture(renderTexture);
+                        curRT = CopyTexture(renderTexture);
 
                     computeShader.SetBuffer(0, "results", resultsBFF);
                     computeShader.SetFloat("width", curRT.width);

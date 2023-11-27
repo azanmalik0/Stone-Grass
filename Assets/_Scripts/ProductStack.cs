@@ -64,7 +64,7 @@ public class ProductStack : Stacker
         Timer.OnTimeOut -= GenerateProduct;
     }
 
-    public void GenerateProduct()
+    public void GenerateProduct(AnimalType animal)
     {
 
         if (hayParent.transform.childCount > 0)
@@ -97,7 +97,7 @@ public class ProductStack : Stacker
             if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
                 hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
             Destroy(feedCell);
-            GenerateProduct();
+            GenerateProduct(animal);
 
         }
     }

@@ -434,8 +434,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: 45c05a5f-34e7-4fd4-b4c3-aee4e4f3072f
-  saveEvent: 1
-  loadEvent: 1
+  saveEvent: 0
+  loadEvent: 0
   settings:
     _location: 4
     path: SaveFile.es3

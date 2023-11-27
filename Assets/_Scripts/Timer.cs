@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
-    public static event Action OnTimeOut;
+    public static event Action<AnimalType> OnTimeOut;
+    public AnimalType animalType;
     public float TimeRemaining;
     float _timeRemaining;
     public bool timerIsRunning = false;
@@ -31,7 +32,7 @@ public class Timer : MonoBehaviour
                 Debug.Log("Time has run out!");
                 _timeRemaining = 0;
                 timerIsRunning = false;
-                OnTimeOut?.Invoke();
+                OnTimeOut?.Invoke(animalType);
             }
         }
     }
