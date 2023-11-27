@@ -18,11 +18,11 @@ public class ProgressBarManager : MonoBehaviour
 
     private void OnEnable()
     {
-        HarvestGrass.OnCropHarvest += UpdateProgressBar;
+        //HarvestGrass.OnCropHarvest += UpdateProgressBar;
     }
     private void OnDisable()
     {
-        HarvestGrass.OnCropHarvest -= UpdateProgressBar;
+        //HarvestGrass.OnCropHarvest -= UpdateProgressBar;
 
     }
     void UpdateProgressBar()

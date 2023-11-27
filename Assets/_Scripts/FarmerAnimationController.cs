@@ -23,7 +23,7 @@ public class FarmerAnimationController : MonoBehaviour
     void Update()
     {
         bool IsRunning = animator.GetBool(IsRunningHash);
-        if (farmerStack.transform.childCount > 0)
+        if ((farmerStack.feedCollected > 0) || (farmerStack.eggCollected > 0) || (farmerStack.milkCollected > 0))
             animator.SetLayerWeight(1, 1);
         else
             animator.SetLayerWeight(1, 0);

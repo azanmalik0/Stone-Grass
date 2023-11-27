@@ -145,7 +145,7 @@ namespace PT.Garden
         private void OnDisable()
         {
             SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
-            Debug.LogError("=================================");
+           // Debug.LogError("=================================");
         }
         private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
         {

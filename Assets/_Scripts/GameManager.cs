@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-       // DOTween.SetTweensCapacity(10000000,10000000);
+        // DOTween.SetTweensCapacity(10000000,10000000);
     }
     void Start()
     {
@@ -50,4 +50,4 @@ public class GameManager : MonoBehaviour
 
 
 }
-public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass,NotCuttingGrass }
+public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass }

@@ -7,6 +7,6 @@ public class TempJugaar : MonoBehaviour
     private void OnDisable()
     {
         gameObject.SetActive(false);
-        Debug.LogError("159123456");
+       // Debug.LogError("159123456");
     }
 }

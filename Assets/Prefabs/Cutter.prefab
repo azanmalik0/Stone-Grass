@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4362623663781152535
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7381847691752707219}
+  - component: {fileID: 1539584856488818943}
+  - component: {fileID: 8225967679935173167}
+  - component: {fileID: 3485829370238583657}
+  m_Layer: 0
+  m_Name: Cutter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7381847691752707219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4362623663781152535}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1539584856488818943
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4362623663781152535}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.51
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8225967679935173167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4362623663781152535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ce8e087e06cbfd489aae22b1727d1f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _removeBrush:
+    brushTexture: {fileID: 2800000, guid: 1e48ea491c647834491786c93015b497, type: 3}
+    brushNormalTexture: {fileID: 0}
+    brushHeightTexture: {fileID: 0}
+    brushScale: 0.04
+    rotateAngle: 0
+    brushNormalBlend: 0
+    brushHeightBlend: 0
+    brushColor: {r: 1, g: 1, b: 1, a: 1}
+    colorBlendType: 0
+    normalBlendType: 0
+    heightBlendType: 0
+  _bendBrush:
+    brushTexture: {fileID: 2800000, guid: 1e48ea491c647834491786c93015b497, type: 3}
+    brushNormalTexture: {fileID: 0}
+    brushHeightTexture: {fileID: 0}
+    brushScale: 0.04
+    rotateAngle: 173
+    brushNormalBlend: 0
+    brushHeightBlend: 0
+    brushColor: {r: 1, g: 1, b: 1, a: 1}
+    colorBlendType: 0
+    normalBlendType: 0
+    heightBlendType: 0
+  _bendCanvas: {fileID: 0}
+  _removeCanvas: {fileID: 0}
+  _isPainting: 0
+--- !u!114 &3485829370238583657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4362623663781152535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 070daf42d9da3e04ca7c06e2927318b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hayCellPrefab: {fileID: 204026808303810990, guid: f4295a11389227c4190d65bb4c4450ba, type: 3}
+  jumpOffset: {x: 0, y: 0, z: 0}
+  requiredGrass: 5
+  grassCut: 0
+  hayCellPrefab1:
+  - {fileID: 204026808303810990, guid: 9acd77784ad5e2a4d902b9cd6ac719ef, type: 3}
+  - {fileID: 204026808303810990, guid: 943be5c1a54299f4c85de7e9c250aa65, type: 3}
+  - {fileID: 204026808303810990, guid: f4295a11389227c4190d65bb4c4450ba, type: 3}
+  - {fileID: 204026808303810990, guid: 6b6931ee79214b3438ff61f3c32e39aa, type: 3}

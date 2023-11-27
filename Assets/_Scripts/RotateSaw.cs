@@ -1,12 +1,9 @@
-using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static SWS.splineMove;
+using Sirenix.OdinInspector;
 
 public class RotateSaw : MonoBehaviour
 {
-    public float rotationSpeed;
+   [ReadOnly] public float rotationSpeed;
     private void OnEnable()
     {
     }

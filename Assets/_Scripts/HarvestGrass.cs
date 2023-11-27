@@ -5,12 +5,11 @@ using UnityEngine;
 
 public class HarvestGrass : MonoBehaviour
 {
-    public static event Action OnCropHarvest;
     [SerializeField] GameObject hayCellPrefab;
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
-    public int grassCut;
     [SerializeField] GameObject[] hayCellPrefab1;
+    public int grassCut;
     private void OnEnable()
     {
         GrassPatchActivator.OnGrassCut += GenerateHay;
@@ -48,34 +47,17 @@ public class HarvestGrass : MonoBehaviour
 
         }
     }
-    //private void CutGrass(Collider other)
-    //{
-    //    grassCut++;
-    //    OnCropHarvest?.Invoke();
-    //    other.gameObject.SetActive(false);
-    //    if (grassCut >= requiredGrass)
-    //    {
-    //        grassCut = 0;
-    //        GameObject hayCell = Instantiate(hayCellPrefab, other.transform.position, Quaternion.identity);
-    //        hayCell.transform.DOJump(other.transform.position + jumpOffset, 3, 1, 1);
-    //    }
 
-    //}
-    float delay = 1;
     void GenerateHay()
     {
         grassCut++;
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            //OnCropHarvest?.Invoke();
+            print("HayGenerate");
             GameObject hayCell = Instantiate(hayCellPrefab, transform.position, Quaternion.identity);
             hayCell.transform.DOJump(transform.position, 2, 1, 1);
-           
-           
-
         }
-      
     }
 
 

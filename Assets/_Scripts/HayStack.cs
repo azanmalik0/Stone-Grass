@@ -22,6 +22,7 @@ public class HayStack : Stacker
     [SerializeField] ParticleSystem boilerParticle;
     [SerializeField] GameObject hayCellPrefab;
     [SerializeField] GameObject PathDrawObject;
+    [SerializeField] Material hayMaterial;
 
     float delay = 0;
     bool unloading;
@@ -35,7 +36,6 @@ public class HayStack : Stacker
     public int HaySold { get => haySold; }
     public int HayCollected { get => hayCollected; }
 
-    public Material currentHayMaterial;
     //==============================================
     [Title("Destinations")]
 
@@ -95,7 +95,7 @@ public class HayStack : Stacker
             hayCollected++;
             OnHayCollect?.Invoke(hayCollected);
             hay.transform.SetParent(this.transform);
-            CheckCapacityFull();
+            // CheckCapacityFull();
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             previousPositions.Add(cellPositions[currentR, currentC]);
@@ -113,13 +113,12 @@ public class HayStack : Stacker
         {
             if (!IsFull)
             {
-                print("Here1");
+                print("FULL");
                 IsFull = true;
                 PathDrawObject.SetActive(true);
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     transform.GetChild(i).GetComponent<MeshRenderer>().material.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-
                 }
             }
 
@@ -128,13 +127,13 @@ public class HayStack : Stacker
         {
             if (IsFull)
             {
-                print("Here2");
+                print("KILL");
                 IsFull = false;
                 PathDrawObject.SetActive(false);
                 for (int i = 0; i < transform.childCount; i++)
                 {
-                    DOTween.Kill(transform.GetChild(i).GetComponent<MeshRenderer>().material);
-
+                    DOTween.Rewind(transform.GetChild(i).GetComponent<MeshRenderer>().material);
+                    
                 }
 
 
@@ -143,7 +142,6 @@ public class HayStack : Stacker
         }
 
     }
-
     IEnumerator UnloadFromTruck()
     {
         while (unloading && transform.childCount > 0)
@@ -154,7 +152,6 @@ public class HayStack : Stacker
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
             hayCell.GetComponent<BoxCollider>().enabled = false;
             hayCell.transform.SetParent(null);
-            CheckCapacityFull();
             hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 Destroy(hayCell);
@@ -167,12 +164,11 @@ public class HayStack : Stacker
 
             delay += 0.000001f;
             ResetGridPositions();
-
+            CheckCapacityFull();
             OnSellingHarvest?.Invoke(haySold);
             yield return null;
 
         }
-                       ///////////////////   yahan send krta
 
     }
     private void OnTriggerEnter(Collider other)
@@ -184,7 +180,6 @@ public class HayStack : Stacker
         if (other.CompareTag("Unload"))
         {
             unloading = true;
-            CheckCapacityFull();
             StartCoroutine(UnloadFromTruck());
         }
     }

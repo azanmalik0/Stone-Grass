@@ -10,7 +10,7 @@ using static ProductStack;
 
 public class FarmerStack : Stacker
 {
-    public static event Action OnMoneyCollect;
+   // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
     [SerializeField] Transform coinPos;
     bool IsLoading;

@@ -79,11 +79,9 @@ public class TruckUpgradeManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenTruckUpgradeMenu;
-        // CurrencyManager.OnCurrencyRecieve += CheckTextColor;
     }
     private void OnDisable()
     {
-        // CurrencyManager.OnCurrencyRecieve -= CheckTextColor;
         GameManager.OnGameStateChanged -= OpenTruckUpgradeMenu;
     }
     private void Start()
