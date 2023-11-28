@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static ProductStack;
 
@@ -22,10 +23,12 @@ public class ProductMarketStack : Stacker
     }
     void Start()
     {
-        SetGridYOffset(gridOffset.y);
+        if (productType == ProductTypes.Egg)
+            SetGridYOffset(0.34f);
+        if (productType == ProductTypes.Milk)
+            SetGridYOffset(0);
         productCheckIndex = 1;
         CalculateCellPositions();
-        ES3AutoSaveMgr.Current.Load();
         LoadProductStored();
         SetProductType(productType);
 
@@ -155,7 +158,6 @@ public class ProductMarketStack : Stacker
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
 
         }
     }

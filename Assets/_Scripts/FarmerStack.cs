@@ -26,7 +26,6 @@ public class FarmerStack : Stacker
     bool IsLoading;
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
         Instance = this;
     }
     private void OnEnable()
@@ -40,7 +39,7 @@ public class FarmerStack : Stacker
     }
     private void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
+        SetGridYOffset(0.92f);
         CalculateCellPositions();
         LoadStack();
         UpdateMaxFarmerCapacity();
@@ -149,7 +148,7 @@ public class FarmerStack : Stacker
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentC, currentR]);
-            ES3AutoSaveMgr.Current.Save();
+            //ES3AutoSaveMgr.Current.Save();
             delay += 0.0001f;
             other.GetComponent<HayLoft>().ResetGridPositions();
             other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
@@ -211,7 +210,7 @@ public class FarmerStack : Stacker
                 previousPositions.Add(cellPositions[currentC, currentR]);
                 if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) > 0)
                     other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
-                ES3AutoSaveMgr.Current.Save();
+                //ES3AutoSaveMgr.Current.Save();
                 delay += 0.0001f;
                 UpdateGridPositions();
                 other.GetComponent<ProductStack>().ResetGridPositions();
@@ -280,7 +279,6 @@ public class FarmerStack : Stacker
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
 
         }
     }

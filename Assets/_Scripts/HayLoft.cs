@@ -32,7 +32,7 @@ public class HayLoft : Stacker
         HayStack.OnSellingHarvest += GetValue;
         FarmUpgradeManager.OnIncreasingStorageCapcaity += DisplayCrudeStorageCounter;
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         HayStack.OnSellingHarvest -= GetValue;
         FarmUpgradeManager.OnIncreasingStorageCapcaity -= DisplayCrudeStorageCounter;
@@ -41,8 +41,7 @@ public class HayLoft : Stacker
 
     private void Start()
     {
-        SetGridYOffset(gridOffset.y);
-        ES3AutoSaveMgr.Current.Load();
+        SetGridYOffset(0.22f);
         LoadFeedStored();
         CalculateCellPositions();
         feedGeneratedText.text = feedGenerated.ToString();
@@ -67,7 +66,7 @@ public class HayLoft : Stacker
     }
     private void LateUpdate()
     {
-        if (feedGenerated > 0)
+        if (feedGenerated > 0 && feedStored <= maxHayCapacity && !IsGenerating)
         {
             StartHayLoft();
         }
@@ -75,64 +74,54 @@ public class HayLoft : Stacker
     }
     void GetValue(int value)
     {
+        hayStored = value;
+        CheckforHayGeneration();
+    }
 
-        hayStored++;
-        if (hayStored >= 1)
+    void CheckforHayGeneration()
+    {
+        if (hayStored >= 10)
         {
             feedGenerated++;
             feedGeneratedText.text = feedGenerated.ToString();
-            hayStored = 0;
-            if (!IsFunctional)
-            {
-                IsFunctional = true;
-                //StartHayLoft();
-            }
+            hayStored -= 10;
+            ES3AutoSaveMgr.Current.Save();
+            CheckforHayGeneration();
+        }
+        else
+        {
 
         }
     }
     public void StartHayLoft()
     {
-        if (feedGenerated >= 1 && !IsGenerating)
+
+        IsGenerating = true;
+        // Debug.LogError("B");
+        GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
+        feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
         {
-            IsGenerating = true;
-            // Debug.LogError("B");
-            GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
-            feedCell.transform.DOLocalMove(feedCellLast.position, 0.5f).SetEase(Ease.Linear).OnComplete(() =>
+            feedCell.transform.SetParent(this.transform);
+            feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 1f).SetEase(Ease.OutQuint).OnComplete(() =>
             {
-                feedCell.transform.SetParent(this.transform);
-                feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetEase(Ease.OutQuint).OnComplete(() =>
-                {
-                    feedGenerated--;
-                    if (feedGenerated < 0)
-                    {
-                        feedGenerated = 0;
-
-                    }
-                    feedGeneratedText.text = feedGenerated.ToString();
-                    feedStored++;
-                    crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
-                    previousPositions.Add(cellPositions[currentR, currentC]);
-                    UpdateGridPositions();
-                    if (feedStored < maxHayCapacity)
-                    {
-                        if (feedGenerated == 0)
-                        {
-                            feedGenerated = 0;
-                            IsFunctional = false;
-                        }
-                        
-                    }
-                    IsGenerating = false;
-
-                });
+                feedGenerated--;
+                feedGeneratedText.text = feedGenerated.ToString();
+                feedStored++;
+                ES3AutoSaveMgr.Current.Save();
+                print(feedStored);
+                crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
+                previousPositions.Add(cellPositions[currentR, currentC]);
+                UpdateGridPositions();
+                IsGenerating = false;
 
             });
-        }
+
+        });
+
 
     }
     private void OnApplicationPause()
     {
-        ES3AutoSaveMgr.Current.Save();
     }
 
 

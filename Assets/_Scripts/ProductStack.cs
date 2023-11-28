@@ -26,9 +26,8 @@ public class ProductStack : Stacker
     }
     private void Start()
     {
-        SetGridYOffset(gridOffset.y);
+        SetGridYOffset(0);
         CalculateCellPositions();
-        ES3AutoSaveMgr.Current.Load();
         LoadProductStored();
     }
     private void LoadProductStored()
@@ -131,7 +130,6 @@ public class ProductStack : Stacker
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
 
         }
     }

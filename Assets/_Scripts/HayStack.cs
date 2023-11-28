@@ -14,7 +14,6 @@ public class HayStack : Stacker
 
     public static event Action<int> OnSellingHarvest;
     public static event Action<int> OnHayCollect;
-    //public static event Action OnReachingHayloft;
 
     //==============================================
     [Title("Unloading References")]
@@ -27,7 +26,6 @@ public class HayStack : Stacker
     float delay = 0;
     bool unloading;
     //==============================================
-    //public float initialYOffset;
     [HideInInspector]
     public int haySold;
     public int hayCollected;
@@ -45,7 +43,6 @@ public class HayStack : Stacker
 
     private void Awake()
     {
-        SetGridYOffset(gridOffset.y);
         instance = this;
     }
     private void OnEnable()
@@ -59,7 +56,7 @@ public class HayStack : Stacker
     }
     private void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
+        SetGridYOffset(0.15f);
         LoadHayCollected();
         CalculateCellPositions();
         UpdateMaxCarCapacity();
@@ -83,7 +80,6 @@ public class HayStack : Stacker
         CapacityBar.Instance._slider.maxValue = maxHayCapacity;
         CapacityBar.Instance.UpdateMaxCapacityUI();
     }
-
     void LoadOnTractor(Collider hay)
     {
         if (transform.childCount >= maxHayCapacity)
@@ -95,11 +91,10 @@ public class HayStack : Stacker
             hayCollected++;
             OnHayCollect?.Invoke(hayCollected);
             hay.transform.SetParent(this.transform);
-            // CheckCapacityFull();
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             previousPositions.Add(cellPositions[currentR, currentC]);
-            ES3AutoSaveMgr.Current.Save();
+            
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
             UpdateGridPositions();
@@ -162,14 +157,13 @@ public class HayStack : Stacker
             });
             if ((previousPositions.Count - 1) > 0)
                 previousPositions.RemoveAt(previousPositions.Count - 1);
-            ES3AutoSaveMgr.Current.Save();
-            OnSellingHarvest?.Invoke(haySold);
             delay += 0.000001f;
             ResetGridPositions();
             CheckCapacityFull();
             yield return null;
 
         }
+        OnSellingHarvest?.Invoke(haySold);
 
     }
     private void OnTriggerEnter(Collider other)
@@ -188,19 +182,17 @@ public class HayStack : Stacker
     {
         if (other.CompareTag("Unload"))
         {
+            //OnSellingHarvest?.Invoke(haySold);
             unloading = false;
         }
 
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Save();
-    //}
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
+           
 
         }
     }

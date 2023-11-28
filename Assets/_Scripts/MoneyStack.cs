@@ -22,8 +22,7 @@ public class MoneyStack : Stacker
     }
     void Start()
     {
-        SetGridYOffset(gridOffset.y);
-        ES3AutoSaveMgr.Current.Load();
+        SetGridYOffset(0);
         CalculateCellPositions();
         LoadMoneyStored();
 
@@ -77,7 +76,6 @@ public class MoneyStack : Stacker
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
 
         }
     }

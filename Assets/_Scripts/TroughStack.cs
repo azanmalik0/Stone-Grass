@@ -26,9 +26,8 @@ public class TroughStack : Stacker
 
     private void Start()
     {
-        SetGridYOffset(gridOffset.y);
+        SetGridYOffset(0.42f);
         CalculateCellPositions();
-        ES3AutoSaveMgr.Current.Load();
         LoadFeedCollected();
         DisplayCrudeTroughCounter();
     }
@@ -160,7 +159,6 @@ public class TroughStack : Stacker
     {
         if (pause)
         {
-            ES3AutoSaveMgr.Current.Save();
 
         }
     }
