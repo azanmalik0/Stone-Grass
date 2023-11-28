@@ -4,9 +4,9 @@ using System.Linq;
 using UnityEngine;
 using Es.InkPainter.Effective;
 
-#if UNITY_EDITOR
 
 using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -264,8 +264,12 @@ namespace Es.InkPainter
                 OnCanvasAttached(this);
             InitPropertyID();
             SetMaterial();
-            SetTexture();
+            //SetTexture();
             MeshDataCache();
+        }
+        private void OnEnable()
+        {
+            SetTexture();
         }
 
         private void Start()
@@ -360,6 +364,34 @@ namespace Es.InkPainter
         /// <summary>
         /// Set and retrieve the texture.
         /// </summary>
+        //private void SetTexture()
+        //{
+        //    foreach (var p in paintSet)
+        //    {
+        //        if (p.material.name != "Default-Material (Instance)")
+        //        {
+        //            if (p.material.HasProperty(p.mainTexturePropertyID))
+        //            {
+
+        //               var loadedTexture = Resources.Load<Texture2D>("hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel"));
+        //                if (loadedTexture != null)
+        //                {
+        //                    p.mainTexture = loadedTexture;
+        //                }
+        //                else
+        //                {
+        //                    p.mainTexture = p.material.GetTexture(p.mainTexturePropertyID);
+        //                }
+
+        //            }
+        //            if (p.material.HasProperty(p.normalTexturePropertyID))
+        //                p.normalTexture = p.material.GetTexture(p.normalTexturePropertyID);
+        //            if (p.material.HasProperty(p.heightTexturePropertyID))
+        //                p.heightTexture = p.material.GetTexture(p.heightTexturePropertyID);
+
+        //        }
+        //    }
+        //}
         private void SetTexture()
         {
             foreach (var p in paintSet)
@@ -368,7 +400,7 @@ namespace Es.InkPainter
                 {
                     if (p.material.HasProperty(p.mainTexturePropertyID))
                     {
-                        var loadedTexture = Resources.Load<Texture2D>("hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel"));
+                        var loadedTexture = LoadTextureFromPersistentDataPath("hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel"));
                         if (loadedTexture != null)
                         {
                             p.mainTexture = loadedTexture;
@@ -377,15 +409,29 @@ namespace Es.InkPainter
                         {
                             p.mainTexture = p.material.GetTexture(p.mainTexturePropertyID);
                         }
-
                     }
+
                     if (p.material.HasProperty(p.normalTexturePropertyID))
                         p.normalTexture = p.material.GetTexture(p.normalTexturePropertyID);
                     if (p.material.HasProperty(p.heightTexturePropertyID))
                         p.heightTexture = p.material.GetTexture(p.heightTexturePropertyID);
-
                 }
             }
+        }
+
+        private Texture2D LoadTextureFromPersistentDataPath(string filename)
+        {
+            string filePath = Path.Combine(Application.persistentDataPath, filename);
+
+            if (File.Exists(filePath))
+            {
+                byte[] fileData = File.ReadAllBytes(filePath);
+                Texture2D texture = new Texture2D(2, 2); // Create a small texture, it will be replaced by the loaded texture
+                texture.LoadImage(fileData); // Load the image data into the texture
+                return texture;
+            }
+
+            return null;
         }
 
         /// <summary>

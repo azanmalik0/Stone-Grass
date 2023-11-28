@@ -31,7 +31,10 @@ namespace PT.Garden
                         _removeCanvas.transform.position.y,
                         transform.position.z
                     )
+
                 );
+               // Debug.LogError("=====>"+gameObject.name);
+
             }
         }
     }

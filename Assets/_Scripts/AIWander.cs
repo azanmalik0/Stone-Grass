@@ -16,6 +16,7 @@ public class AIWander : MonoBehaviour
 
     public float wanderRadius = 10f;
     public float wanderInterval = 5f;
+    private Coroutine wanderCoroutine;
 
     public float headTurnInterval = 10f;
     public float minHeadTurnTime = 2f;
@@ -30,8 +31,7 @@ public class AIWander : MonoBehaviour
         isWandering = false;
         isIdleHeadTurn = false;
         nextHeadTurnTime = Random.Range(minHeadTurnTime, maxHeadTurnTime);
-
-        StartCoroutine(Wander());
+        StartWandering();
     }
     private void OnEnable()
     {
@@ -44,7 +44,22 @@ public class AIWander : MonoBehaviour
         Timer.OnTimeOut -= BacktoWandering;
 
     }
-
+    void StartWandering()
+    {
+        if (wanderCoroutine == null)
+        {
+            wanderCoroutine = StartCoroutine(Wander());
+        }
+    }
+    void StopWandering()
+    {
+        if (wanderCoroutine != null)
+        {
+            StopCoroutine(wanderCoroutine);
+            wanderCoroutine = null;
+            isWandering = false;
+        }
+    }
     private IEnumerator Wander()
     {
         while (true)
@@ -83,7 +98,7 @@ public class AIWander : MonoBehaviour
                 isIdleHeadTurn = false;
             }
 
-            yield return new WaitForSeconds(wanderInterval);
+            yield return null;
         }
     }
     private Vector3 GetRandomPointOnNavMesh(Vector3 center, float radius)
@@ -110,8 +125,7 @@ public class AIWander : MonoBehaviour
     {
         if (animal == animalType)
         {
-            //Debug.LogError("GOTOTARGETPOSITION" + gameObject.name);
-            StopCoroutine(Wander());
+            StopWandering();
             animator.SetBool("IsWalking", true);
             StartCoroutine(MoveToTarget(animal));
         }
@@ -121,21 +135,18 @@ public class AIWander : MonoBehaviour
         agent.SetDestination(targetPosition.position);
         yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance < 0.1f);
         if (animal == AnimalType.Chicken)
-            transform.eulerAngles = new(0, 90, 0);
+            transform.localEulerAngles=new Vector3(180,0,180);
         else if (animal == AnimalType.Cow)
-            transform.eulerAngles = new(0, 0, 0);
+            transform.localEulerAngles=Vector3.zero;
         animator.SetBool("IsEating", true);
     }
     void BacktoWandering(AnimalType animal)
     {
         if (animal == animalType)
         {
-            //Debug.LogError("BacktoWandering" + gameObject.name);
-            isWandering = false;
             animator.SetBool("IsEating", false);
-            animator.SetBool("IsWalking", true);
             StopCoroutine(MoveToTarget(animal));
-            StartCoroutine(Wander());
+            StartWandering();
         }
     }
 }

@@ -5,58 +5,75 @@ using UnityEngine;
 
 public class HarvestGrass : MonoBehaviour
 {
-    [SerializeField] GameObject hayCellPrefab;
+    public static HarvestGrass instance;
+    GameObject hayCellPrefab;
     [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
-    [SerializeField] GameObject[] hayCellPrefab1;
+    [SerializeField] GameObject[] hayCellvariants;
     public int grassCut;
-    private void OnEnable()
-    {
-        GrassPatchActivator.OnGrassCut += GenerateHay;
-    }
-    private void OnDisable()
-    {
 
-        GrassPatchActivator.OnGrassCut -= GenerateHay;
+    private void Awake()
+    {
+        instance = this;
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Blue"))
         {
 
 
-            hayCellPrefab = hayCellPrefab1[0];
+            hayCellPrefab = hayCellvariants[0];
         }
         else if (other.CompareTag("Pink"))
         {
 
 
-            hayCellPrefab = hayCellPrefab1[1];
+            hayCellPrefab = hayCellvariants[1];
         }
         else if (other.CompareTag("Green"))
         {
 
-            hayCellPrefab = hayCellPrefab1[2];
+            hayCellPrefab = hayCellvariants[2];
 
         }
         else if (other.CompareTag("Autumn"))
         {
 
-            hayCellPrefab = hayCellPrefab1[3];
+            hayCellPrefab = hayCellvariants[3];
+
+        }
+        else if (other.CompareTag("Purple"))
+        {
+
+            hayCellPrefab = hayCellvariants[4];
+
+        }
+        else if (other.CompareTag("Red"))
+        {
+
+            hayCellPrefab = hayCellvariants[5];
+
+        }
+        else if (other.CompareTag("Orange"))
+        {
+
+            hayCellPrefab = hayCellvariants[6];
 
         }
     }
 
-    void GenerateHay()
+    public void GenerateHay(Vector3 pos)
     {
         grassCut++;
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            print("HayGenerate");
-            GameObject hayCell = Instantiate(hayCellPrefab, transform.position, Quaternion.identity);
-            hayCell.transform.DOJump(transform.position, 2, 1, 1);
+            //print("HayGenerate" + gameObject.name);
+            if (hayCellPrefab != null)
+            {
+                Instantiate(hayCellPrefab, pos, Quaternion.identity);
+            }
+
         }
     }
 

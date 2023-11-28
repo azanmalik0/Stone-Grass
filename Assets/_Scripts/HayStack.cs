@@ -193,9 +193,17 @@ public class HayStack : Stacker
         }
 
     }
-    private void OnApplicationQuit()
+    //private void OnApplicationQuit()
+    //{
+    //    ES3AutoSaveMgr.Current.Save();
+    //}
+    private void OnApplicationPause(bool pause)
     {
-        ES3AutoSaveMgr.Current.Save();
+        if (pause)
+        {
+            ES3AutoSaveMgr.Current.Save();
+
+        }
     }
 
 

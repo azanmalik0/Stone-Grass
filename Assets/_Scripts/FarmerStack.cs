@@ -149,6 +149,7 @@ public class FarmerStack : Stacker
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentC, currentR]);
+            ES3AutoSaveMgr.Current.Save();
             delay += 0.0001f;
             other.GetComponent<HayLoft>().ResetGridPositions();
             other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
@@ -210,6 +211,7 @@ public class FarmerStack : Stacker
                 previousPositions.Add(cellPositions[currentC, currentR]);
                 if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) > 0)
                     other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
+                ES3AutoSaveMgr.Current.Save();
                 delay += 0.0001f;
                 UpdateGridPositions();
                 other.GetComponent<ProductStack>().ResetGridPositions();
@@ -270,10 +272,17 @@ public class FarmerStack : Stacker
 
         }
     }
-    private void OnApplicationQuit()
+    //private void OnApplicationQuit()
+    //{
+    //    ES3AutoSaveMgr.Current.Save();
+    //}
+    private void OnApplicationPause(bool pause)
     {
-        ES3AutoSaveMgr.Current.Save();
-    }
+        if (pause)
+        {
+            ES3AutoSaveMgr.Current.Save();
 
+        }
+    }
 
 }

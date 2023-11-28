@@ -41,6 +41,9 @@ TagManager:
   - Pink
   - Cow
   - Chicken
+  - Purple
+  - Red
+  - Orange
   layers:
   - Default
   - TransparentFX

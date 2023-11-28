@@ -33,7 +33,7 @@ namespace PT.Garden
         public ComputeShader computeShader;
         public PixelChange[] results;
         // [SerializeField] private GameObject grassParticle;
-        // [SerializeField] private Transform uv00, uv11;
+        [SerializeField] private Transform uv00, uv11;
         // private ParticleSystem[] particlePool;
         // private int particleIndex = 0;
         [SerializeField] private InkCanvas _removeCanvas, _windCanvas;
@@ -45,7 +45,7 @@ namespace PT.Garden
         private ComputeBuffer resultsBFF;
 
         private bool _isSetUp = false;
-
+        public Transform BJ;
         private void Start()
         {
             _isSetUp = _mr != null;
@@ -121,6 +121,7 @@ namespace PT.Garden
             }
             catch { }
         }
+        bool IsCutting;
         float delay = 2f;
         RenderTexture curRT;
         private void Update()
@@ -158,16 +159,12 @@ namespace PT.Garden
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
                             IsCutting = true;
-                            OnGrassCut?.Invoke();
+                            Vector3 pos = new Vector3();
+                            pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
+                            pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;
+                            pos.y = transform.position.y + 0.5f;
+                            HarvestGrass.instance.GenerateHay(pos);
                             GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
-                            // UnityEngine.Debug.Log("Anadar");
-                            // print("======================================>");
-                            // Vector3 pos = new()
-                            // {
-                            //     x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x,
-                            //     z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z,
-                            //     y = transform.position.y + 0.5f
-                            // };
                             //// DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
                         }
                         else
@@ -184,7 +181,8 @@ namespace PT.Garden
                 }
             }
         }
-        bool IsCutting;
+
+
         private RenderTexture CopyTexture(RenderTexture t)
         {
             RenderTexture newrt = new(t)
