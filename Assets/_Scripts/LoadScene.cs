@@ -22,7 +22,6 @@ public class LoadScene : MonoBehaviour
 
     private void Start()
     {
-        //ES3AutoSaveMgr.Current.Load();
         StartCoroutine(LoadSceneAsync(sceneID));
 
     }
@@ -31,7 +30,6 @@ public class LoadScene : MonoBehaviour
     IEnumerator LoadSceneAsync(int sceneID)
     {
         yield return new WaitForSeconds(2f);
-        ES3AutoSaveMgr.Current.Save();
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
         while (!operation.isDone)
         {

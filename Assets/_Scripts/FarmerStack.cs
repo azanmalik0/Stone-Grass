@@ -138,10 +138,10 @@ public class FarmerStack : Stacker
         else if (other.GetComponent<HayLoft>().feedStored > 0)
         {
             feedCollected++;
-            other.GetComponent<HayLoft>().feedStored--;
             Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
             //DOTween.Complete(feedCell);
             feedCell.SetParent(this.transform);
+            other.GetComponent<HayLoft>().feedStored--;
             if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) > 0)
                 other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
             feedCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.3f).SetDelay(delay).SetEase(Ease.OutSine);

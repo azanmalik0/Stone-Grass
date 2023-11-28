@@ -48,6 +48,8 @@ namespace PT.Garden
         public Transform BJ;
         private void Start()
         {
+            Vibration.Init();
+
             _isSetUp = _mr != null;
 
             if (_isSetUp)
@@ -159,6 +161,9 @@ namespace PT.Garden
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
                             IsCutting = true;
+                            //if (Vibration.vibratin)
+                            Vibration.CancelAndroid();
+                            Vibration.VibrateAndroid(20);
                             Vector3 pos = new Vector3();
                             pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
                             pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;

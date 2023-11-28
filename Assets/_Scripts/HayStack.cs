@@ -134,7 +134,7 @@ public class HayStack : Stacker
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     DOTween.Rewind(transform.GetChild(i).GetComponent<MeshRenderer>().material);
-                    
+
                 }
 
 
@@ -149,12 +149,12 @@ public class HayStack : Stacker
         {
             hayCollected--;
             haySold++;
-            OnHayCollect?.Invoke(HayCollected);
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
             hayCell.GetComponent<BoxCollider>().enabled = false;
             hayCell.transform.SetParent(null);
             hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
             {
+                OnHayCollect?.Invoke(HayCollected);
                 Destroy(hayCell);
                 boilerParticle.Play();
                 CurrencyManager.Instance.RecieveCoins(1);
@@ -163,11 +163,10 @@ public class HayStack : Stacker
             if ((previousPositions.Count - 1) > 0)
                 previousPositions.RemoveAt(previousPositions.Count - 1);
             ES3AutoSaveMgr.Current.Save();
-
+            OnSellingHarvest?.Invoke(haySold);
             delay += 0.000001f;
             ResetGridPositions();
             CheckCapacityFull();
-            OnSellingHarvest?.Invoke(haySold);
             yield return null;
 
         }

@@ -36,7 +36,7 @@ public class LevelMenuManager : MonoBehaviour
     private void Start()
     {
         ES3AutoSaveMgr.Current.Load();
-        //levelObjects[currentLevel].SetActive(true);
+        levelObjects[currentLevel].SetActive(true);
 
         //==============Hasnat=======================================
         //loadedLevel = currentLevel;
@@ -66,9 +66,11 @@ public class LevelMenuManager : MonoBehaviour
 
         if (currentLevel != level)
         {
+            PercentageChecker.Instance.SaveLevelTexture();
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
-            levelObjects[currentLevel].SetActive(true);
+            print("CurrentLevelSaved" + " " + currentLevel);
+            ES3AutoSaveMgr.Current.Save();
             loadingPanel.SetActive(true);
         }
 
@@ -89,8 +91,8 @@ public class LevelMenuManager : MonoBehaviour
 
     void UnlockNextLevelButton()
     {
-        levelButtons[currentLevel+1].transform.GetChild(1).gameObject.SetActive(false);
-        levelButtons[currentLevel+1].GetComponent<Button>().enabled = true;
+        levelButtons[currentLevel + 1].transform.GetChild(1).gameObject.SetActive(false);
+        levelButtons[currentLevel + 1].GetComponent<Button>().interactable = true;
 
         //=================Hasnat============================================
         //if (currentLevel == PlayerPrefs.GetInt("TotalLevelsUnlocked"))
@@ -104,7 +106,7 @@ public class LevelMenuManager : MonoBehaviour
         //    }
         //}
     }
-    
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)

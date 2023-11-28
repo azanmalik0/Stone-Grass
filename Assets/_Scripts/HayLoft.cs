@@ -67,8 +67,7 @@ public class HayLoft : Stacker
     }
     private void LateUpdate()
     {
-        //DisplayCrudeStorageCounter();
-        if (feedStored < maxHayCapacity)
+        if (feedGenerated > 0)
         {
             StartHayLoft();
         }
@@ -76,6 +75,7 @@ public class HayLoft : Stacker
     }
     void GetValue(int value)
     {
+
         hayStored++;
         if (hayStored >= 1)
         {
@@ -85,7 +85,7 @@ public class HayLoft : Stacker
             if (!IsFunctional)
             {
                 IsFunctional = true;
-                StartHayLoft();
+                //StartHayLoft();
             }
 
         }
@@ -130,7 +130,7 @@ public class HayLoft : Stacker
         }
 
     }
-    private void OnApplicationQuit()
+    private void OnApplicationPause()
     {
         ES3AutoSaveMgr.Current.Save();
     }

@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Vibration.Init();
     }
     void Start()
     {

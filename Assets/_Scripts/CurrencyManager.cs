@@ -22,7 +22,7 @@ public class CurrencyManager : MonoBehaviour
     }
     private void Start()
     {
-         RecieveCoins(1000);
+        //RecieveCoins(1000);
         coins = PlayerPrefs.GetInt("Coins");
         coinText.text = coins.ToString();
     }

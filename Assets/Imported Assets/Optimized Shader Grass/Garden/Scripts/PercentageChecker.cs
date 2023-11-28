@@ -12,6 +12,7 @@ namespace PT.Garden
     {
 
         [Title("New")]
+        public static PercentageChecker Instance;
         public static event Action OnFirstStarUnlock;
         public static event Action OnSecondStarUnlock;
         public GameObject unlockedStar1;
@@ -43,6 +44,10 @@ namespace PT.Garden
         [SerializeField] private Image _filledSlider;
         private ComputeBuffer sumBuffer;
 
+        private void Awake()
+        {
+            Instance = this;
+        }
         private void Start()
         {
             _mainMaterial = _meshRenderer.materials[_matIndex];
@@ -133,54 +138,37 @@ namespace PT.Garden
                     UnlockOnce2 = true;
 
                 }
-                Debug.LogError("Win");
+               // Debug.LogError("Win");
             }
         }
 
 
 
-#if !UNITY_EDITOR && UNITY_ANDROID
+
 
         private void OnApplicationPause(bool pause)
         {
             if (pause)
             {
                 Debug.LogError("=================================");
-                SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
+                SaveLevelTexture();
 
             }
 
         }
-#endif
 
-        private void OnApplicationQuit()
+        public void SaveLevelTexture()
         {
-            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
-            Debug.LogError("=================================");
-        }
-        private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
-        {
-            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
-            Graphics.Blit(renderTexture, tempRT);
-
-            Texture2D texture2D = new Texture2D(tempRT.width, tempRT.height);
-            RenderTexture.active = tempRT;
-            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
-            texture2D.Apply();
-            byte[] bytes = texture2D.EncodeToPNG();
-            string filePath = Path.Combine(Application.dataPath, "Resources", filename);
-            File.WriteAllBytes(filePath, bytes);
-            DestroyImmediate(texture2D);
-            DestroyImmediate(tempRT);
-
-#if UNITY_EDITOR
-
-            UnityEditor.AssetDatabase.Refresh();
-#endif
+            SaveRenderTextureToPersistentDataPath((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
 
         }
 
-        //        private void SaveRenderTextureToPersistentDataPath(RenderTexture renderTexture, string filename)
+        //private void OnApplicationQuit()
+        //{
+        //    SaveRenderTextureToPersistentDataPath((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
+        //    Debug.LogError("=================================");
+        //}
+        //        private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
         //        {
         //            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
         //            Graphics.Blit(renderTexture, tempRT);
@@ -189,19 +177,44 @@ namespace PT.Garden
         //            RenderTexture.active = tempRT;
         //            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
         //            texture2D.Apply();
-
         //            byte[] bytes = texture2D.EncodeToPNG();
-
-        //            string filePath = Path.Combine(Application.persistentDataPath, filename);
+        //            string filePath = Path.Combine(Application.dataPath, "Resources", filename);
         //            File.WriteAllBytes(filePath, bytes);
-
         //            DestroyImmediate(texture2D);
         //            DestroyImmediate(tempRT);
+
         //#if UNITY_EDITOR
+
         //            UnityEditor.AssetDatabase.Refresh();
         //#endif
-        //            Debug.LogError("Path++++++" + filePath);
+
         //        }
+
+        private void SaveRenderTextureToPersistentDataPath(RenderTexture renderTexture, string filename)
+        {
+            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
+            Graphics.Blit(renderTexture, tempRT);
+
+            Texture2D texture2D = new Texture2D(tempRT.width, tempRT.height);
+            RenderTexture.active = tempRT;
+            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
+            texture2D.Apply();
+
+            byte[] bytes = texture2D.EncodeToPNG();
+
+            string filePath = Path.Combine(Application.persistentDataPath, filename);
+            File.WriteAllBytes(filePath, bytes);
+
+            DestroyImmediate(texture2D);
+            DestroyImmediate(tempRT);
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+            Debug.LogError("Path++++++" + filePath);
+        }
+
+
+
         private void OnDestroy()
         {
             sumBuffer?.Dispose();
