@@ -9,7 +9,7 @@ public class LoadScene : MonoBehaviour
 {
     public static LoadScene instance;
     [SerializeField] Image loadingFillBar;
-    //public int sceneID;
+    public int sceneID;
 
     private void Awake()
     {
@@ -19,32 +19,27 @@ public class LoadScene : MonoBehaviour
         }
 
     }
-    
 
-    private IEnumerator Start()
+    private void Start()
     {
-
-        loadingFillBar.DOFillAmount(1, 3).SetDelay(0.5f).SetEase(Ease.Linear);
-        yield return new WaitForSeconds(4f);
-        loadingFillBar.fillAmount = 0;
-        gameObject.SetActive(false);
-        //StartCoroutine(LoadSceneAsync(sceneID));
+        //ES3AutoSaveMgr.Current.Load();
+        StartCoroutine(LoadSceneAsync(sceneID));
 
     }
 
 
-    //IEnumerator LoadSceneAsync(int sceneID)
-    //{
-    //    yield return new WaitForSeconds(2f);
-    //    //ES3AutoSaveMgr.Current.Save();
-    //    AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
-    //    while (!operation.isDone)
-    //    {
-    //        float fillValue = Mathf.Clamp01(operation.progress / 0.9f);
-    //        loadingFillBar.fillAmount = fillValue;
-    //        yield return null;
-    //    }
+    IEnumerator LoadSceneAsync(int sceneID)
+    {
+        yield return new WaitForSeconds(2f);
+        ES3AutoSaveMgr.Current.Save();
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneID);
+        while (!operation.isDone)
+        {
+            float fillValue = Mathf.Clamp01(operation.progress / 0.9f);
+            loadingFillBar.fillAmount = fillValue;
+            yield return null;
+        }
 
 
-    //}
+    }
 }

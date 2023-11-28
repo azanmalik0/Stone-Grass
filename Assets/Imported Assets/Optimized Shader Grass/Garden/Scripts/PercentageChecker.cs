@@ -138,54 +138,27 @@ namespace PT.Garden
         }
 
 
-        
 
-        
+#if !UNITY_EDITOR && UNITY_ANDROID
+
         private void OnApplicationPause(bool pause)
         {
             if (pause)
             {
                 Debug.LogError("=================================");
-                SaveRenderTextureToPersistentDataPath((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
+                SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
 
             }
 
         }
+#endif
 
-        //public void SaveTheTexture()
-        //{
-        //    SaveRenderTextureToPersistentDataPath((RenderTexture)_texture, "hasnat.png");
-        //    Debug.LogError("Texture Saved===============");
-        //}
-
-        //private void OnApplicationQuit()
-        //{
-        //    SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + PlayerPrefs.GetInt("CurrentPlayingLevel") + ".png");
-        //    Debug.LogError("=================================");
-        //}
-        //        private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
-        //        {
-        //            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
-        //            Graphics.Blit(renderTexture, tempRT);
-
-        //            Texture2D texture2D = new Texture2D(tempRT.width, tempRT.height);
-        //            RenderTexture.active = tempRT;
-        //            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
-        //            texture2D.Apply();
-        //            byte[] bytes = texture2D.EncodeToPNG();
-        //            string filePath = Path.Combine(Application.dataPath, "Resources", filename);
-        //            File.WriteAllBytes(filePath, bytes);
-        //            DestroyImmediate(texture2D);
-        //            DestroyImmediate(tempRT);
-
-        //#if UNITY_EDITOR
-
-        //            UnityEditor.AssetDatabase.Refresh();
-        //#endif
-
-        //        }
-
-        private void SaveRenderTextureToPersistentDataPath(RenderTexture renderTexture, string filename)
+        private void OnApplicationQuit()
+        {
+            SaveRenderTextureToResourcesFolder((RenderTexture)_texture, "hasnat" + LevelMenuManager.Instance.currentLevel + ".png");
+            Debug.LogError("=================================");
+        }
+        private void SaveRenderTextureToResourcesFolder(RenderTexture renderTexture, string filename)
         {
             RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
             Graphics.Blit(renderTexture, tempRT);
@@ -194,19 +167,41 @@ namespace PT.Garden
             RenderTexture.active = tempRT;
             texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
             texture2D.Apply();
-
             byte[] bytes = texture2D.EncodeToPNG();
-
-            string filePath = Path.Combine(Application.persistentDataPath, filename);
+            string filePath = Path.Combine(Application.dataPath, "Resources", filename);
             File.WriteAllBytes(filePath, bytes);
-
             DestroyImmediate(texture2D);
             DestroyImmediate(tempRT);
+
 #if UNITY_EDITOR
+
             UnityEditor.AssetDatabase.Refresh();
 #endif
-            Debug.LogError("Path++++++" + filePath);
+
         }
+
+        //        private void SaveRenderTextureToPersistentDataPath(RenderTexture renderTexture, string filename)
+        //        {
+        //            RenderTexture tempRT = new RenderTexture(renderTexture.width, renderTexture.height, 0);
+        //            Graphics.Blit(renderTexture, tempRT);
+
+        //            Texture2D texture2D = new Texture2D(tempRT.width, tempRT.height);
+        //            RenderTexture.active = tempRT;
+        //            texture2D.ReadPixels(new Rect(0, 0, tempRT.width, tempRT.height), 0, 0);
+        //            texture2D.Apply();
+
+        //            byte[] bytes = texture2D.EncodeToPNG();
+
+        //            string filePath = Path.Combine(Application.persistentDataPath, filename);
+        //            File.WriteAllBytes(filePath, bytes);
+
+        //            DestroyImmediate(texture2D);
+        //            DestroyImmediate(tempRT);
+        //#if UNITY_EDITOR
+        //            UnityEditor.AssetDatabase.Refresh();
+        //#endif
+        //            Debug.LogError("Path++++++" + filePath);
+        //        }
         private void OnDestroy()
         {
             sumBuffer?.Dispose();

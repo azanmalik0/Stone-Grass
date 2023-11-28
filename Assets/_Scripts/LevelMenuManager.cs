@@ -1,5 +1,8 @@
 using PT.Garden;
 using Sirenix.OdinInspector;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +15,12 @@ public class LevelMenuManager : MonoBehaviour
     [SerializeField] Image levelSelectionPanel;
     [SerializeField] GameObject loadingPanel;
     //===============================================
-    public static int currentLevel = 0;
-    public static int loadedLevel = 0;
+    public int currentLevel = 0;
+    public int loadedLevel = 0;
     private void Awake()
     {
         Instance = this;
+
     }
     private void OnEnable()
     {
@@ -31,15 +35,20 @@ public class LevelMenuManager : MonoBehaviour
     }
     private void Start()
     {
+        ES3AutoSaveMgr.Current.Load();
+        //levelObjects[currentLevel].SetActive(true);
 
-        currentLevel=PlayerPrefs.GetInt("CurrentLevel");
-        levelObjects[currentLevel].SetActive(true);
+        //==============Hasnat=======================================
+        //loadedLevel = currentLevel;
+        //PlayerPrefs.SetInt("CurrentPlayingLevel", loadedLevel);
+        //levelObjects[PlayerPrefs.GetInt("CurrentPlayingLevel")].SetActive(true);
 
-        for (int i = 0; i <= PlayerPrefs.GetInt("TotalLevelsUnlocked"); i++)
-        {
-            levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
-            levelButtons[i].GetComponent<Button>().enabled = true;
-        }
+
+        //for (int i = 0; i <= PlayerPrefs.GetInt("TotalLevelsUnlocked"); i++)
+        //{
+        //    levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+        //    levelButtons[i].GetComponent<Button>().enabled = true;
+        //}
 
     }
     public void OnButtonClick(string button)
@@ -57,12 +66,10 @@ public class LevelMenuManager : MonoBehaviour
 
         if (currentLevel != level)
         {
-            loadingPanel.SetActive(true);
-            CloseLevelSelectionMenu();
             levelObjects[currentLevel].SetActive(false);
-            levelObjects[level].SetActive(true);
             currentLevel = level;
-            PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+            levelObjects[currentLevel].SetActive(true);
+            loadingPanel.SetActive(true);
         }
 
 
@@ -82,15 +89,26 @@ public class LevelMenuManager : MonoBehaviour
 
     void UnlockNextLevelButton()
     {
-        if (currentLevel == PlayerPrefs.GetInt("TotalLevelsUnlocked"))
-        {
-            PlayerPrefs.SetInt("TotalLevelsUnlocked", PlayerPrefs.GetInt("TotalLevelsUnlocked") + 1);
-            for (int i = 0; i <= PlayerPrefs.GetInt("TotalLevelsUnlocked"); i++)
-            {
-                levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
-                levelButtons[i].GetComponent<Button>().enabled = true;
-            }
-        }
+        levelButtons[currentLevel+1].transform.GetChild(1).gameObject.SetActive(false);
+        levelButtons[currentLevel+1].GetComponent<Button>().enabled = true;
+
+        //=================Hasnat============================================
+        //if (currentLevel == PlayerPrefs.GetInt("TotalLevelsUnlocked"))
+        //{
+        //    PlayerPrefs.SetInt("TotalLevelsUnlocked", PlayerPrefs.GetInt("TotalLevelsUnlocked") + 1);
+        //    Debug.LogError(" Level Barh gaya ");
+        //    for (int i = 0; i <= PlayerPrefs.GetInt("TotalLevelsUnlocked"); i++)
+        //    {
+        //        levelButtons[i].transform.GetChild(1).gameObject.SetActive(false);
+        //        levelButtons[i].GetComponent<Button>().enabled = true;
+        //    }
+        //}
+    }
+    
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+            ES3AutoSaveMgr.Current.Save();
     }
 
 
