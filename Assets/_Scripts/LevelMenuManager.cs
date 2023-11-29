@@ -35,7 +35,7 @@ public class LevelMenuManager : MonoBehaviour
     }
     private void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
+        // ES3AutoSaveMgr.Current.Load();
         levelObjects[currentLevel].SetActive(true);
 
         //==============Hasnat=======================================
@@ -110,7 +110,10 @@ public class LevelMenuManager : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         if (pause)
-            ES3AutoSaveMgr.Current.Save();
+        {
+
+            // ES3AutoSaveMgr.Current.Save();
+        }
     }
 
 

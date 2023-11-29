@@ -9,7 +9,7 @@ using UnityEngine;
 public class BuyerStack : Stacker
 {
     public static event Action OnProductBought;
-    bool IsBuying;
+    public bool IsBuying;
     float delay = 0;
     [SerializeField] GameObject eggsParent;
     [SerializeField] GameObject milkParent;
@@ -33,8 +33,17 @@ public class BuyerStack : Stacker
         {
             if (!IsBuying)
             {
-                StartCoroutine(BuyProduct(eggsParent));
-                StartCoroutine(BuyProduct(milkParent));
+                int randomValue = UnityEngine.Random.Range(1, 3);
+                if (randomValue == 1)
+                {
+                    StartCoroutine(BuyProduct(eggsParent));
+
+                }
+                else if (randomValue == 2)
+                {
+
+                    StartCoroutine(BuyProduct(milkParent));
+                }
             }
         }
 
@@ -44,6 +53,7 @@ public class BuyerStack : Stacker
 
         if (other.CompareTag("Market"))
         {
+            Debug.LogError("MArket");
             //RefreshGrid();
             delay = 0;
         }
@@ -60,37 +70,119 @@ public class BuyerStack : Stacker
         }
 
     }
+    bool IsFirst;
     IEnumerator BuyProduct(GameObject productParent)
     {
-        IsBuying = true;
-        buyerSpline.Pause();
-        animator.SetBool("IsWalking", false);
-
-        if (transform.childCount >= maxHayCapacity)
+        if (productParent == eggsParent)
         {
-            //Debug.LogError("Bought");
-            OnProductBought?.Invoke();
-            yield return new WaitForSeconds(2);
-            buyerSpline.Resume();
-            animator.SetBool("IsWalking", true);
 
-        }
-
-        else if (productParent.transform.childCount == 0)
-        {
+            IsBuying = true;
+            buyerSpline.Pause();
             animator.SetBool("IsWalking", false);
-            IsBuying = false;
+
+            if (productParent.transform.childCount <= 0)
+            {
+                StartCoroutine(BuyProduct(milkParent));
+            }
+            if (productParent.transform.childCount <= 0 && transform.childCount > 0)
+            {
+                if (!IsFirst)
+                {
+                    IsFirst = true;
+                    StartCoroutine(BuyProduct(milkParent));
+                }
+                else
+                {
+                    Debug.LogError("Bought1");
+                    OnProductBought?.Invoke();
+                    yield return new WaitForSeconds(2);
+                    buyerSpline.Resume();
+                    animator.SetBool("IsWalking", true);
+                }
+            }
+            else if (transform.childCount >= maxHayCapacity)
+            {
+                Debug.LogError("Bought1");
+                OnProductBought?.Invoke();
+                yield return new WaitForSeconds(2);
+                buyerSpline.Resume();
+                animator.SetBool("IsWalking", true);
+
+            }
+            else if (productParent.transform.childCount > 0)
+            {
+
+                Debug.LogError("Buying");
+                Transform product = productParent.transform.GetChild(productParent.transform.childCount - 1);
+                DOTween.Complete(product);
+                product.SetParent(this.transform);
+                product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                delay += 0.0001f;
+                UpdateGridPositions();
+                productParent.GetComponent<ProductMarketStack>().ResetGridPositions();
+                productParent.GetComponent<ProductMarketStack>().eggsStored--;
+                IsBuying = false;
+            }
+            else
+            {
+                IsBuying = false;
+            }
         }
-        else if (productParent.transform.childCount > 0 && transform.childCount <= maxHayCapacity)
+        if (productParent == milkParent)
         {
-            Transform product = productParent.transform.GetChild(productParent.transform.childCount - 1);
-            DOTween.Complete(product);
-            product.SetParent(this.transform);
-            product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
-            delay += 0.0001f;
-            UpdateGridPositions();
-            productParent.GetComponent<ProductMarketStack>().ResetGridPositions();
-            IsBuying = false;
+
+            IsBuying = true;
+            buyerSpline.Pause();
+            animator.SetBool("IsWalking", false);
+
+            //if (productParent.transform.childCount <= 0)
+            //{
+            //    StartCoroutine(BuyProduct(eggsParent));
+            //}
+
+            if (productParent.transform.childCount <= 0 && transform.childCount > 0)
+            {
+                Debug.LogError("Bought2");
+                OnProductBought?.Invoke();
+                yield return new WaitForSeconds(2);
+                buyerSpline.Resume();
+                animator.SetBool("IsWalking", true);
+            }
+            else if (transform.childCount >= maxHayCapacity)
+            {
+                if (!IsFirst)
+                {
+                    IsFirst = true;
+                    StartCoroutine(BuyProduct(eggsParent));
+                }
+                else
+                {
+                    Debug.LogError("Bought1");
+                    OnProductBought?.Invoke();
+                    yield return new WaitForSeconds(2);
+                    buyerSpline.Resume();
+                    animator.SetBool("IsWalking", true);
+                }
+
+            }
+            else if (productParent.transform.childCount > 0)
+            {
+
+                Debug.LogError("Buying");
+                Transform product = productParent.transform.GetChild(productParent.transform.childCount - 1);
+                DOTween.Complete(product);
+                product.SetParent(this.transform);
+                product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                delay += 0.0001f;
+                UpdateGridPositions();
+                productParent.GetComponent<ProductMarketStack>().ResetGridPositions();
+                productParent.GetComponent<ProductMarketStack>().milkStored--;
+                IsBuying = false;
+            }
+            else
+            {
+                IsBuying = false;
+            }
         }
     }
 }

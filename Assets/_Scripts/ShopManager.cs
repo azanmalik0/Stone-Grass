@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-
-    [SerializeField] Image shopPanel;
+    public static ShopManager instance;
+    public Image shopPanel;
     //===================================
     [Title("Select Button References")]
     public Button[] previewButtons;
@@ -26,7 +26,10 @@ public class ShopManager : MonoBehaviour
     public int previousSelectedIndex = 0;
     private int previewIndex = 0;
 
-
+    private void Awake()
+    {
+        instance = this;
+    }
 
     private void OnEnable()
     {
@@ -34,7 +37,7 @@ public class ShopManager : MonoBehaviour
     }
     private void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
+        //ES3AutoSaveMgr.Current.Load();
         UpdateSkinVisibility();
         SetDeafult();
         CheckTextColor();
@@ -67,8 +70,12 @@ public class ShopManager : MonoBehaviour
     {
         if (state == GameState.InShop)
         {
-            if(shopPanel != null)
-            shopPanel.gameObject.SetActive(true);
+            if (shopPanel != null)
+            {
+
+                shopPanel.gameObject.SetActive(true);
+                TruckUpgradeManager.Instance.truckUpgradePanel.gameObject.SetActive(false);
+            }
             CheckTextColor();
 
         }

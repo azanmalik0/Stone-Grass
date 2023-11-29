@@ -88,7 +88,7 @@ public class ProductMarketStack : Stacker
     {
         if (other.CompareTag("Farmer_Stack"))
         {
-            other.GetComponent<FarmerStack>().RefreshGrid();
+            //other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
             delay = 0;
         }
@@ -99,6 +99,7 @@ public class ProductMarketStack : Stacker
 
         if (other.transform.childCount <= 0)
         {
+            IsLoading=false;
             other.GetComponent<FarmerStack>().RefreshGrid();
         }
         else if (other.transform.childCount > 0)
@@ -119,7 +120,6 @@ public class ProductMarketStack : Stacker
                 {
 
                     Transform product = other.transform.GetChild(other.transform.childCount - productCheckIndex);
-                    //DOTween.Complete(product);
                     product.SetParent(this.transform);
                     if (productType == ProductTypes.Egg)
                     {
@@ -130,6 +130,7 @@ public class ProductMarketStack : Stacker
                     if (productType == ProductTypes.Milk)
                     {
                         milkStored++;
+                        product.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
@@ -140,7 +141,9 @@ public class ProductMarketStack : Stacker
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
-                    //other.GetComponent<FarmerStack>().RefreshGrid();
+                    //other.GetComponent<FarmerStack>().CheckMax();
+                    other.GetComponent<FarmerStack>().totalItems--;
+                    other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
                     IsLoading = false;
 
                 }
@@ -150,10 +153,7 @@ public class ProductMarketStack : Stacker
 
 
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Save();
-    //}
+   
     private void OnApplicationPause(bool pause)
     {
         if (pause)

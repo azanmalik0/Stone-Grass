@@ -122,10 +122,7 @@ public class ProductStack : Stacker
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
         IsLoading = false;
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Load();
-    //}
+    
     private void OnApplicationPause(bool pause)
     {
         if (pause)

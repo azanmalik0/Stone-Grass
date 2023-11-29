@@ -40,7 +40,6 @@ public class MoneyStack : Stacker
     {
         if (coinsStored > 0)
         {
-
             for (int i = 0; i < coinsStored; i++)
             {
                 GameObject cell = Instantiate(coinPrefab, this.transform);
@@ -57,10 +56,10 @@ public class MoneyStack : Stacker
         {
             GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
             coinsStored++;
-            money.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine);
+            money.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
             previousPositions.Add(cellPositions[currentC, currentR]);
             UpdateGridPositions();
-            delay += 0.1f;
+            delay += 0.0001f;
             if (i == (3 - 1))
             {
                 delay = 0;
@@ -68,10 +67,7 @@ public class MoneyStack : Stacker
         }
 
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Save();
-    //}
+  
     private void OnApplicationPause(bool pause)
     {
         if (pause)

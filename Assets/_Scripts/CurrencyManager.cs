@@ -13,7 +13,6 @@ public class CurrencyManager : MonoBehaviour
     public static int coins;
     private void OnEnable()
     {
-        //HayStack.OnSellingHarvest += RecieveCoins;
         FarmUpgradeManager.OnBuyingUpgrade += DeductCoins;
     }
     private void Awake()
@@ -22,7 +21,7 @@ public class CurrencyManager : MonoBehaviour
     }
     private void Start()
     {
-        //RecieveCoins(1000);
+        //PlayerPrefs.SetInt("Coins",10000);
         coins = PlayerPrefs.GetInt("Coins");
         coinText.text = coins.ToString();
     }

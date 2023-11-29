@@ -37,7 +37,18 @@ public class TroughStack : Stacker
         {
             GameObject cell = Instantiate(feedPrefab, this.transform);
             cell.transform.localPosition = previousPositions[i];
-
+            if(i==feedStored-1)
+            {
+                if (feedStored >= maxHayCapacity)
+                {
+                    if (animalType == AnimalType.Chicken)
+                        OnTroughFull?.Invoke(AnimalType.Chicken);
+                    if (animalType == AnimalType.Cow)
+                        OnTroughFull?.Invoke(AnimalType.Cow);
+                    produceTimer.SetActive(true);
+                    crudeCounter.SetActive(false);
+                }
+            }
         }
     }
     public void DisplayCrudeTroughCounter()
@@ -137,12 +148,16 @@ public class TroughStack : Stacker
                     DisplayCrudeTroughCounter();
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
+                    crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
                     crudeCell.localRotation = Quaternion.identity;
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     UpdateGridPositions();
                     delay += 0.0001f;
                     other.GetComponent<FarmerStack>().ResetGridPositions();
+                    other.GetComponent<FarmerStack>().totalItems--;
+                    other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
+                    //other.GetComponent<FarmerStack>().CheckMax();
                     IsLoading = false;
 
                 }

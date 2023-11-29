@@ -13,7 +13,7 @@ public class TruckUpgradeManager : MonoBehaviour
     public static event Action OnIncreasingCarCapacity;
 
     //===============================================
-    [SerializeField] Image truckUpgradePanel;
+     public Image truckUpgradePanel;
     //===============================================
     [TabGroup("Collections")][SerializeField] GameObject[] sawBladeUpgrades;
     [TabGroup("Collections")][SerializeField] GameObject[] truckWheelUpgrades;
@@ -73,7 +73,6 @@ public class TruckUpgradeManager : MonoBehaviour
 
     private void Awake()
     {
-        carCapacity_Slider.minValue = maxCarCapacity;
         Instance = this;
     }
     private void OnEnable()
@@ -86,7 +85,7 @@ public class TruckUpgradeManager : MonoBehaviour
     }
     private void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
+        //ES3AutoSaveMgr.Current.Load();
         SetDefaultValues();
     }
 
@@ -94,6 +93,7 @@ public class TruckUpgradeManager : MonoBehaviour
     {
         CheckTextColor();
 
+        carCapacity_Slider.minValue = 360;
         //===========================================
         sawBlades_CT.text = "$" + SawBlades_CR.ToString();
         rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
@@ -248,6 +248,7 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             CheckTextColor();
             truckUpgradePanel.gameObject.SetActive(true);
+            ShopManager.instance.shopPanel.gameObject.SetActive(false);
 
         }
     }
@@ -258,6 +259,6 @@ public class TruckUpgradeManager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        ES3AutoSaveMgr.Current.Save();
+        //ES3AutoSaveMgr.Current.Save();
     }
 }

@@ -66,7 +66,7 @@ public class HayLoft : Stacker
     }
     private void LateUpdate()
     {
-        if (feedGenerated > 0 && feedStored <= maxHayCapacity && !IsGenerating)
+        if (feedGenerated > 0 && feedStored < maxHayCapacity && !IsGenerating)
         {
             StartHayLoft();
         }
