@@ -170,13 +170,13 @@ public class FarmerStack : Stacker
             if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) > 0)
                 other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
             feedCell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
-            feedCell.DOLocalJump(cellPositions[currentC, currentR], 3, 1, 1f).SetDelay(delay).SetEase(Ease.InOutSine);
+            feedCell.DOLocalJump(cellPositions[currentC, currentR], 3, 1, 0.3f).SetDelay(delay).SetEase(Ease.InOutSine);
             RefreshGrid();
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentC, currentR]);
             //ES3AutoSaveMgr.Current.Save();
-            delay += 0.1f;
+            delay += 0.0001f;
             other.GetComponent<HayLoft>().ResetGridPositions();
             other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
             //CheckMax();
