@@ -118,12 +118,8 @@ public class HayLoft : Stacker
             });
 
         });
-
-
     }
-    private void OnApplicationPause()
-    {
-    }
+    
 
 
 }

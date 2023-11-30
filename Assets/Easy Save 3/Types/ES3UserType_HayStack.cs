@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("hayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
+	[ES3PropertiesAttribute("hayPinkCollected", "hayBlueCollected", "hayRedCollected", "hayPurpleCollected", "hayOrangeCollected", "hayGreenCollected", "totalHayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
 	public class ES3UserType_HayStack : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,7 +16,13 @@ namespace ES3Types
 		{
 			var instance = (HayStack)obj;
 			
-			writer.WriteProperty("hayCollected", instance.hayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayPinkCollected", instance.hayPinkCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayBlueCollected", instance.hayBlueCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayRedCollected", instance.hayRedCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayPurpleCollected", instance.hayPurpleCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayOrangeCollected", instance.hayOrangeCollected, ES3Type_int.Instance);
+			writer.WriteProperty("hayGreenCollected", instance.hayGreenCollected, ES3Type_int.Instance);
+			writer.WriteProperty("totalHayCollected", instance.totalHayCollected, ES3Type_int.Instance);
 			writer.WritePrivateField("gridOffset", instance);
 			writer.WriteProperty("previousPositions", instance.previousPositions, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<UnityEngine.Vector3>)));
 			writer.WriteProperty("currentR", instance.currentR, ES3Type_int.Instance);
@@ -31,8 +37,26 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "hayCollected":
-						instance.hayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "hayPinkCollected":
+						instance.hayPinkCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "hayBlueCollected":
+						instance.hayBlueCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "hayRedCollected":
+						instance.hayRedCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "hayPurpleCollected":
+						instance.hayPurpleCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "hayOrangeCollected":
+						instance.hayOrangeCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "hayGreenCollected":
+						instance.hayGreenCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "totalHayCollected":
+						instance.totalHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "gridOffset":
 					instance = (HayStack)reader.SetPrivateField("gridOffset", reader.Read<UnityEngine.Vector3>(), instance);

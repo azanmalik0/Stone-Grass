@@ -82,7 +82,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BendRotationRandom: 0.054
-    - _BladeHeight: 0.63
+    - _BladeHeight: 0.9
     - _BladeHeightRandom: 0.48
     - _BladeWidth: 0.04
     - _BladeWidthRandom: 0.03

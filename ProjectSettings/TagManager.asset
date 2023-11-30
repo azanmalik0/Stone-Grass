@@ -45,6 +45,13 @@ TagManager:
   - Red
   - Orange
   - GrassField
+  - HayGreen
+  - HayAutumn
+  - HayBlue
+  - HayOrange
+  - HayPink
+  - HayPurple
+  - HayRed
   layers:
   - Default
   - TransparentFX
