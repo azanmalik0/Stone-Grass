@@ -19,14 +19,9 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        ES3AutoSaveMgr.Current.Load();
-        //DOTween.SetTweensCapacity(1000, 900000);
         Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
     }
-
-
-
     public void UpdateGameState(GameState NewState)
     {
         this.state = NewState;
@@ -46,10 +41,8 @@ public class GameManager : MonoBehaviour
                 farmerObject.SetActive(true);
                 break;
         }
-
+        //print(state);
         OnGameStateChanged?.Invoke(NewState);
     }
-
-
 }
-public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass }
+public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass, OnPlatform, OnGrassField }

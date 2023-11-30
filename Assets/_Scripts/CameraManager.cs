@@ -10,8 +10,12 @@ public class CameraManager : MonoBehaviour
     [SerializeField] Vector3 upgradePosition;
     [SerializeField] Vector3 shopPosition;
     [SerializeField] Vector3 offset;
+    [SerializeField] Vector3 grassFieldOffset;
+    [SerializeField] Vector3 platformOffset;
+    [SerializeField] float smoothSpeed;
     bool IsInMenu;
     GameManager GM;
+    GameState CurrentState;
 
     private void Start()
     {
@@ -29,23 +33,23 @@ public class CameraManager : MonoBehaviour
         GameManager.OnGameStateChanged -= ChangeCameraToNewPosition;
 
     }
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         if (!IsInMenu)
             FollowPlayer(followTarget);
     }
     void SetTarget(GameState state)
     {
-        GameState currentState = state;
-        if (currentState == GameState.Tractor)
+        CurrentState = state;
+        if (CurrentState == GameState.Tractor)
             followTarget = GM.tractorObject.transform;
-        if (currentState == GameState.Farmer)
+        if (CurrentState == GameState.Farmer)
             followTarget = GM.farmerObject.transform;
 
     }
     void ChangeCameraToNewPosition(GameState state)
     {
-        GameState CurrentState = state;
+        CurrentState = state;
         if (CurrentState == GameState.Upgrading)
         {
             IsInMenu = true;
@@ -60,27 +64,40 @@ public class CameraManager : MonoBehaviour
         {
             StartCoroutine(ChangeCameraToGamePosition());
         }
-        if (CurrentState == GameState.UnlockingArea)
+        if (CurrentState == GameState.OnGrassField)
         {
-            //IsInMenu = true;
-
+            ChangeCameraToGrassFieldPosition();
+        }
+        if (CurrentState == GameState.OnPlatform)
+        {
+            ChangeCameraToPlatformPosition();
         }
 
-
+    }
+    void ChangeCameraToPlatformPosition()
+    {
+        transform.DOMoveY(17, 1f).SetEase(Ease.OutSine).SetDelay(1f).OnStart(() => offset = platformOffset);
+        transform.DORotate(new Vector3(47.97f, 0, 0), 1f).SetEase(Ease.Linear);
+    }
+    void ChangeCameraToGrassFieldPosition()
+    {
+        transform.DOMoveY(12.7f, 1f).SetEase(Ease.OutSine).SetDelay(1f).OnStart(() => offset = grassFieldOffset);
+        transform.DORotate(new Vector3(47.97f, 0, 0), 1f).SetEase(Ease.Linear);
 
     }
     IEnumerator ChangeCameraToGamePosition()
     {
-        Tween tm = transform.DOMove(followTarget.position + offset, 0.5f).SetEase(Ease.Linear);
-        Tween tr = transform.DORotate(new Vector3(47.97f, 0, 0), 0.5f).SetEase(Ease.Linear);
-        //yield return new WaitUntil(() => tm.IsComplete());
+        transform.DOMove(followTarget.position + platformOffset, 0.5f).SetEase(Ease.Linear);
+        transform.DORotate(new Vector3(47.97f, 0, 0), 0.5f).SetEase(Ease.Linear);
         yield return new WaitForSeconds(0.5f);
         IsInMenu = false;
     }
-
     private void FollowPlayer(Transform target)
     {
-        transform.position = target.position + offset;
+        Vector3 desiredPosition = target.position + offset;
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        transform.position = smoothedPosition;
     }
+
 }
 

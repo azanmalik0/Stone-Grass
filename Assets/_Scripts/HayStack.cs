@@ -21,26 +21,15 @@ public class HayStack : Stacker
     [SerializeField] ParticleSystem boilerParticle;
     [SerializeField] GameObject hayCellPrefab;
     [SerializeField] GameObject PathDrawObject;
-    [SerializeField] Material hayMaterial;
 
-    float delay = 0;
-    bool unloading;
     //==============================================
-    [HideInInspector]
+
     public int haySold;
     public int hayCollected;
     public int hayCollectedTmp;
+    float delay = 0;
     bool IsFull;
-    public int HaySold { get => haySold; }
-    public int HayCollected { get => hayCollected; }
-
-    //==============================================
-    [Title("Destinations")]
-
-    [SerializeField] Transform hayloft;
-    [SerializeField] Transform truckUpgrade;
-
-
+    bool unloading;
     private void Awake()
     {
         instance = this;
@@ -94,7 +83,7 @@ public class HayStack : Stacker
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             previousPositions.Add(cellPositions[currentR, currentC]);
-            
+
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
             UpdateGridPositions();
@@ -109,7 +98,6 @@ public class HayStack : Stacker
         {
             if (!IsFull)
             {
-                print("FULL");
                 IsFull = true;
                 PathDrawObject.SetActive(true);
                 for (int i = 0; i < transform.childCount; i++)
@@ -123,7 +111,6 @@ public class HayStack : Stacker
         {
             if (IsFull)
             {
-                print("KILL");
                 IsFull = false;
                 PathDrawObject.SetActive(false);
                 for (int i = 0; i < transform.childCount; i++)
@@ -140,6 +127,7 @@ public class HayStack : Stacker
     }
     IEnumerator UnloadFromTruck()
     {
+        //print("UnloadTruck");
         while (unloading && transform.childCount > 0)
         {
             hayCollected--;
@@ -149,7 +137,7 @@ public class HayStack : Stacker
             hayCell.transform.SetParent(null);
             hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
             {
-                OnHayCollect?.Invoke(HayCollected);
+                OnHayCollect?.Invoke(hayCollected);
                 Destroy(hayCell);
                 boilerParticle.Play();
                 CurrencyManager.Instance.RecieveCoins(1);
@@ -182,20 +170,8 @@ public class HayStack : Stacker
     {
         if (other.CompareTag("Unload"))
         {
-            //OnSellingHarvest?.Invoke(haySold);
             unloading = false;
         }
 
     }
-
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-        {
-           
-
-        }
-    }
-
-
 }

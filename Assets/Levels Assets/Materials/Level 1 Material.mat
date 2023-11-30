@@ -82,7 +82,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BendRotationRandom: 0.054
-    - _BladeHeight: 0.63
+    - _BladeHeight: 0.9
     - _BladeHeightRandom: 0.48
     - _BladeWidth: 0.04
     - _BladeWidthRandom: 0.03
@@ -108,9 +108,9 @@ Material:
     - _ZWrite: 1
     - _hasNeath: 0
     m_Colors:
-    - _BottomColor: {r: 0.66725963, g: 0.5330188, b: 1, a: 1}
+    - _BottomColor: {r: 0.45552552, g: 0.24528302, b: 0.9811321, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _TopColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TopColor: {r: 0.5116722, g: 1, b: 0.43867922, a: 1}
     - _WindSource: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

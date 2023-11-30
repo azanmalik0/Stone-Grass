@@ -6,13 +6,14 @@ using System;
 using System.Diagnostics;
 using Sirenix.OdinInspector;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 namespace PT.Garden
 {
     public class GrassPatchActivator : MonoBehaviour
     {
         [Title("New")]
-        public static event Action OnGrassCut;
+        // public static event Action OnGrassCut;
         [SerializeField] Transform cutter;
         //[SerializeField] int grassCut;
         //[SerializeField] int requiredGrass;
@@ -32,9 +33,9 @@ namespace PT.Garden
 
         public ComputeShader computeShader;
         public PixelChange[] results;
-        // [SerializeField] private GameObject grassParticle;
+        [SerializeField] private GameObject grassParticle;
         [SerializeField] private Transform uv00, uv11;
-        // private ParticleSystem[] particlePool;
+        //private ParticleSystem[] particlePool;
         // private int particleIndex = 0;
         [SerializeField] private InkCanvas _removeCanvas, _windCanvas;
         [SerializeField] private MeshRenderer _mr;
@@ -46,8 +47,11 @@ namespace PT.Garden
 
         private bool _isSetUp = false;
         public Transform BJ;
+        //Sequence delaySequence;
+
         private void Start()
         {
+            //delaySequence = DOTween.Sequence();
             Vibration.Init();
 
             _isSetUp = _mr != null;
@@ -161,31 +165,30 @@ namespace PT.Garden
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
                             IsCutting = true;
-                            //if (Vibration.vibratin)
-                            Vibration.CancelAndroid();
-                            Vibration.VibrateAndroid(20);
+                            // Vibration.CancelAndroid();
+                            //Vibration.VibrateAndroid(20);
                             Vector3 pos = new Vector3();
                             pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
                             pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;
                             pos.y = transform.position.y + 0.5f;
                             HarvestGrass.instance.GenerateHay(pos);
-                            GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
-                            //// DoParticle(cutter.position, new Color(pt.r, pt.g, pt.b));
+                            //GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
+                            //DoParticle(pos, new Color(pt.r, pt.g, pt.b));
                         }
                         else
                         {
                             if (!IsCutting)
                             {
-                                DOTween.Sequence()
-                                    .AppendCallback(() => GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass))
-                                    .SetDelay(delay);
-                            }
 
+                                //GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass);
+
+                            }
                         }
                     }
                 }
             }
         }
+
 
 
         private RenderTexture CopyTexture(RenderTexture t)

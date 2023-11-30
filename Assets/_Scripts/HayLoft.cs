@@ -49,7 +49,7 @@ public class HayLoft : Stacker
     }
     private void LoadFeedStored()
     {
-        if (feedStored > 0)
+        if (feedStored > 0 && previousPositions.Count>0)
         {
             for (int i = 0; i < feedStored; i++)
             {
@@ -75,6 +75,7 @@ public class HayLoft : Stacker
     void GetValue(int value)
     {
         hayStored = value;
+        
         CheckforHayGeneration();
     }
 
@@ -85,7 +86,7 @@ public class HayLoft : Stacker
             feedGenerated++;
             feedGeneratedText.text = feedGenerated.ToString();
             hayStored -= 10;
-            ES3AutoSaveMgr.Current.Save();
+            //ES3AutoSaveMgr.Current.Save();
             CheckforHayGeneration();
         }
         else
@@ -107,8 +108,8 @@ public class HayLoft : Stacker
                 feedGenerated--;
                 feedGeneratedText.text = feedGenerated.ToString();
                 feedStored++;
-                ES3AutoSaveMgr.Current.Save();
-                print(feedStored);
+                //ES3AutoSaveMgr.Current.Save();
+                //print(feedStored);
                 crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
                 previousPositions.Add(cellPositions[currentR, currentC]);
                 UpdateGridPositions();
