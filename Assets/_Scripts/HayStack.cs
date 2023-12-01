@@ -245,6 +245,7 @@ public class HayStack : Stacker
         }
 
     }
+    [SerializeField] Material hayMataerial;
     void CheckCapacityFull()
     {
         if (transform.childCount >= maxHayCapacity)
@@ -253,10 +254,11 @@ public class HayStack : Stacker
             {
                 IsFull = true;
                 PathDrawObject.SetActive(true);
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    transform.GetChild(i).GetComponent<MeshRenderer>().material.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                }
+                //for (int i = 0; i < transform.childCount; i++)
+                //{
+               // transform.GetChild(0).GetComponent<MeshRenderer>().material.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                hayMataerial.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                //}
             }
 
         }
@@ -266,11 +268,12 @@ public class HayStack : Stacker
             {
                 IsFull = false;
                 PathDrawObject.SetActive(false);
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    DOTween.Rewind(transform.GetChild(i).GetComponent<MeshRenderer>().material);
+                //for (int i = 0; i < transform.childCount; i++)
+                // {
+                //DOTween.Rewind(transform.GetChild(0).GetComponent<MeshRenderer>().material);
+                DOTween.Rewind(hayMataerial);
 
-                }
+                //}
 
 
             }

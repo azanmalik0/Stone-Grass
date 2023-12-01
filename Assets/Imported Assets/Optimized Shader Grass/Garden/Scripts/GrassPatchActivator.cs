@@ -160,27 +160,35 @@ namespace PT.Garden
 
                     lastRenderTexture = curRT;
                     IsCutting = false;
+
                     foreach (PixelChange pt in results)
                     {
                         if (Mathf.Abs(pt.change) > 0.1)
                         {
                             IsCutting = true;
-                            // Vibration.CancelAndroid();
-                            //Vibration.VibrateAndroid(20);
                             Vector3 pos = new Vector3();
                             pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
                             pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;
                             pos.y = transform.position.y + 0.5f;
                             HarvestGrass.instance.GenerateHay(pos);
-                            //GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
+                            GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
                             //DoParticle(pos, new Color(pt.r, pt.g, pt.b));
                         }
                         else
                         {
-                            if (!IsCutting)
+                           if (!IsCutting)
                             {
 
-                                //GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass);
+                                //if (!delayedExecutionStarted)
+                                //{
+                                //    timer += Time.deltaTime;
+
+                                //    if (timer >= delayDuration)
+                                //    {
+                                      GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass);
+                                //        delayedExecutionStarted = true;
+                                //    }
+                                //}
 
                             }
                         }
@@ -188,7 +196,9 @@ namespace PT.Garden
                 }
             }
         }
-
+        bool delayedExecutionStarted = false;
+        float delayDuration = 2.0f; // Change this value to set the delay in seconds
+        float timer = 0.0f;
 
 
         private RenderTexture CopyTexture(RenderTexture t)

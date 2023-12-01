@@ -15,6 +15,7 @@ public class MovementController : MonoBehaviour
     GameState currentState;
     Rigidbody rb;
     public bool IsInMenu;
+    public float MovementSpeed { get { return movementSpeed; } set { movementSpeed = value; } }
 
 
 
@@ -82,7 +83,8 @@ public class MovementController : MonoBehaviour
         if (state == GameState.CuttingGrass)
             movementSpeed = 250;
         else if (state == GameState.NotCuttingGrass)
-            movementSpeed = 500;
+            movementSpeed=Mathf.Lerp(250, 500, 1);
+            //movementSpeed = 500;
     }
     void ToggleJoyStickInput(GameState state)
     {
