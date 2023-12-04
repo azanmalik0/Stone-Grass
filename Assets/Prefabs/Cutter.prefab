@@ -68,13 +68,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hayCellPrefab: {fileID: 204026808303810990, guid: f4295a11389227c4190d65bb4c4450ba, type: 3}
   jumpOffset: {x: 0, y: 0, z: 0}
-  requiredGrass: 5
-  hayCellvariants:
-  - {fileID: 204026808303810990, guid: 9acd77784ad5e2a4d902b9cd6ac719ef, type: 3}
-  - {fileID: 204026808303810990, guid: 943be5c1a54299f4c85de7e9c250aa65, type: 3}
-  - {fileID: 204026808303810990, guid: f4295a11389227c4190d65bb4c4450ba, type: 3}
-  - {fileID: 204026808303810990, guid: 6b6931ee79214b3438ff61f3c32e39aa, type: 3}
-  - {fileID: 204026808303810990, guid: 31bded2b854f151459e991c683fd7b6e, type: 3}
-  - {fileID: 204026808303810990, guid: a11a40b51fdd5a246abf5c046dda47cd, type: 3}
-  - {fileID: 204026808303810990, guid: a5750fb9d5bd77941b6ae82e6314fb90, type: 3}
+  requiredGrass: 20
   grassCut: 0

@@ -56,6 +56,7 @@ public class HayStack : Stacker
     private void OnDisable()
     {
         TruckUpgradeManager.OnIncreasingCarCapacity -= UpdateMaxCarCapacity;
+        
 
     }
     private void Start()
@@ -67,6 +68,7 @@ public class HayStack : Stacker
         }
         CalculateCellPositions();
         UpdateMaxCarCapacity();
+        CheckCapacityFull();
     }
 
     void LoadOrangeHayCollected()
@@ -442,5 +444,10 @@ public class HayStack : Stacker
             unloading = false;
         }
 
+    }
+    private void OnDestroy()
+    {
+        //hayMataerial.color = Color.white;
+        DOTween.Rewind(hayMataerial);
     }
 }

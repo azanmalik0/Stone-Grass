@@ -17,18 +17,18 @@ public class CoinReward : MonoBehaviour
 
     private void OnEnable()
     {
-        PercentageChecker.OnSecondStarUnlock += AnimateCoinReward;
+        ProgressBarManager.OnSecondStarUnlock += AnimateCoinReward;
     }
     private void OnDisable()
     {
-        PercentageChecker.OnSecondStarUnlock -= AnimateCoinReward;
+        ProgressBarManager.OnSecondStarUnlock -= AnimateCoinReward;
         
     }
     void Start()
     {
 
         if (coinsAmount == 0)
-            coinsAmount = 7; // you need to change this value based on the number of coins in the inspector
+            coinsAmount = 7;
 
         initialPos = new Vector2[coinsAmount];
         initialRotation = new Quaternion[coinsAmount];
@@ -60,7 +60,6 @@ public class CoinReward : MonoBehaviour
                 ResetValues();
             }
             delay += 0.1f;
-            //counter.transform.parent.GetChild(0).transform.DOScale(1.1f, 0.1f).SetLoops(10, LoopType.Yoyo).SetEase(Ease.InOutSine).SetDelay(1.2f);
         }
 
         StartCoroutine(CountDollars());

@@ -44,5 +44,9 @@ public class GameManager : MonoBehaviour
         //print(state);
         OnGameStateChanged?.Invoke(NewState);
     }
+    //private void OnApplicationQuit()
+    //{
+    //    ES3AutoSaveMgr.Current.Save();
+    //}
 }
 public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass, OnPlatform, OnGrassField }
