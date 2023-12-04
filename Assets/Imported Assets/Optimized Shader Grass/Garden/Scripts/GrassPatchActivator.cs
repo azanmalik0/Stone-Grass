@@ -170,8 +170,8 @@ namespace PT.Garden
                             pos.x = (pt.x / curRT.width) * (uv11.position.x - uv00.position.x) + uv00.position.x;
                             pos.z = (pt.y / curRT.height) * (uv11.position.z - uv00.position.z) + uv00.position.z;
                             pos.y = transform.position.y + 0.5f;
-                            HarvestGrass.instance.GenerateHay(pos);
-                            GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
+                           // HarvestGrass.instance.GenerateHay(pos);
+                           // GameManager.Instance.UpdateGameState(GameState.CuttingGrass);
                             //DoParticle(pos, new Color(pt.r, pt.g, pt.b));
                         }
                         else
@@ -185,7 +185,7 @@ namespace PT.Garden
 
                                 //    if (timer >= delayDuration)
                                 //    {
-                                      GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass);
+                                     // GameManager.Instance.UpdateGameState(GameState.NotCuttingGrass);
                                 //        delayedExecutionStarted = true;
                                 //    }
                                 //}
