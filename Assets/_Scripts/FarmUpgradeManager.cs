@@ -21,8 +21,19 @@ public class FarmUpgradeManager : MonoBehaviour
     int currentChickens = 0;
     int currentCows = 0;
     //====================================================
-    [Title("Text References")]
+    [Title("Upgrade Locked Image References")]
+    [TabGroup("Animals Menu")] public GameObject chickenNumbersUpgradeLockedImage;
+    [TabGroup("Animals Menu")] public GameObject cowNumbersUpgradeLockedImage;
+    [TabGroup("Animals Menu")] public GameObject cowTrayUpgradeLockedImage;
+    [TabGroup("Animals Menu")] public GameObject chickenTrayUpgradeLockedImage;
+    [Title("Upgrade Locked Button Object References")]
+    [TabGroup("Animals Menu")] public GameObject cowNumbersUpgradeButtonObject;
+    [TabGroup("Animals Menu")] public GameObject chickenNumbersUpgradeButtonObject;
+    [TabGroup("Animals Menu")] public GameObject chickenTrayUpgradeButtonObject;
+    [TabGroup("Animals Menu")] public GameObject cowTrayUpgradeButtonObject;
 
+
+    [Title("Text References")]
     [TabGroup("Animals Menu")] public Text chickenTray_CT;
     [TabGroup("Animals Menu")] public Text chickenNumbers_CT;
     [TabGroup("Animals Menu")] public Text cowTray_CT;
@@ -88,13 +99,11 @@ public class FarmUpgradeManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
     }
     private void Start()
     {
         SetDefaultValues();
     }
-
     private void SetDefaultValues()
     {
         CheckTextColor();
@@ -124,7 +133,6 @@ public class FarmUpgradeManager : MonoBehaviour
 
 
     }
-
     private void CheckTextColor()
     {
         CurrencyManager.UpdateAffordabilityStatus(cowNumbers_CT, cowNumbers_CR);
@@ -134,17 +142,16 @@ public class FarmUpgradeManager : MonoBehaviour
         CurrencyManager.UpdateAffordabilityStatus(storageCapacity_CT, maxStorageCapacity);
         CurrencyManager.UpdateAffordabilityStatus(farmerCapacity_CT, maxFarmerCapacity);
     }
-
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenFarmUpgradeMenu;
+        LockedAreasManager.AreaUnlocked += UnlockUpgrade;
     }
     private void OnDisable()
     {
         GameManager.OnGameStateChanged -= OpenFarmUpgradeMenu;
+        LockedAreasManager.AreaUnlocked -= UnlockUpgrade;
     }
-
-
     public void OnButtonClick(string button)
     {
         if (button == "Exit")
@@ -176,7 +183,6 @@ public class FarmUpgradeManager : MonoBehaviour
             IncreaseFarmerCapacity(incrementFarmerCapacity);
         }
     }
-
     private void IncreaseStorageCapacity(int increment)
     {
         if (CurrencyManager.CheckRequiredCoins(maxStorageCapacity))
@@ -214,7 +220,6 @@ public class FarmUpgradeManager : MonoBehaviour
             }
         }
     }
-
     void IncreaseCowTrayCapacity(int increment)
     {
         if (CurrencyManager.CheckRequiredCoins(maxCowTrayCapacity))
@@ -234,7 +239,6 @@ public class FarmUpgradeManager : MonoBehaviour
             }
         }
     }
-
     void IncreaseChickenTrayCapacity(int increment)
     {
         if (CurrencyManager.CheckRequiredCoins(maxChickenTray_CR))
@@ -255,7 +259,6 @@ public class FarmUpgradeManager : MonoBehaviour
         }
 
     }
-
     void AddCows()
     {
         if (CurrencyManager.CheckRequiredCoins(cowNumbers_CR))
@@ -316,6 +319,24 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         farmUpgradePanel.gameObject.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.InGame);
+    }
+    void UnlockUpgrade(string upgradeType)
+    {
+        if (upgradeType == "Henhouse")
+        {
+            chickenNumbersUpgradeLockedImage.gameObject.SetActive(false);
+            chickenTrayUpgradeLockedImage.gameObject.SetActive(false);
+            chickenTrayUpgradeButtonObject.gameObject.SetActive(true);
+            chickenNumbersUpgradeButtonObject.gameObject.SetActive(true);
+        }
+        if (upgradeType == "Barn")
+        {
+            cowNumbersUpgradeLockedImage.gameObject.SetActive(false);
+            cowTrayUpgradeLockedImage.gameObject.SetActive(false);
+            cowTrayUpgradeButtonObject.gameObject.SetActive(true);
+            cowNumbersUpgradeButtonObject.gameObject.SetActive(true);
+        }
+
     }
 
 }

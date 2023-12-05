@@ -10,64 +10,47 @@ using UnityEngine.UI;
 public class LockedAreasManager : MonoBehaviour
 {
     public static LockedAreasManager Instance;
-    [SerializeField] Transform farmerCoinPos;
-    [SerializeField] GameObject coinPrefab;
+    public static event Action<string> AreaUnlocked;
     //=======================================================
     [Title("References")]
-    //[TabGroup("Henhouse")][SerializeField] Transform henhouseCoinPos;
-    //[TabGroup("Henhouse")][SerializeField] Text henhouseLocked_CT;
+
     [TabGroup("Henhouse")][SerializeField] Text henhouseLocked_CRT;
-    [TabGroup("Henhouse")][SerializeField] RectTransform henhouseLockedPanel;
+    [TabGroup("Henhouse")][SerializeField] GameObject henhouseLockedPanel;
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseInActive;
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseActive;
     [TabGroup("Henhouse")][SerializeField] ParticleSystem henhouse_smokeParticle;
-    [TabGroup("Henhouse")][SerializeField] BoxCollider henhouse_collider;
-    [TabGroup("Henhouse")][SerializeField] GameObject henhouse_unlockZone;
     [Title("Preferences")]
     [TabGroup("Henhouse")][SerializeField] int henhouseLocked_CR;
-    [TabGroup("Henhouse")][ReadOnly][SerializeField] int henhouseLocked_RM;
     //=============================================================
     [Title("References")]
-    //[TabGroup("Farm")][SerializeField] Transform farmCoinPos;
-    //[TabGroup("Farm")][SerializeField] Text farmLocked_CT;
+
     [TabGroup("Farm")][SerializeField] Text farmLocked_CRT;
-    [TabGroup("Farm")][SerializeField] RectTransform farmLockedPanel;
+    [TabGroup("Farm")][SerializeField] GameObject farmLockedPanel;
+    [TabGroup("Farm")][SerializeField] GameObject farmCanUnlockPanel;
+    [TabGroup("Farm")][SerializeField] GameObject farmCannotUnlockedPanel;
     [TabGroup("Farm")][SerializeField] GameObject farmInActive;
     [TabGroup("Farm")][SerializeField] GameObject farmActive;
     [TabGroup("Farm")][SerializeField] ParticleSystem farm_smokeParticle;
-    [TabGroup("Farm")][SerializeField] BoxCollider farm_collider;
-    [TabGroup("Farm")][SerializeField] GameObject farm_unlockZone;
     [Title("Preferences")]
     [TabGroup("Farm")][SerializeField] int farmLocked_CR;
-    [TabGroup("Farm")][ReadOnly][SerializeField] int farmLocked_RM;
     //=============================================================
     [Title("References")]
-    //[TabGroup("Barn")][SerializeField] Transform barnCoinPos;
-    //[TabGroup("Barn")][SerializeField] Text barnLocked_CT;
+
     [TabGroup("Barn")][SerializeField] Text barnLocked_CRT;
-    [TabGroup("Barn")][SerializeField] RectTransform barnLockedPanel;
+    [TabGroup("Barn")][SerializeField] GameObject barnLockedPanel;
     [TabGroup("Barn")][SerializeField] GameObject barnInActive;
     [TabGroup("Barn")][SerializeField] GameObject barnActive;
     [TabGroup("Barn")][SerializeField] ParticleSystem barn_smokeParticle;
-    [TabGroup("Barn")][SerializeField] BoxCollider barn_collider;
-    [TabGroup("Barn")][SerializeField] GameObject barn_unlockZone;
     [Title("Preferences")]
     [TabGroup("Barn")][SerializeField] int barnLocked_CR;
-    [TabGroup("Barn")][ReadOnly][SerializeField] int barnLocked_RM;
     //==============================================================
     [Title("References")]
-    //[TabGroup("Market")][SerializeField] Transform marketCoinPos;
-    //[TabGroup("Market")][SerializeField] Text marketLocked_CT;
-    [TabGroup("Market")][SerializeField] Text marketLocked_CRT;
-    [TabGroup("Market")][SerializeField] RectTransform marketLockedPanel;
+    [TabGroup("Market")][SerializeField] GameObject marketLockedPanel;
     [TabGroup("Market")][SerializeField] GameObject marketInActive;
     [TabGroup("Market")][SerializeField] GameObject marketActive;
     [TabGroup("Market")][SerializeField] ParticleSystem market_smokeParticle;
-    [TabGroup("Market")][SerializeField] BoxCollider market_collider;
-    [TabGroup("Market")][SerializeField] GameObject market_unlockZone;
     [Title("Preferences")]
     [TabGroup("Market")][SerializeField] int marketLocked_CR;
-    [TabGroup("Market")][ReadOnly][SerializeField] int marketLocked_RM;
     //==============================================================
     private void Awake()
     {
@@ -78,13 +61,13 @@ public class LockedAreasManager : MonoBehaviour
     public bool farmUnlocked;
     public bool marketUnlocked;
     public bool henhouseUnlocked;
-
+    public bool CanUnlock;
     private void Start()
     {
-        //henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
-        //farmLocked_CT.text = farmLocked_RM + "/" + farmLocked_CR;
-        //barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
-        //marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
+        henhouseLocked_CRT.text = henhouseLocked_CR.ToString();
+        barnLocked_CRT.text = barnLocked_CR.ToString();
+        farmLocked_CRT.text = farmLocked_CR.ToString();
+
     }
     private void OnTriggerStay(Collider other)
     {
@@ -93,6 +76,7 @@ public class LockedAreasManager : MonoBehaviour
             if (!Loading)
             {
                 Loading = true;
+                henhouseLockedPanel.SetActive(true);
                 GiveCoinsToHenhouse();
             }
 
@@ -101,6 +85,7 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (!Loading)
             {
+                farmLockedPanel.SetActive(true);
                 Loading = true;
                 GiveCoinsToFarm();
             }
@@ -109,6 +94,7 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (!Loading)
             {
+                barnLockedPanel.SetActive(true);
                 Loading = true;
                 GiveCoinsToBarn();
             }
@@ -117,8 +103,8 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (!Loading)
             {
+                marketLockedPanel.SetActive(true);
                 Loading = true;
-                GiveCoinsToMarket();
             }
         }
     }
@@ -126,60 +112,35 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
+            henhouseLockedPanel.SetActive(false);
             Loading = false;
         }
         else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
         {
+            farmLockedPanel.SetActive(false);
             Loading = false;
         }
         else if (other.CompareTag("BarnUnlock") && this.CompareTag("Farmer_Stack"))
         {
+            barnLockedPanel.SetActive(false);
             Loading = false;
         }
         else if (other.CompareTag("MarketUnlock") && this.CompareTag("Farmer_Stack"))
         {
+            marketLockedPanel.SetActive(false);
             Loading = false;
         }
 
-    }
-    void GiveCoinsToMarket()
-    {
-
-        if (CurrencyManager.coins > 0)
-        {
-            if (marketLocked_RM < marketLocked_CR)
-            {
-                marketLocked_RM++;
-                marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
-                CurrencyManager.Instance.DeductCoins(1);
-                Loading = false;
-
-            }
-            else
-            {
-                if (!marketUnlocked)
-                {
-
-                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                    UnlockArea("Market");
-                }
-
-            }
-
-
-
-
-        }
     }
     void GiveCoinsToHenhouse()
     {
         if (CurrencyManager.coins > 0)
         {
-            if (henhouseLocked_RM < henhouseLocked_CR)
+            if (henhouseLocked_CR > 0)
             {
-
-                henhouseLocked_RM++;
-                henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
+                //henhouseLocked_CRT.DOCounter(henhouseLocked_CR, henhouseLocked_CR--, 0.1f).SetEase(Ease.InOutSine);
+                henhouseLocked_CR--;
+                henhouseLocked_CRT.text = henhouseLocked_CR.ToString();
                 CurrencyManager.Instance.DeductCoins(1);
                 Loading = false;
 
@@ -189,6 +150,7 @@ public class LockedAreasManager : MonoBehaviour
 
                 if (!henhouseUnlocked)
                 {
+                    henhouseLockedPanel.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                     UnlockArea("Henhouse");
                 }
@@ -196,14 +158,36 @@ public class LockedAreasManager : MonoBehaviour
         }
 
     }
-    void GiveCoinsToFarm()
+    void GiveCoinsToBarn()
     {
         if (CurrencyManager.coins > 0)
         {
-            if (farmLocked_RM < farmLocked_CR)
+            if (barnLocked_CR > 0)
             {
-                farmLocked_RM++;
-                farmLocked_CT.text = farmLocked_RM + "/" + farmLocked_CR;
+                barnLocked_CR--;
+                barnLocked_CRT.text = barnLocked_CR.ToString();
+                CurrencyManager.Instance.DeductCoins(1);
+                Loading = false;
+            }
+            else
+            {
+                if (!barnUnlocked)
+                {
+                    barnLockedPanel.SetActive(false);
+                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
+                    UnlockArea("Barn");
+                }
+            }
+        }
+    }
+    void GiveCoinsToFarm()
+    {
+        if (CurrencyManager.coins > 0 && CanUnlock)
+        {
+            if (farmLocked_CR > 0)
+            {
+                farmLocked_CR--;
+                farmLocked_CRT.text = farmLocked_CR.ToString();
                 CurrencyManager.Instance.DeductCoins(1);
                 Loading = false;
 
@@ -212,6 +196,7 @@ public class LockedAreasManager : MonoBehaviour
             {
                 if (!farmUnlocked)
                 {
+                    farmLockedPanel.SetActive(false);
                     GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
                     UnlockArea("Farm");
                 }
@@ -222,37 +207,27 @@ public class LockedAreasManager : MonoBehaviour
 
 
     }
-    void GiveCoinsToBarn()
-    {
-        if (CurrencyManager.coins > 0)
-        {
-            if (barnLocked_RM < barnLocked_CR)
-            {
-                barnLocked_RM++;
-                barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
-                CurrencyManager.Instance.DeductCoins(1);
-                Loading = false;
-            }
-            else
-            {
-                if (!barnUnlocked)
-                {
-                    GameManager.Instance.UpdateGameState(GameState.UnlockingArea);
-                    UnlockArea("Barn");
-                }
-            }
-        }
-    }
     private void UnlockArea(string area)
     {
+        if (area == "Henhouse" || area == "Barn")
+        {
+            CanUnlock = true;
+            farmCannotUnlockedPanel.SetActive(false);
+            farmCanUnlockPanel.SetActive(true);
+
+            if (!marketUnlocked)
+            {
+                UnlockArea("Market");
+            }
+        }
         if (area == "Henhouse")
         {
             henhouseInActive.SetActive(false);
             henhouse_smokeParticle.Play();
             henhouseActive.SetActive(true);
-            market_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
             henhouseUnlocked = true;
+            AreaUnlocked?.Invoke("Henhouse");
             Loading = false;
         }
         if (area == "Farm")
@@ -266,22 +241,19 @@ public class LockedAreasManager : MonoBehaviour
         }
         if (area == "Barn")
         {
-
             barnInActive.SetActive(false);
             barn_smokeParticle.Play();
             barnActive.SetActive(true);
-            farm_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
             barnUnlocked = true;
+            AreaUnlocked?.Invoke("Barn");
             Loading = false;
         }
         if (area == "Market")
         {
-
             marketInActive.SetActive(false);
             market_smokeParticle.Play();
             marketActive.SetActive(true);
-            barn_unlockZone.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
             marketUnlocked = true;
             Loading = false;
