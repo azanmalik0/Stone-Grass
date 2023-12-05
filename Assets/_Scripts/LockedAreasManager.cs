@@ -14,9 +14,10 @@ public class LockedAreasManager : MonoBehaviour
     [SerializeField] GameObject coinPrefab;
     //=======================================================
     [Title("References")]
-    [TabGroup("Henhouse")][SerializeField] Transform henhouseCoinPos;
+    //[TabGroup("Henhouse")][SerializeField] Transform henhouseCoinPos;
+    //[TabGroup("Henhouse")][SerializeField] Text henhouseLocked_CT;
+    [TabGroup("Henhouse")][SerializeField] Text henhouseLocked_CRT;
     [TabGroup("Henhouse")][SerializeField] RectTransform henhouseLockedPanel;
-    [TabGroup("Henhouse")][SerializeField] Text henhouseLocked_CT;
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseInActive;
     [TabGroup("Henhouse")][SerializeField] GameObject henhouseActive;
     [TabGroup("Henhouse")][SerializeField] ParticleSystem henhouse_smokeParticle;
@@ -27,9 +28,10 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Henhouse")][ReadOnly][SerializeField] int henhouseLocked_RM;
     //=============================================================
     [Title("References")]
-    [TabGroup("Farm")][SerializeField] Transform farmCoinPos;
+    //[TabGroup("Farm")][SerializeField] Transform farmCoinPos;
+    //[TabGroup("Farm")][SerializeField] Text farmLocked_CT;
+    [TabGroup("Farm")][SerializeField] Text farmLocked_CRT;
     [TabGroup("Farm")][SerializeField] RectTransform farmLockedPanel;
-    [TabGroup("Farm")][SerializeField] Text farmLocked_CT;
     [TabGroup("Farm")][SerializeField] GameObject farmInActive;
     [TabGroup("Farm")][SerializeField] GameObject farmActive;
     [TabGroup("Farm")][SerializeField] ParticleSystem farm_smokeParticle;
@@ -40,9 +42,10 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Farm")][ReadOnly][SerializeField] int farmLocked_RM;
     //=============================================================
     [Title("References")]
-    [TabGroup("Barn")][SerializeField] Transform barnCoinPos;
+    //[TabGroup("Barn")][SerializeField] Transform barnCoinPos;
+    //[TabGroup("Barn")][SerializeField] Text barnLocked_CT;
+    [TabGroup("Barn")][SerializeField] Text barnLocked_CRT;
     [TabGroup("Barn")][SerializeField] RectTransform barnLockedPanel;
-    [TabGroup("Barn")][SerializeField] Text barnLocked_CT;
     [TabGroup("Barn")][SerializeField] GameObject barnInActive;
     [TabGroup("Barn")][SerializeField] GameObject barnActive;
     [TabGroup("Barn")][SerializeField] ParticleSystem barn_smokeParticle;
@@ -53,9 +56,10 @@ public class LockedAreasManager : MonoBehaviour
     [TabGroup("Barn")][ReadOnly][SerializeField] int barnLocked_RM;
     //==============================================================
     [Title("References")]
-    [TabGroup("Market")][SerializeField] Transform marketCoinPos;
+    //[TabGroup("Market")][SerializeField] Transform marketCoinPos;
+    //[TabGroup("Market")][SerializeField] Text marketLocked_CT;
+    [TabGroup("Market")][SerializeField] Text marketLocked_CRT;
     [TabGroup("Market")][SerializeField] RectTransform marketLockedPanel;
-    [TabGroup("Market")][SerializeField] Text marketLocked_CT;
     [TabGroup("Market")][SerializeField] GameObject marketInActive;
     [TabGroup("Market")][SerializeField] GameObject marketActive;
     [TabGroup("Market")][SerializeField] ParticleSystem market_smokeParticle;
@@ -77,10 +81,10 @@ public class LockedAreasManager : MonoBehaviour
 
     private void Start()
     {
-        henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
-        farmLocked_CT.text = farmLocked_RM + "/" + farmLocked_CR;
-        barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
-        marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
+        //henhouseLocked_CT.text = henhouseLocked_RM + "/" + henhouseLocked_CR;
+        //farmLocked_CT.text = farmLocked_RM + "/" + farmLocked_CR;
+        //barnLocked_CT.text = barnLocked_RM + "/" + barnLocked_CR;
+        //marketLocked_CT.text = marketLocked_RM + "/" + marketLocked_CR;
     }
     private void OnTriggerStay(Collider other)
     {
@@ -169,9 +173,6 @@ public class LockedAreasManager : MonoBehaviour
     }
     void GiveCoinsToHenhouse()
     {
-
-
-
         if (CurrencyManager.coins > 0)
         {
             if (henhouseLocked_RM < henhouseLocked_CR)
@@ -192,17 +193,11 @@ public class LockedAreasManager : MonoBehaviour
                     UnlockArea("Henhouse");
                 }
             }
-
-
         }
-
-
-
 
     }
     void GiveCoinsToFarm()
     {
-        // Debug.LogError("Coins available = > " + CurrencyManager.coins);
         if (CurrencyManager.coins > 0)
         {
             if (farmLocked_RM < farmLocked_CR)

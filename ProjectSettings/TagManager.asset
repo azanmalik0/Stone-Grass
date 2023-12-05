@@ -52,6 +52,10 @@ TagManager:
   - HayPink
   - HayPurple
   - HayRed
+  - Effects
+  - HayCorn
+  - HayWheat
+  - HaySun
   layers:
   - Default
   - TransparentFX

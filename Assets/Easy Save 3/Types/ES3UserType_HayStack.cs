@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("hayPinkCollected", "hayBlueCollected", "hayRedCollected", "hayPurpleCollected", "hayOrangeCollected", "hayGreenCollected", "totalHayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
+	[ES3PropertiesAttribute("sunHayCollected", "cornHayCollected", "wheatHayCollected", "totalHayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
 	public class ES3UserType_HayStack : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,12 +16,9 @@ namespace ES3Types
 		{
 			var instance = (HayStack)obj;
 			
-			writer.WriteProperty("hayPinkCollected", instance.hayPinkCollected, ES3Type_int.Instance);
-			writer.WriteProperty("hayBlueCollected", instance.hayBlueCollected, ES3Type_int.Instance);
-			writer.WriteProperty("hayRedCollected", instance.hayRedCollected, ES3Type_int.Instance);
-			writer.WriteProperty("hayPurpleCollected", instance.hayPurpleCollected, ES3Type_int.Instance);
-			writer.WriteProperty("hayOrangeCollected", instance.hayOrangeCollected, ES3Type_int.Instance);
-			writer.WriteProperty("hayGreenCollected", instance.hayGreenCollected, ES3Type_int.Instance);
+			writer.WriteProperty("sunHayCollected", instance.sunHayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("cornHayCollected", instance.cornHayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("wheatHayCollected", instance.wheatHayCollected, ES3Type_int.Instance);
 			writer.WriteProperty("totalHayCollected", instance.totalHayCollected, ES3Type_int.Instance);
 			writer.WritePrivateField("gridOffset", instance);
 			writer.WriteProperty("previousPositions", instance.previousPositions, ES3Internal.ES3TypeMgr.GetOrCreateES3Type(typeof(System.Collections.Generic.List<UnityEngine.Vector3>)));
@@ -37,23 +34,14 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
-					case "hayPinkCollected":
-						instance.hayPinkCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "sunHayCollected":
+						instance.sunHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "hayBlueCollected":
-						instance.hayBlueCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "cornHayCollected":
+						instance.cornHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
-					case "hayRedCollected":
-						instance.hayRedCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "hayPurpleCollected":
-						instance.hayPurpleCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "hayOrangeCollected":
-						instance.hayOrangeCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
-						break;
-					case "hayGreenCollected":
-						instance.hayGreenCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+					case "wheatHayCollected":
+						instance.wheatHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "totalHayCollected":
 						instance.totalHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);

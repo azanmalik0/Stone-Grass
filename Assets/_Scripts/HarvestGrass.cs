@@ -9,32 +9,49 @@ public class HarvestGrass : MonoBehaviour
 {
     public static HarvestGrass instance;
     public static event Action OnCropHarvest;
-    [SerializeField] GameObject hayCellPrefab;
-    [SerializeField] Vector3 jumpOffset;
+    //================================================
+    //[SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
-    public int grassCut;
+    [SerializeField] int grassCut;
+    [Title("Particle References")]
+    [SerializeField] ParticleSystem cornCollectParticle;
+    [SerializeField] ParticleSystem wheatCollectParticle;
+    [SerializeField] ParticleSystem sunCollectParticle;
+    [Title("Hay Cell References")]
+    [SerializeField] GameObject wheatHayCellPrefab;
+    [SerializeField] GameObject cornHayCellPrefab;
+    [SerializeField] GameObject sunHayCellPrefab;
 
     private void Awake()
     {
         instance = this;
     }
+    private void Start()
+    {
+        cornCollectParticle=transform.GetChild(0).GetComponent<ParticleSystem>();
+        sunCollectParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
+        wheatCollectParticle = transform.GetChild(2).GetComponent<ParticleSystem>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Corn"))
         {
-            GenerateHay(other);
+            cornCollectParticle.Play();
+            GenerateHay(other, cornHayCellPrefab);
         }
         if (other.CompareTag("Wheat"))
         {
-            GenerateHay(other);
+            wheatCollectParticle.Play();
+            GenerateHay(other, wheatHayCellPrefab);
         }
         if (other.CompareTag("Sunflower"))
         {
-            GenerateHay(other);
+            sunCollectParticle.Play();
+            GenerateHay(other, sunHayCellPrefab);
         }
     }
 
-    public void GenerateHay(Collider other)
+    public void GenerateHay(Collider other, GameObject hayCell)
     {
         other.gameObject.SetActive(false);
         OnCropHarvest?.Invoke();
@@ -42,7 +59,7 @@ public class HarvestGrass : MonoBehaviour
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            Instantiate(hayCellPrefab, other.transform.position, Quaternion.identity);
+            Instantiate(hayCell, other.transform.position, Quaternion.identity);
 
         }
     }
