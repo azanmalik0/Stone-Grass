@@ -12,7 +12,7 @@ public class HayStack : Stacker
 {
     public static HayStack instance;
 
-    public static event Action<int> OnSellingHarvest;
+    public static event Action OnSellingHarvest;
     public static event Action<int> OnHayCollect;
 
     //==============================================
@@ -213,6 +213,7 @@ public class HayStack : Stacker
                 Destroy(hayCell);
                 boilerParticle.Play();
                 CurrencyManager.Instance.RecieveCoins(1);
+                OnSellingHarvest?.Invoke();
 
             });
             if ((previousPositions.Count - 1) > 0)
@@ -223,7 +224,6 @@ public class HayStack : Stacker
             yield return null;
 
         }
-        OnSellingHarvest?.Invoke(haySold);
 
     }
     private void CheckHayType(GameObject hayCell, bool Increment)
@@ -292,5 +292,5 @@ public class HayStack : Stacker
         }
 
     }
-  
+
 }

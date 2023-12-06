@@ -15,11 +15,10 @@ public class HarvestGrass : MonoBehaviour
     [SerializeField] int grassCut;
     [Title("Particle References")]
     [SerializeField] ParticleSystem cornCollectParticle;
-    [SerializeField] ParticleSystem wheatCollectParticle;
     [SerializeField] ParticleSystem sunCollectParticle;
     [Title("Hay Cell References")]
-    [SerializeField] GameObject wheatHayCellPrefab;
     [SerializeField] GameObject cornHayCellPrefab;
+    [SerializeField] GameObject cornRedHayCellPrefab;
     [SerializeField] GameObject sunHayCellPrefab;
 
     private void Awake()
@@ -30,7 +29,6 @@ public class HarvestGrass : MonoBehaviour
     {
         cornCollectParticle=transform.GetChild(0).GetComponent<ParticleSystem>();
         sunCollectParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
-        wheatCollectParticle = transform.GetChild(2).GetComponent<ParticleSystem>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -39,10 +37,15 @@ public class HarvestGrass : MonoBehaviour
             cornCollectParticle.Play();
             GenerateHay(other, cornHayCellPrefab);
         }
-        if (other.CompareTag("Wheat"))
+        if (other.CompareTag("CornRed"))
         {
-            wheatCollectParticle.Play();
-            GenerateHay(other, wheatHayCellPrefab);
+            cornCollectParticle.Play();
+            GenerateHay(other, cornRedHayCellPrefab);
+        }
+        if (other.CompareTag("CornNight"))
+        {
+            cornCollectParticle.Play();
+            GenerateHay(other, cornHayCellPrefab);
         }
         if (other.CompareTag("Sunflower"))
         {

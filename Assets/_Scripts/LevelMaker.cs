@@ -38,8 +38,8 @@ public class LevelMaker : MonoBehaviour
             {
 
                 //Instantiate(reqObject, transform.GetChild(i).position, transform.GetChild(i).rotation;
-                Instantiate(reqObject, transform.GetChild(i));
-                Instantiate(reqObject1, transform.GetChild(i + 2));
+                Instantiate(reqObject, transform.GetChild(i));                   // 0  1  2  3
+                Instantiate(reqObject1, transform.GetChild(i + 2));              // 2  3  4  5
                 yield return null;
             }
         }
@@ -49,7 +49,7 @@ public class LevelMaker : MonoBehaviour
             {
 
                 //Instantiate(reqObject, transform.GetChild(i).position, transform.GetChild(i).rotation;
-                Instantiate(reqObject2, transform.GetChild(i + 3));
+                Instantiate(reqObject2, transform.GetChild(i + 2));
                 yield return null;
             }
         }
@@ -59,7 +59,7 @@ public class LevelMaker : MonoBehaviour
             {
 
                 //Instantiate(reqObject, transform.GetChild(i).position, transform.GetChild(i).rotation;
-                Instantiate(reqObject, transform.GetChild(i + 4));
+                Instantiate(reqObject, transform.GetChild(i + 3));
                 yield return null;
             }
         }

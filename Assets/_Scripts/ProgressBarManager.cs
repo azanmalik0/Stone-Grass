@@ -61,7 +61,7 @@ public class ProgressBarManager : MonoBehaviour
             }
 
         }
-        else if (progresSlider.value >= 1f)
+        if (progresSlider.value >= 1)
         {
             if (!UnlockOnce2)
             {

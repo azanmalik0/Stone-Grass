@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: e79320f9e50e78243ac15dd11758af3f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WaterTex:
@@ -61,7 +61,7 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BorderColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 0.4339623, g: 0.20661981, b: 0.079832695, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DistTiling: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MoveDirection: {r: 0, g: 0, b: 0, a: 0}

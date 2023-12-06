@@ -22,19 +22,17 @@ public class HayLoft : Stacker
     public int feedStored;
     public int feedGenerated;
 
-    public bool FeedStorageFull;
-    public bool IsGenerating;
-    public bool IsFunctional;
+    public bool IsMovingOnBelt;
 
 
     private void OnEnable()
     {
-        HayStack.OnSellingHarvest += GetValue;
+        HayStack.OnSellingHarvest += GenerateFeed;
         FarmUpgradeManager.OnIncreasingStorageCapcaity += DisplayCrudeStorageCounter;
     }
     private void OnDestroy()
     {
-        HayStack.OnSellingHarvest -= GetValue;
+        HayStack.OnSellingHarvest -= GenerateFeed;
         FarmUpgradeManager.OnIncreasingStorageCapcaity -= DisplayCrudeStorageCounter;
 
     }
@@ -66,28 +64,20 @@ public class HayLoft : Stacker
     }
     private void LateUpdate()
     {
-        if (feedGenerated > 0 && feedStored < maxHayCapacity && !IsGenerating)
+        if (feedGenerated > 0 && feedStored < maxHayCapacity && !IsMovingOnBelt)
         {
             StartHayLoft();
         }
 
     }
-    void GetValue(int value)
+    void GenerateFeed()
     {
-        hayStored = value;
-        if (hayStored > 0)
-            CheckforHayGeneration();
-    }
-    void CheckforHayGeneration()
-    {
-
+        hayStored++;
         if (hayStored >= requiredHay)
         {
             feedGenerated++;
             feedGeneratedText.text = feedGenerated.ToString();
-            hayStored -= requiredHay;
-            if (hayStored > 0)
-                CheckforHayGeneration();
+            hayStored = 0;
 
         }
 
@@ -95,7 +85,7 @@ public class HayLoft : Stacker
     public void StartHayLoft()
     {
 
-        IsGenerating = true;
+        IsMovingOnBelt = true;
         GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
         feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
         {
@@ -108,14 +98,12 @@ public class HayLoft : Stacker
                 crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
                 previousPositions.Add(cellPositions[currentR, currentC]);
                 UpdateGridPositions();
-                IsGenerating = false;
+                IsMovingOnBelt = false;
 
             });
 
         });
     }
-
-
 
 }
 

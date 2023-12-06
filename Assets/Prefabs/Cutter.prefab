@@ -2464,10 +2464,9 @@ MonoBehaviour:
   requiredGrass: 20
   grassCut: 0
   cornCollectParticle: {fileID: 0}
-  wheatCollectParticle: {fileID: 0}
   sunCollectParticle: {fileID: 0}
-  wheatHayCellPrefab: {fileID: 204026808303810990, guid: 5d345a822c01a7441a31cb438c0d6174, type: 3}
   cornHayCellPrefab: {fileID: 204026808303810990, guid: 3e6f773c417403142b5dcf1bd2cd66dd, type: 3}
+  cornRedHayCellPrefab: {fileID: 204026808303810990, guid: df9157e9daa31794e8118d55239c369d, type: 3}
   sunHayCellPrefab: {fileID: 204026808303810990, guid: 03c6a44a286bc274f86ae9894e98441e, type: 3}
 --- !u!1 &6390342913953649699
 GameObject:
