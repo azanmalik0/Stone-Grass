@@ -83,7 +83,7 @@ public class LevelMenuManager : MonoBehaviour
     void ShowLevelUnlockedPopup()
     {
         print("popup========<<");
-        if (PlayerPrefs.GetInt($"PopupShown{LevelMenuManager.Instance.currentLevel}") == 0)
+        if (PlayerPrefs.GetInt($"PopupShown{LevelMenuManager.Instance.currentLevel}") == 0 && LevelMenuManager.Instance.currentLevel < 9)
         {
             DG.Tweening.Sequence sequence = DOTween.Sequence();
             sequence.Append(levelUnlockedPopup.DOFade(1, 1.5f).SetEase(Ease.Linear))

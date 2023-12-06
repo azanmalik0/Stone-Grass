@@ -49,7 +49,7 @@ public class HayLoft : Stacker
     }
     private void LoadFeedStored()
     {
-        if (feedStored > 0 && previousPositions.Count>0)
+        if (feedStored > 0 && previousPositions.Count > 0)
         {
             for (int i = 0; i < feedStored; i++)
             {
@@ -75,30 +75,27 @@ public class HayLoft : Stacker
     void GetValue(int value)
     {
         hayStored = value;
-        
-        CheckforHayGeneration();
+        if (hayStored > 0)
+            CheckforHayGeneration();
     }
-
     void CheckforHayGeneration()
     {
-        if (hayStored >= 10)
+
+        if (hayStored >= requiredHay)
         {
             feedGenerated++;
             feedGeneratedText.text = feedGenerated.ToString();
-            hayStored -= 10;
-            //ES3AutoSaveMgr.Current.Save();
-            CheckforHayGeneration();
-        }
-        else
-        {
+            hayStored -= requiredHay;
+            if (hayStored > 0)
+                CheckforHayGeneration();
 
         }
+
     }
     public void StartHayLoft()
     {
 
         IsGenerating = true;
-        // Debug.LogError("B");
         GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
         feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>
         {
@@ -108,8 +105,6 @@ public class HayLoft : Stacker
                 feedGenerated--;
                 feedGeneratedText.text = feedGenerated.ToString();
                 feedStored++;
-                //ES3AutoSaveMgr.Current.Save();
-                //print(feedStored);
                 crudeStorageCapacityText.text = $"{feedStored}/{maxHayCapacity}";
                 previousPositions.Add(cellPositions[currentR, currentC]);
                 UpdateGridPositions();
@@ -119,7 +114,7 @@ public class HayLoft : Stacker
 
         });
     }
-    
+
 
 
 }

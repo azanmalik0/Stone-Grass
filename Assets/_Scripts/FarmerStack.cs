@@ -106,7 +106,6 @@ public class FarmerStack : Stacker
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
-            print("LS_ProductShelf");
             if (!IsLoading)
             {
                 IsLoading = true;

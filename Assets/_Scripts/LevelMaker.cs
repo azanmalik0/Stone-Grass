@@ -19,7 +19,7 @@ public class LevelMaker : MonoBehaviour
 
     IEnumerator Start()
     {
-        
+
         if (myLevelShape == Shape.Single)
         {
 
@@ -27,10 +27,11 @@ public class LevelMaker : MonoBehaviour
             {
 
                 //Instantiate(reqObject, transform.GetChild(i).position, transform.GetChild(i).rotation;
-                Instantiate(reqObject, transform.GetChild(i));
+                if (transform.GetChild(i).CompareTag("Level"))
+                    Instantiate(reqObject, transform.GetChild(i));
                 yield return null;
             }
-        } 
+        }
         else if (myLevelShape == Shape.Double)
         {
             for (int i = 0; i < transform.childCount; i++)
@@ -62,6 +63,6 @@ public class LevelMaker : MonoBehaviour
                 yield return null;
             }
         }
-       
+
     }
 }

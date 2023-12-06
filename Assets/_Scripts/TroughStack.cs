@@ -37,7 +37,7 @@ public class TroughStack : Stacker
         {
             GameObject cell = Instantiate(feedPrefab, this.transform);
             cell.transform.localPosition = previousPositions[i];
-            if(i==feedStored-1)
+            if (i == feedStored - 1)
             {
                 if (feedStored >= maxHayCapacity)
                 {
@@ -102,6 +102,7 @@ public class TroughStack : Stacker
     {
         if (other.CompareTag("Farmer_Stack"))
         {
+
             IsLoading = false;
             delay = 0;
         }
@@ -166,18 +167,6 @@ public class TroughStack : Stacker
         }
 
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Save();
-    //}
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-        {
-
-        }
-    }
-
 }
 public enum AnimalType { Cow, Chicken }
 
