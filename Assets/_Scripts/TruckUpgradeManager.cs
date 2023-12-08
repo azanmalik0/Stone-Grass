@@ -123,6 +123,7 @@ public class TruckUpgradeManager : MonoBehaviour
     {
         if (button == "Exit")
         {
+            
             AM.Play("Pop");
             CloseTruckUpgradeMenu();
         }
@@ -158,6 +159,7 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             if (RotationSetter.Instance.RotationSpeed < maxRotationSpeedUpgrade)
             {
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
                 if (RotationSetter.Instance.RotationSpeed == (maxRotationSpeedUpgrade - speed))
                     rotationSpeed_maxed.SetActive(true);
                 OnIncreasingRotationSpeed?.Invoke(speed);
@@ -182,6 +184,7 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             if (maxCarCapacity < maxCarCapacityUpgrade)
             {
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
                 if (maxCarCapacity == (maxCarCapacityUpgrade - increment))
                     carCapacity_maxed.SetActive(true);
                 maxCarCapacity += increment;
@@ -208,6 +211,7 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             if (currentWheels < truckWheelUpgrades.Length - 1)
             {
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
                 if (currentWheels == (truckWheelUpgrades.Length - 2))
                     wheels_maxed.SetActive(true);
                 truckWheelUpgrades[currentWheels].SetActive(false);
@@ -234,6 +238,7 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             if (currentSawBlades < sawBladeUpgrades.Length - 1)
             {
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
                 if (currentSawBlades == (sawBladeUpgrades.Length - 2))
                     sawBlades_maxed.SetActive(true);
 

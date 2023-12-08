@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class HayStack : Stacker
+public class HayStack : Stacker 
 {
     public static HayStack instance;
     AudioManager AM;

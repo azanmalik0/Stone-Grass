@@ -17,10 +17,7 @@ public class ProductMarketStack : Stacker
     bool IsLoading;
     float delay = 0;
     [SerializeField] int productCheckIndex;
-    private void Awake()
-    {
-
-    }
+    
     void Start()
     {
         if (productType == ProductTypes.Egg)
@@ -91,6 +88,14 @@ public class ProductMarketStack : Stacker
             //other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
             delay = 0;
+        }
+    }
+    private void Update()
+    {
+        if(this.transform.childCount<=0)
+        {
+            currentC = 0;
+            currentR = 0;
         }
     }
 

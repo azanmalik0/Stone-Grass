@@ -13,6 +13,7 @@ public abstract class Stacker : SerializedMonoBehaviour
     [SerializeField] protected float cellWidth = 1.0f;
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset;
+    [SerializeField] protected Vector3 gridRotationOffset;
      public float InitialYOffset;
     [TableMatrix]
     public Vector3[,] cellPositions;
@@ -54,7 +55,6 @@ public abstract class Stacker : SerializedMonoBehaviour
     }
     protected void CalculateCellPositions()
     {
-
         cellPositions = new Vector3[maxRows, maxColumns];
         Vector3 startPosition = transform.localPosition + gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
 
@@ -67,24 +67,7 @@ public abstract class Stacker : SerializedMonoBehaviour
         }
 
     }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
-        Gizmos.matrix = transform.localToWorldMatrix;
-        Vector3 startPosition = gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
-
-        for (int row = 0; row < maxRows; row++)
-        {
-            for (int col = 0; col < maxColumns; col++)
-            {
-                Vector3 position = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
-                Gizmos.DrawWireCube(position, new Vector3(cellWidth, 0.1f, cellHeight));
-            }
-        }
-
-        Gizmos.matrix = oldGizmosMatrix;
-    }
+  
     public void UpdateGridPositions()
     {
         currentC++;
@@ -113,20 +96,7 @@ public abstract class Stacker : SerializedMonoBehaviour
             }
         }
     }
-    //public void RefreshGrid()
-    //{
-    //    currentC = 0;
-    //    currentR = 0;
-    //    gridOffset.y = InitialYOffset;
-    //    for (int i = 0; i < transform.childCount; i++)
-    //    {
-    //        //transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.2f).SetEase(Ease.OutSine);
-    //        transform.GetChild(i).localPosition= cellPositions[currentC, currentR];
-    //        UpdateGridPositions();
-
-
-    //    }
-    //}
+  
 
 
 }

@@ -198,6 +198,7 @@ public class FarmUpgradeManager : MonoBehaviour
         {
             if (maxStorageCapacity < maxStorageUpgrade)
             {
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
                 if (maxStorageCapacity == (maxStorageUpgrade - increment))
                     storageCapacity_maxed.SetActive(true);
                 maxStorageCapacity += increment;
@@ -214,7 +215,7 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (CurrencyManager.CheckRequiredCoins(maxFarmerCapacity))
         {
-
+            VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
             if (maxFarmerCapacity < maxFarmerUpgrade)
             {
                 if (maxFarmerCapacity == (maxFarmerUpgrade - increment))
@@ -233,7 +234,7 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (CurrencyManager.CheckRequiredCoins(maxCowTrayCapacity))
         {
-
+            VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
             if (maxCowTrayCapacity <= maxCowTrayUpgrade)
             {
                 if (maxCowTrayCapacity == (maxCowTrayUpgrade - increment))
@@ -252,7 +253,7 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (CurrencyManager.CheckRequiredCoins(maxChickenTray_CR))
         {
-
+            VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
             if (maxChickenTrayCapacity <= maxChickenTrayUpgrade)
             {
                 if (maxChickenTrayCapacity == (maxChickenTrayUpgrade - increment))
@@ -272,7 +273,7 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (CurrencyManager.CheckRequiredCoins(cowNumbers_CR))
         {
-
+            VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
             if (currentCows < cows.Length - 1)
             {
                 if (currentCows == (cows.Length - 2))
@@ -295,7 +296,7 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (CurrencyManager.CheckRequiredCoins(chickenNumbers_CR))
         {
-
+            VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
             if (currentChickens < chickens.Length - 1)
             {
                 if (currentChickens == (chickens.Length - 2))

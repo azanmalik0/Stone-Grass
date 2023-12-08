@@ -17,9 +17,21 @@ public class ToggleController : MonoBehaviour
 
     private void Awake()
     {
+        SetDefault();
         imageComponent = GetComponent<Image>();
         toggle = GetComponent<Toggle>();
-        toggle.isOn = PlayerPrefs.GetInt(playerPref, 1) == 1 ? true : false;
+        toggle.isOn = PlayerPrefs.GetInt(playerPref) == 1 ? true : false;
+    }
+    void SetDefault()
+    {
+        if (!PlayerPrefs.HasKey("Vibration"))
+        {
+            PlayerPrefs.SetInt("Vibration", 1);
+        }
+        if (!PlayerPrefs.HasKey("Sound"))
+        {
+            PlayerPrefs.SetInt("Sound", 1);
+        }
     }
 
     private void Start()

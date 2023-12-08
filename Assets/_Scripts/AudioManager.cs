@@ -31,22 +31,28 @@ public class AudioManager : MonoBehaviour
 
     public void Play(string name)
     {
-        Sound s = Array.Find(sounds, sound => sound.Name == name);
-        if (s == null)
+        if (PlayerPrefs.GetInt("Sound") == 1)
         {
-            return;
+            Sound s = Array.Find(sounds, sound => sound.Name == name);
+            if (s == null)
+            {
+                return;
+            }
+            s.source.Play();
         }
-        s.source.Play();
 
     }
     public void Play(string name, float delay)
     {
-        Sound s = Array.Find(sounds, sound => sound.Name == name);
-        if (s == null)
+        if (PlayerPrefs.GetInt("Sound") == 1)
         {
-            return;
+            Sound s = Array.Find(sounds, sound => sound.Name == name);
+            if (s == null)
+            {
+                return;
+            }
+            s.source.PlayDelayed(delay);
         }
-        s.source.PlayDelayed(delay);
 
     }
     public void Stop(string name)

@@ -92,11 +92,13 @@ public class ShopManager : MonoBehaviour
     public void PreviewSkin(int index)
     {
         AM.Play("Pop");
+        VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
         ApplySkin(index);
     }
     public void BuySkin(int index)
     {
         AM.Play("Pop");
+        VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
         if (CurrencyManager.CheckRequiredCoins(skins_CR[index]))
         {
             for (int i = 0; i < selectButtons.Length; i++)
@@ -118,6 +120,7 @@ public class ShopManager : MonoBehaviour
     public void SelectSkin(int index)
     {
         AM.Play("Pop");
+        VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
         for (int i = 0; i < selectButtons.Length; i++)
         {
             if (i == index)
