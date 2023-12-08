@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class FarmUpgradeManager : MonoBehaviour
 {
     public static FarmUpgradeManager Instance;
+    AudioManager AM;
     public static event Action OnIncreasingTrayCapcaity;
     public static event Action OnIncreasingFarmerCapcaity;
     public static event Action OnIncreasingStorageCapcaity;
@@ -102,6 +103,7 @@ public class FarmUpgradeManager : MonoBehaviour
     }
     private void Start()
     {
+        AM = AudioManager.instance;
         SetDefaultValues();
     }
     private void SetDefaultValues()
@@ -156,30 +158,37 @@ public class FarmUpgradeManager : MonoBehaviour
     {
         if (button == "Exit")
         {
+            AM.Play("Pop");
             CloseFarmUpgradeMenu();
         }
         if (button == "AddChickens")
         {
+            AM.Play("Pop");
             AddChickens();
         }
         if (button == "AddCows")
         {
+            AM.Play("Pop");
             AddCows();
         }
         if (button == "ChickenTray")
         {
+            AM.Play("Pop");
             IncreaseChickenTrayCapacity(incrementChickenTrayCapacity);
         }
         if (button == "CowTray")
         {
+            AM.Play("Pop");
             IncreaseCowTrayCapacity(incrementCowTrayCapacity);
         }
         if (button == "IncreaseStorageCapacity")
         {
+            AM.Play("Pop");
             IncreaseStorageCapacity(incrementStorageCapacity);
         }
         if (button == "IncreaseFarmerCapacity")
         {
+            AM.Play("Pop");
             IncreaseFarmerCapacity(incrementFarmerCapacity);
         }
     }

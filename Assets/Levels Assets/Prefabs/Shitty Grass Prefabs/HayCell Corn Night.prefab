@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 204026808303810991}
   - component: {fileID: 204026808303810994}
   m_Layer: 0
-  m_Name: HayCell Corn
-  m_TagString: HayCorn
+  m_Name: HayCell Corn Night
+  m_TagString: HayCornNight
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 78f4f7e9b1899ae4b9a6c28e300f7d40, type: 2}
+  - {fileID: 2100000, guid: d30ce39cfffe86d46831ba101db794e0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

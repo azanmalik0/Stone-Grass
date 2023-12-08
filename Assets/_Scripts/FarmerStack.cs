@@ -12,6 +12,7 @@ public class FarmerStack : Stacker
 {
     // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
+
     public int feedCollected;
     public int milkCollected;
     public int eggCollected;
@@ -45,8 +46,8 @@ public class FarmerStack : Stacker
         LoadStack();
         UpdateMaxFarmerCapacity();
     }
-  
-   
+
+
     int everything;
     public void CheckMax()
     {
@@ -146,18 +147,22 @@ public class FarmerStack : Stacker
         {
             farmerCapacityFullText.gameObject.SetActive(true);
             RefreshGrid();
+            AudioManager.instance.Stop("PickupStuff");
             IsLoading = false;
 
         }
         else if (other.GetComponent<HayLoft>().feedStored <= 0)
         {
             RefreshGrid();
+            AudioManager.instance.Stop("PickupStuff");
             IsLoading = false;
 
         }
         else if (other.GetComponent<HayLoft>().feedStored > 0)
         {
             feedCollected++;
+            if (!AudioManager.instance.IsPlaying("PickupStuff"))
+                AudioManager.instance.Play("PickupStuff");
             totalItems++;
             Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
             feedCell.SetParent(this.transform);
@@ -170,13 +175,13 @@ public class FarmerStack : Stacker
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentC, currentR]);
-            delay += 0.0001f;
+            delay += 0.00001f;
             other.GetComponent<HayLoft>().ResetGridPositions();
             other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
             IsLoading = false;
         }
     }
-  
+
     private void GetMoneyFromCounter(Collider other)
     {
 

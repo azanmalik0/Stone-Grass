@@ -8,6 +8,12 @@ public class InGameUIManager : MonoBehaviour
     [SerializeField] Image settingsPanel;
     [SerializeField] GameObject inGameUI;
     [SerializeField] GameObject joyStickStopper;
+    AudioManager AM;
+
+    private void Start()
+    {
+        AM = AudioManager.instance;
+    }
 
     private void OnEnable()
     {
@@ -22,16 +28,19 @@ public class InGameUIManager : MonoBehaviour
     {
         if (button == "OpenSettings")
         {
+            AM.Play("Pop");
             settingsPanel.gameObject.SetActive(true);
             inGameUI.SetActive(false);
         }
         if (button == "ExitSettings")
         {
+            AM.Play("Pop");
             settingsPanel.gameObject.SetActive(false);
             inGameUI.SetActive(true);
         }
         if (button == "PrivacyPolicy")
         {
+            AM.Play("Pop");
             //=================================
         }
 
@@ -40,15 +49,11 @@ public class InGameUIManager : MonoBehaviour
     {
         if ((state == GameState.UnlockingArea))
         {
-            //joyStickStopper.SetActive(true);
             inGameUI.SetActive(false);
-            //GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = true;
             GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else
         {
-            //joyStickStopper.SetActive(false);
-           // GameManager.Instance.tractorObject.GetComponent<Rigidbody>().isKinematic = false;
             GameManager.Instance.farmerObject.GetComponent<Rigidbody>().isKinematic = false;
             inGameUI.SetActive(true);
         }

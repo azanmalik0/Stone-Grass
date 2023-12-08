@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class LockedAreasManager : MonoBehaviour
 {
     public static LockedAreasManager Instance;
+    AudioManager AM;
     public static event Action<string> AreaUnlocked;
     //=======================================================
     [Title("References")]
@@ -64,6 +65,7 @@ public class LockedAreasManager : MonoBehaviour
     public bool CanUnlock;
     private void Start()
     {
+        AM = AudioManager.instance;
         henhouseLocked_CRT.text = henhouseLocked_CR.ToString();
         barnLocked_CRT.text = barnLocked_CR.ToString();
         farmLocked_CRT.text = farmLocked_CR.ToString();
@@ -222,9 +224,11 @@ public class LockedAreasManager : MonoBehaviour
         }
         if (area == "Henhouse")
         {
+            AM.Play("AreaUnlock");
             henhouseInActive.SetActive(false);
             henhouse_smokeParticle.Play();
             henhouseActive.SetActive(true);
+            //henhouseActive.transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack).OnComplete(() => { });
             GameManager.Instance.UpdateGameState(GameState.InGame);
             henhouseUnlocked = true;
             AreaUnlocked?.Invoke("Henhouse");
@@ -241,6 +245,7 @@ public class LockedAreasManager : MonoBehaviour
         }
         if (area == "Barn")
         {
+            AM.Play("AreaUnlock");
             barnInActive.SetActive(false);
             barn_smokeParticle.Play();
             barnActive.SetActive(true);

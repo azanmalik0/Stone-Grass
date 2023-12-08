@@ -8,12 +8,14 @@ using UnityEngine.UI;
 public class TruckUpgradeManager : MonoBehaviour
 {
     public static TruckUpgradeManager Instance;
+    AudioManager AM;
     public static event Action<int> OnIncreasingRotationSpeed;
     public static event Action<int> OnBuyingUpgrade;
     public static event Action OnIncreasingCarCapacity;
 
     //===============================================
-     public Image truckUpgradePanel;
+    public Image truckUpgradePanel;
+    [SerializeField] ParticleSystem upgradeParticle;
     //===============================================
     [TabGroup("Collections")][SerializeField] GameObject[] sawBladeUpgrades;
     [TabGroup("Collections")][SerializeField] GameObject[] truckWheelUpgrades;
@@ -85,7 +87,7 @@ public class TruckUpgradeManager : MonoBehaviour
     }
     private void Start()
     {
-        //ES3AutoSaveMgr.Current.Load();
+        AM = AudioManager.instance;
         SetDefaultValues();
     }
 
@@ -109,7 +111,6 @@ public class TruckUpgradeManager : MonoBehaviour
         carCapacity_Slider.value = maxCarCapacity;
 
     }
-
     private void CheckTextColor()
     {
         CurrencyManager.UpdateAffordabilityStatus(sawBlades_CT, SawBlades_CR);
@@ -122,25 +123,30 @@ public class TruckUpgradeManager : MonoBehaviour
     {
         if (button == "Exit")
         {
+            AM.Play("Pop");
             CloseTruckUpgradeMenu();
         }
         if (button == "AddSawBlades")
         {
+            AM.Play("Pop");
             AddBlades();
 
         }
         if (button == "IncreaseRotationSpeed")
         {
+            AM.Play("Pop");
             IncreaseRotationSpeed(incrementRotationSpeed);
 
         }
         if (button == "AddWheels")
         {
+            AM.Play("Pop");
             AddWheels();
 
         }
         if (button == "IncreaseCarCapacity")
         {
+            AM.Play("Pop");
             IncreaseCarCapacity(incrementCarCapacity);
 
         }
@@ -160,6 +166,8 @@ public class TruckUpgradeManager : MonoBehaviour
                 rotationSpeed_CT.text = "$" + rotationSpeed_CR.ToString();
                 rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
                 CheckTextColor();
+                AM.Play("Upgrade");
+                
             }
             else
             {
@@ -183,6 +191,8 @@ public class TruckUpgradeManager : MonoBehaviour
                 carCapacity_Slider.value = maxCarCapacity;
                 OnIncreasingCarCapacity?.Invoke();
                 CheckTextColor();
+                AM.Play("Upgrade");
+              
             }
             else
             {
@@ -208,6 +218,8 @@ public class TruckUpgradeManager : MonoBehaviour
                 currentWheels++;
                 wheels_Slider.value = currentWheels;
                 CheckTextColor();
+                AM.Play("Upgrade");
+                
             }
             else
             {
@@ -233,6 +245,8 @@ public class TruckUpgradeManager : MonoBehaviour
                 currentSawBlades++;
                 sawBlades_Slider.value = currentSawBlades;
                 CheckTextColor();
+                AM.Play("Upgrade");
+               
 
             }
             else

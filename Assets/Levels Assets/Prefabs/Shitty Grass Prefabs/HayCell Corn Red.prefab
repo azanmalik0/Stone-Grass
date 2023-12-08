@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 204026808303810994}
   m_Layer: 0
   m_Name: HayCell Corn Red
-  m_TagString: HayCorn
+  m_TagString: HayCornRed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -10,6 +10,7 @@ using UnityEngine.UI;
 public class LevelMenuManager : MonoBehaviour
 {
     public static LevelMenuManager Instance;
+    AudioManager AM;
     [TabGroup("Collections")][SerializeField] GameObject[] levelObjects;
     [TabGroup("Collections")][SerializeField] GameObject[] levelButtons;
     //===============================================
@@ -39,12 +40,14 @@ public class LevelMenuManager : MonoBehaviour
     }
     private void Start()
     {
+        AM = AudioManager.instance;
         levelObjects[currentLevel].SetActive(true);
     }
     public void OnButtonClick(string button)
     {
         if (button == "Exit")
         {
+            AM.Play("Pop");
             CloseLevelSelectionMenu();
         }
 
@@ -53,6 +56,7 @@ public class LevelMenuManager : MonoBehaviour
 
     public void LoadLevel(int level)
     {
+        AM.Play("Pop");
         if (currentLevel != level)
         {
             PercentageChecker.Instance.SaveLevelTexture();

@@ -59,6 +59,8 @@ TagManager:
   - Level
   - CornRed
   - CornNight
+  - HayCornNight
+  - HayCornRed
   layers:
   - Default
   - TransparentFX

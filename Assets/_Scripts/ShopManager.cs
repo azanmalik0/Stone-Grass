@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class ShopManager : MonoBehaviour
 {
     public static ShopManager instance;
+    AudioManager AM;
     public Image shopPanel;
     //===================================
     [Title("Select Button References")]
@@ -38,6 +39,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         //ES3AutoSaveMgr.Current.Load();
+        AM=AudioManager.instance;
         UpdateSkinVisibility();
         SetDeafult();
         CheckTextColor();
@@ -62,6 +64,7 @@ public class ShopManager : MonoBehaviour
     {
         if (button == "Exit")
         {
+            AM.Play("Pop");
             CloseShopMenu();
 
         }
@@ -88,10 +91,12 @@ public class ShopManager : MonoBehaviour
     }
     public void PreviewSkin(int index)
     {
+        AM.Play("Pop");
         ApplySkin(index);
     }
     public void BuySkin(int index)
     {
+        AM.Play("Pop");
         if (CurrencyManager.CheckRequiredCoins(skins_CR[index]))
         {
             for (int i = 0; i < selectButtons.Length; i++)
@@ -112,6 +117,7 @@ public class ShopManager : MonoBehaviour
     }
     public void SelectSkin(int index)
     {
+        AM.Play("Pop");
         for (int i = 0; i < selectButtons.Length; i++)
         {
             if (i == index)

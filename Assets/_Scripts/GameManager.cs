@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+       AudioManager.instance.Play("Ambient");
+
         Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
     }
