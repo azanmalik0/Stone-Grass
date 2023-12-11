@@ -3,13 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using PT.Garden;
-using TMPro;
 using UnityEngine;
 
 public class CoinReward : MonoBehaviour
 {
     [SerializeField] private GameObject pileOfCoins;
-    // [SerializeField] private TextMeshProUGUI counter;
     [SerializeField] private Vector2[] initialPos;
     [SerializeField] private Quaternion[] initialRotation;
     [SerializeField] private int coinsAmount;

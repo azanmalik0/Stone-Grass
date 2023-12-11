@@ -53,7 +53,7 @@ public class BuyerStack : Stacker
 
         if (other.CompareTag("Market"))
         {
-            Debug.LogError("MArket");
+           // Debug.LogError("MArket");
             //RefreshGrid();
             delay = 0;
         }
@@ -93,7 +93,7 @@ public class BuyerStack : Stacker
                 }
                 else
                 {
-                    Debug.LogError("Bought1");
+                    //Debug.LogError("Bought1");
                     OnProductBought?.Invoke();
                     yield return new WaitForSeconds(2);
                     buyerSpline.Resume();
@@ -102,7 +102,7 @@ public class BuyerStack : Stacker
             }
             else if (transform.childCount >= maxHayCapacity)
             {
-                Debug.LogError("Bought1");
+                //Debug.LogError("Bought1");
                 OnProductBought?.Invoke();
                 yield return new WaitForSeconds(2);
                 buyerSpline.Resume();
@@ -112,7 +112,7 @@ public class BuyerStack : Stacker
             else if (productParent.transform.childCount > 0)
             {
 
-                Debug.LogError("Buying");
+                //Debug.LogError("Buying");
                 Transform product = productParent.transform.GetChild(productParent.transform.childCount - 1);
                 DOTween.Complete(product);
                 product.SetParent(this.transform);
@@ -142,7 +142,7 @@ public class BuyerStack : Stacker
 
             if (productParent.transform.childCount <= 0 && transform.childCount > 0)
             {
-                Debug.LogError("Bought2");
+                //Debug.LogError("Bought2");
                 OnProductBought?.Invoke();
                 yield return new WaitForSeconds(2);
                 buyerSpline.Resume();
@@ -157,7 +157,7 @@ public class BuyerStack : Stacker
                 }
                 else
                 {
-                    Debug.LogError("Bought1");
+                    //Debug.LogError("Bought1");
                     OnProductBought?.Invoke();
                     yield return new WaitForSeconds(2);
                     buyerSpline.Resume();
@@ -168,7 +168,7 @@ public class BuyerStack : Stacker
             else if (productParent.transform.childCount > 0)
             {
 
-                Debug.LogError("Buying");
+                //Debug.LogError("Buying");
                 Transform product = productParent.transform.GetChild(productParent.transform.childCount - 1);
                 DOTween.Complete(product);
                 product.SetParent(this.transform);

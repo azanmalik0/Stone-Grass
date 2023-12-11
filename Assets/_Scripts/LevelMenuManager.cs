@@ -59,7 +59,7 @@ public class LevelMenuManager : MonoBehaviour
         AM.Play("Pop");
         if (currentLevel != level)
         {
-            PercentageChecker.Instance.SaveLevelTexture();
+            //PercentageChecker.Instance.SaveLevelTexture();
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
             ES3AutoSaveMgr.Current.Save();

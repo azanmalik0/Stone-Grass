@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class HayStack : Stacker 
+public class HayStack : Stacker
 {
     public static HayStack instance;
     AudioManager AM;
@@ -188,7 +188,8 @@ public class HayStack : Stacker
         else
         {
             totalHayCollected++;
-            AM.Play("Pickup Hay");
+            if (!AM.IsPlaying("Pickup Hay"))
+                AM.Play("Pickup Hay");
             OnHayCollect?.Invoke(totalHayCollected);
             hay.transform.SetParent(this.transform);
             CheckHayType(hay.gameObject, true);
@@ -248,7 +249,11 @@ public class HayStack : Stacker
         while (unloading && transform.childCount > 0)
         {
             if (!AudioManager.instance.IsPlaying("SellHay"))
+            {
                 AudioManager.instance.Play("SellHay");
+                VibrationManager.Vibrate();
+
+            }
             AudioManager.instance.Play("GoldSack");
             totalHayCollected--;
             haySold++;

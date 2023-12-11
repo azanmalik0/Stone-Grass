@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FpsCounter : MonoBehaviour
 {
-    public TextMeshProUGUI fps;
+    public Text fps;
     string label = "";
     float count;
     private void Awake()
