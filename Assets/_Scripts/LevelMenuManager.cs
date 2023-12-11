@@ -59,7 +59,7 @@ public class LevelMenuManager : MonoBehaviour
         AM.Play("Pop");
         if (currentLevel != level)
         {
-            //PercentageChecker.Instance.SaveLevelTexture();
+            // PercentageChecker.Instance.SaveLevelTexture();
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
             ES3AutoSaveMgr.Current.Save();
@@ -95,5 +95,13 @@ public class LevelMenuManager : MonoBehaviour
 
             PlayerPrefs.SetInt($"PopupShown{LevelMenuManager.Instance.currentLevel}", 1);
         }
+    }
+
+    public void UnlockNextLevel()
+    {
+        levelObjects[currentLevel].SetActive(false);
+        currentLevel++;
+        ES3AutoSaveMgr.Current.Save();
+        loadingPanel.SetActive(true);
     }
 }

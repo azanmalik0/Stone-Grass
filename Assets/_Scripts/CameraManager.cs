@@ -6,13 +6,14 @@ using static UnityEngine.GraphicsBuffer;
 
 public class CameraManager : MonoBehaviour
 {
-    [SerializeField] Transform followTarget;
+    Transform followTarget;
     [SerializeField] Vector3 upgradePosition;
     [SerializeField] Vector3 shopPosition;
     [SerializeField] Vector3 offset;
     [SerializeField] Vector3 grassFieldOffset;
     [SerializeField] Vector3 platformOffset;
     [SerializeField] float smoothSpeed;
+    [SerializeField] GameObject tractorObject;
     bool IsInMenu;
     GameManager GM;
     GameState CurrentState;
@@ -42,7 +43,8 @@ public class CameraManager : MonoBehaviour
     {
         CurrentState = state;
         if (CurrentState == GameState.Tractor)
-            followTarget = GM.tractorObject.transform;
+            //followTarget = GM.tractorObject.transform;
+            followTarget = tractorObject.transform;
         if (CurrentState == GameState.Farmer)
             followTarget = GM.farmerObject.transform;
 

@@ -67,7 +67,6 @@ public abstract class Stacker : SerializedMonoBehaviour
         }
 
     }
-  
     public void UpdateGridPositions()
     {
         currentC++;
@@ -96,7 +95,30 @@ public abstract class Stacker : SerializedMonoBehaviour
             }
         }
     }
-  
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
+        Gizmos.matrix = transform.localToWorldMatrix;
 
+        Quaternion rotation = Quaternion.Euler(gridRotationOffset);
+
+        Vector3 startPosition = gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
+
+        for (int row = 0; row < maxRows; row++)
+        {
+            for (int col = 0; col < maxColumns; col++)
+            {
+                Vector3 position = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
+
+                // Apply rotation to the position
+                position = rotation * position;
+
+                Gizmos.DrawWireCube(position, new Vector3(cellWidth, 0.1f, cellHeight));
+            }
+        }
+
+        Gizmos.matrix = oldGizmosMatrix;
+    }
 
 }

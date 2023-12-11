@@ -53,6 +53,8 @@ public class LockedAreasManager : MonoBehaviour
     [Title("Preferences")]
     [TabGroup("Market")][SerializeField] int marketLocked_CR;
     //==============================================================
+
+    public int decrementAmount;
     private void Awake()
     {
         Instance = this;
@@ -114,6 +116,7 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
+            DOTween.Kill(henhouseLocked_CRT);
             henhouseLockedPanel.SetActive(false);
             Loading = false;
         }
@@ -140,10 +143,10 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (henhouseLocked_CR > 0)
             {
-                //henhouseLocked_CRT.DOCounter(henhouseLocked_CR, henhouseLocked_CR--, 0.1f).SetEase(Ease.InOutSine);
-                henhouseLocked_CR--;
+
+                henhouseLocked_CR -= decrementAmount;
                 henhouseLocked_CRT.text = henhouseLocked_CR.ToString();
-                CurrencyManager.Instance.DeductCoins(1);
+                CurrencyManager.Instance.DeductCoins(decrementAmount);
                 Loading = false;
 
             }
@@ -166,9 +169,9 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (barnLocked_CR > 0)
             {
-                barnLocked_CR--;
+                barnLocked_CR-= decrementAmount;
                 barnLocked_CRT.text = barnLocked_CR.ToString();
-                CurrencyManager.Instance.DeductCoins(1);
+                CurrencyManager.Instance.DeductCoins(decrementAmount);
                 Loading = false;
             }
             else
@@ -188,9 +191,9 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (farmLocked_CR > 0)
             {
-                farmLocked_CR--;
+                farmLocked_CR-= decrementAmount;
                 farmLocked_CRT.text = farmLocked_CR.ToString();
-                CurrencyManager.Instance.DeductCoins(1);
+                CurrencyManager.Instance.DeductCoins(decrementAmount);
                 Loading = false;
 
             }

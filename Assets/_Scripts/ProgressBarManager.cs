@@ -50,7 +50,7 @@ public class ProgressBarManager : MonoBehaviour
 
     private void CheckStarUnlock()
     {
-        if (progresSlider.value >= 0.5f)
+        if (progresSlider.value >= 0.7f)
         {
             if (!UnlockOnce1)
             {
