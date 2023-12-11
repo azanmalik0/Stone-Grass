@@ -9,6 +9,7 @@ public class ProductStack : Stacker
 {
     public enum ProductType { Egg, Milk }
     public ProductType type;
+    public AnimalType animalType;
     public float initialYOffset;
     [SerializeField] GameObject hayParent;
     [SerializeField] GameObject productPrefab;
@@ -65,39 +66,42 @@ public class ProductStack : Stacker
 
     public void GenerateProduct(AnimalType animal)
     {
-
-        if (hayParent.transform.childCount > 0)
+        if (animal == animalType)
         {
 
-            GameObject feedCell = hayParent.transform.GetChild(hayParent.transform.childCount - 1).gameObject;
-            if (type == ProductType.Egg)
+            if (hayParent.transform.childCount > 0)
             {
-                GameObject product = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
-                if (!IsLoading)
+
+                GameObject feedCell = hayParent.transform.GetChild(hayParent.transform.childCount - 1).gameObject;
+                if (type == ProductType.Egg)
                 {
-                    IsLoading = true;
-                    LoadProductOnShelf(product);
+                    GameObject product = Instantiate(eggPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+                    if (!IsLoading)
+                    {
+                        IsLoading = true;
+                        LoadProductOnShelf(product);
+                    }
+
                 }
+                if (type == ProductType.Milk)
+                {
+                    GameObject product = Instantiate(milkPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
+                    if (!IsLoading)
+                    {
+                        IsLoading = true;
+                        LoadProductOnShelf(product);
+                    }
+
+                }
+                feedCell.transform.SetParent(null);
+                hayParent.GetComponent<TroughStack>().feedStored--;
+                hayParent.GetComponent<TroughStack>().DisplayCrudeTroughCounter();
+                if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
+                    hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
+                Destroy(feedCell);
+                GenerateProduct(animal);
 
             }
-            if (type == ProductType.Milk)
-            {
-                GameObject product = Instantiate(milkPrefab, feedCell.transform.position, Quaternion.identity, hayParent.transform);
-                if (!IsLoading)
-                {
-                    IsLoading = true;
-                    LoadProductOnShelf(product);
-                }
-
-            }
-            feedCell.transform.SetParent(null);
-            hayParent.GetComponent<TroughStack>().feedStored--;
-            hayParent.GetComponent<TroughStack>().DisplayCrudeTroughCounter();
-            if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
-                hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
-            Destroy(feedCell);
-            GenerateProduct(animal);
-
         }
     }
     void LoadProductOnShelf(GameObject product)
@@ -122,7 +126,7 @@ public class ProductStack : Stacker
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
         IsLoading = false;
     }
-    
+
     private void OnApplicationPause(bool pause)
     {
         if (pause)

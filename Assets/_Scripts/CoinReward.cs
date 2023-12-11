@@ -20,7 +20,7 @@ public class CoinReward : MonoBehaviour
     private void OnDisable()
     {
         ProgressBarManager.OnSecondStarUnlock -= AnimateCoinReward;
-        
+
     }
     void Start()
     {
@@ -38,31 +38,30 @@ public class CoinReward : MonoBehaviour
         }
 
     }
-
-
-
-
     public void AnimateCoinReward()
     {
-        pileOfCoins.SetActive(true);
-        var delay = 0f;
-
-        for (int i = 0; i < pileOfCoins.transform.childCount; i++)
+        if (PlayerPrefs.GetInt($"CoinsAnimated{LevelMenuManager.Instance.currentLevel}") == 0 && LevelMenuManager.Instance.currentLevel < 9)
         {
-            pileOfCoins.transform.GetChild(i).DOScale(1f, 0.3f).SetDelay(delay).SetEase(Ease.OutBack);
-            pileOfCoins.transform.GetChild(i).GetComponent<RectTransform>().DOAnchorPos(new Vector2(670f, 1580f), 0.8f).SetDelay(delay + 0.5f).SetEase(Ease.InBack);
-            pileOfCoins.transform.GetChild(i).DORotate(Vector3.zero, 0.5f).SetDelay(delay + 0.5f).SetEase(Ease.Flash);
-            pileOfCoins.transform.GetChild(i).DOScale(0f, 0.3f).SetDelay(delay + 1.5f).SetEase(Ease.OutBack);
-            if (i == pileOfCoins.transform.childCount - 1)
+            pileOfCoins.SetActive(true);
+            var delay = 0f;
+
+            for (int i = 0; i < pileOfCoins.transform.childCount; i++)
             {
-                ResetValues();
+                pileOfCoins.transform.GetChild(i).DOScale(1f, 0.3f).SetDelay(delay).SetEase(Ease.OutBack);
+                pileOfCoins.transform.GetChild(i).GetComponent<RectTransform>().DOAnchorPos(new Vector2(670f, 1580f), 0.8f).SetDelay(delay + 0.5f).SetEase(Ease.InBack);
+                pileOfCoins.transform.GetChild(i).DORotate(Vector3.zero, 0.5f).SetDelay(delay + 0.5f).SetEase(Ease.Flash);
+                pileOfCoins.transform.GetChild(i).DOScale(0f, 0.3f).SetDelay(delay + 1.5f).SetEase(Ease.OutBack);
+                if (i == pileOfCoins.transform.childCount - 1)
+                {
+                    ResetValues();
+                }
+                delay += 0.1f;
             }
-            delay += 0.1f;
+
+            StartCoroutine(CountDollars());
+            PlayerPrefs.SetInt($"CoinsAnimated{LevelMenuManager.Instance.currentLevel}", 1);
         }
-
-        StartCoroutine(CountDollars());
     }
-
     private void ResetValues()
     {
         for (int i = 0; i < pileOfCoins.transform.childCount; i++)
@@ -71,7 +70,6 @@ public class CoinReward : MonoBehaviour
             pileOfCoins.transform.GetChild(i).GetComponent<RectTransform>().rotation = initialRotation[i];
         }
     }
-
     IEnumerator CountDollars()
     {
         yield return new WaitForSecondsRealtime(0.5f);

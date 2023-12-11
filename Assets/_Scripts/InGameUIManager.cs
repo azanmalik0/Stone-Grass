@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,24 +6,25 @@ using UnityEngine.UI;
 
 public class InGameUIManager : MonoBehaviour
 {
+    AudioManager AM;
     [SerializeField] Image settingsPanel;
     [SerializeField] GameObject inGameUI;
     [SerializeField] GameObject joyStickStopper;
-    AudioManager AM;
+    [SerializeField] RectTransform nextLevelPopup;
 
     private void Start()
     {
         AM = AudioManager.instance;
     }
-
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += SetjoyStickState;
+        ProgressBarManager.OnSecondStarUnlock += EnableNextLevelPopup;
     }
     private void OnDisable()
     {
-
         GameManager.OnGameStateChanged -= SetjoyStickState;
+        ProgressBarManager.OnSecondStarUnlock -= EnableNextLevelPopup;
     }
     public void OnButtonClick(string button)
     {
@@ -58,6 +60,14 @@ public class InGameUIManager : MonoBehaviour
             inGameUI.SetActive(true);
         }
 
+    }
+    void EnableNextLevelPopup()
+    {
+        if (LevelMenuManager.Instance.currentLevel < 9)
+        {
+            nextLevelPopup.gameObject.SetActive(true);
+            nextLevelPopup.DOScale(Vector3.one, 1f).SetLoops(-1, LoopType.Yoyo);
+        }
     }
 
 }

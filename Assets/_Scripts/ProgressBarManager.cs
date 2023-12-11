@@ -66,11 +66,7 @@ public class ProgressBarManager : MonoBehaviour
             if (!UnlockOnce2)
             {
                 unlockedStar2.SetActive(true);
-                if (PlayerPrefs.GetInt($"CoinsAnimated{LevelMenuManager.Instance.currentLevel}") == 0 && LevelMenuManager.Instance.currentLevel < 9)
-                {
-                    OnSecondStarUnlock?.Invoke();
-                    PlayerPrefs.SetInt($"CoinsAnimated{LevelMenuManager.Instance.currentLevel}", 1);
-                }
+                OnSecondStarUnlock?.Invoke();
                 UnlockOnce2 = true;
 
             }
