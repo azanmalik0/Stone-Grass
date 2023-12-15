@@ -1,8 +1,6 @@
 using DG.Tweening;
-using PT.Garden;
 using Sirenix.OdinInspector;
 using System;
-using System.ComponentModel;
 using UnityEngine;
 
 public class HarvestGrass : MonoBehaviour
@@ -11,17 +9,19 @@ public class HarvestGrass : MonoBehaviour
     AudioManager AM;
     public static event Action OnCropHarvest;
     //================================================
-    //[SerializeField] Vector3 jumpOffset;
+    [SerializeField] Vector3 jumpOffset;
     [SerializeField] int requiredGrass;
     [SerializeField] int grassCut;
     [Title("Particle References")]
     [SerializeField] ParticleSystem cornCollectParticle;
     [SerializeField] ParticleSystem cornRedCollectParticle;
+    [SerializeField] ParticleSystem cornYellowCollectParticle;
     [SerializeField] ParticleSystem cornNightCollectParticle;
     [SerializeField] ParticleSystem sunCollectParticle;
     [Title("Hay Cell References")]
     [SerializeField] GameObject cornHayCellPrefab;
     [SerializeField] GameObject cornRedHayCellPrefab;
+    [SerializeField] GameObject cornYellowHayCellPrefab;
     [SerializeField] GameObject cornNightHayCellPrefab;
     [SerializeField] GameObject sunHayCellPrefab;
 
@@ -36,6 +36,7 @@ public class HarvestGrass : MonoBehaviour
         sunCollectParticle = transform.GetChild(1).GetComponent<ParticleSystem>();
         cornRedCollectParticle = transform.GetChild(3).GetComponent<ParticleSystem>();
         cornNightCollectParticle = transform.GetChild(4).GetComponent<ParticleSystem>();
+        cornYellowCollectParticle = transform.GetChild(5).GetComponent<ParticleSystem>();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -51,8 +52,13 @@ public class HarvestGrass : MonoBehaviour
         }
         if (other.CompareTag("CornNight"))
         {
-            cornCollectParticle.Play();
+            cornNightCollectParticle.Play();
             GenerateHay(other, cornNightHayCellPrefab);
+        }
+        if (other.CompareTag("CornYellow"))
+        {
+            cornYellowCollectParticle.Play();
+            GenerateHay(other, cornYellowHayCellPrefab);
         }
         if (other.CompareTag("Sunflower"))
         {
@@ -69,7 +75,10 @@ public class HarvestGrass : MonoBehaviour
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            Instantiate(hayCell, other.transform.position, Quaternion.identity);
+          GameObject Cell = Instantiate(hayCell,new Vector3(other.transform.position.x, -0.149f, other.transform.position.z), Quaternion.identity);
+            float randomAngle = UnityEngine.Random.Range(0, 360);
+            Cell.transform.DORotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad);
+            Cell.transform.DOJump(new Vector3(other.transform.position.x, -0.149f, other.transform.position.z),5,1,1f).SetEase(Ease.OutQuint);
 
         }
     }

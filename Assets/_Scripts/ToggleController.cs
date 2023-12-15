@@ -15,28 +15,12 @@ public class ToggleController : MonoBehaviour
     Image imageComponent;
     AudioManager AM;
 
-    private void Awake()
-    {
-        SetDefault();
-        imageComponent = GetComponent<Image>();
-        toggle = GetComponent<Toggle>();
-        toggle.isOn = PlayerPrefs.GetInt(playerPref) == 1 ? true : false;
-    }
-    void SetDefault()
-    {
-        if (!PlayerPrefs.HasKey("Vibration"))
-        {
-            PlayerPrefs.SetInt("Vibration", 1);
-        }
-        if (!PlayerPrefs.HasKey("Sound"))
-        {
-            PlayerPrefs.SetInt("Sound", 1);
-        }
-    }
-
     private void Start()
     {
         AM = AudioManager.instance;
+        imageComponent = GetComponent<Image>();
+        toggle = GetComponent<Toggle>();
+        toggle.isOn = PlayerPrefs.GetInt(playerPref) == 1 ? true : false;
     }
     public void OnSwitch(bool on)
     {

@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +13,13 @@ public class FarmerStack : Stacker
 {
     // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
+    public static event Action<string> OnFarmerInteractingWithMarket;
 
     public int feedCollected;
     public int milkCollected;
     public int eggCollected;
     public int totalItems;
+    int everything;
     [Title("References")]
     [SerializeField] Transform coinPos;
     [SerializeField] public Text farmerCapacityFullText;
@@ -26,6 +29,8 @@ public class FarmerStack : Stacker
     //====================================
     float delay;
     bool IsLoading;
+    int index;
+    AudioManager AM;
     private void Awake()
     {
         Instance = this;
@@ -41,19 +46,18 @@ public class FarmerStack : Stacker
     }
     private void Start()
     {
+        AM = AudioManager.instance;
         SetGridYOffset(0.92f);
         CalculateCellPositions();
-        LoadStack();
         UpdateMaxFarmerCapacity();
+        LoadFeedCollected();
     }
-
-
-    int everything;
     public void CheckMax()
     {
-        everything = feedCollected + eggCollected + milkCollected;
-        if (everything >= maxHayCapacity)
+        //everything = feedCollected + eggCollected + milkCollected;
+        if (totalItems >= maxHayCapacity-1)
         {
+            print("Here");
             farmerCapacityFullText.gameObject.SetActive(true);
         }
         else
@@ -62,31 +66,73 @@ public class FarmerStack : Stacker
 
         }
     }
-
-    private void LoadStack()
+    void LoadEggsCollected()
     {
-
-        for (int i = 0; i < feedCollected; i++)
+        if (eggCollected > 0)
         {
-            GameObject cell = Instantiate(feedPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
-            cell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
-
+            for (int i = 0; i < eggCollected; i++)
+            {
+                GameObject cell = Instantiate(eggPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[index];
+                index++;
+                if (i == eggCollected - 1)
+                {
+                    CheckMax();
+                    RefreshGrid();
+                }
+            }
         }
-        for (int i = 0; i < eggCollected; i++)
+        else
         {
-            GameObject cell = Instantiate(eggPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
-
+            index = 0;
+            RefreshGrid();
+            CheckMax();
         }
-        for (int i = 0; i < milkCollected; i++)
+    }
+    void LoadCheeseCollected()
+    {
+        if (milkCollected > 0)
         {
-            GameObject cell = Instantiate(milkPrefab, this.transform);
-            cell.transform.localPosition = previousPositions[i];
-            cell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 0.791418f);
-
+            for (int i = 0; i < milkCollected; i++)
+            {
+                GameObject cell = Instantiate(milkPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[index];
+                cell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 0.791418f);
+                index++;
+                if (i == milkCollected - 1)
+                {
+                    LoadEggsCollected();
+                }
+            }
         }
-        RefreshGrid();
+        else
+        {
+            LoadEggsCollected();
+        }
+    }
+    void LoadFeedCollected()
+    {
+        if (feedCollected > 0)
+        {
+            for (int i = 0; i < feedCollected; i++)
+            {
+                GameObject cell = Instantiate(feedPrefab, this.transform);
+                cell.transform.localPosition = previousPositions[index];
+                cell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
+                index++;
+                if (i == feedCollected - 1)
+                {
+                    LoadCheeseCollected();
+                }
+            }
+        }
+        else
+        {
+            LoadCheeseCollected();
+        }
+
+
+        //RefreshGrid();
 
     }
     private void UpdateMaxFarmerCapacity()
@@ -116,6 +162,7 @@ public class FarmerStack : Stacker
 
         if (other.CompareTag("Market"))
         {
+            OnFarmerInteractingWithMarket?.Invoke("Entered");
             if (!IsLoading)
             {
                 IsLoading = true;
@@ -137,6 +184,8 @@ public class FarmerStack : Stacker
         }
         if (other.CompareTag("Market"))
         {
+            AM.Stop("GetMoney");
+            OnFarmerInteractingWithMarket?.Invoke("Exited");
             RefreshGrid();
             IsLoading = false;
         }
@@ -181,24 +230,31 @@ public class FarmerStack : Stacker
             IsLoading = false;
         }
     }
-
     private void GetMoneyFromCounter(Collider other)
     {
 
         if (other.transform.childCount <= 0)
         {
             IsLoading = false;
+            AM.Stop("GetMoney");
             delay = 0;
         }
         else if (other.transform.childCount > 0)
         {
-
+            if (!AM.IsPlaying("GetMoney"))
+            {
+                AM.Play("GetMoney");
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Peek);
+            }
             CurrencyManager.Instance.RecieveCoins(1);
             Transform money = other.transform.GetChild(other.transform.childCount - 1);
             money.SetParent(this.transform);
             money.DOLocalJump(coinPos.localPosition, 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => Destroy(money.gameObject));
             delay += 0.001f;
             other.GetComponent<MoneyStack>().ResetGridPositions();
+            if ((other.GetComponent<MoneyStack>().previousPositions.Count - 1) > 0)
+                other.GetComponent<MoneyStack>().previousPositions.RemoveAt(other.GetComponent<MoneyStack>().previousPositions.Count - 1);
+            other.GetComponent<MoneyStack>().coinsStored--;
             IsLoading = false;
         }
     }

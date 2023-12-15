@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     public static event Action<GameState> OnGameStateChanged;
     public GameObject tractorObject;
     public GameObject farmerObject;
+
+    //===============================
+    AudioManager AM;
+    AdsManager adsManager;
     private void Awake()
     {
         Instance = this;
@@ -19,10 +23,24 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-       AudioManager.instance.Play("Ambient");
-
+        AM = AudioManager.instance;
+        adsManager = AdsManager.Instance;
+        SetDefault();
+        adsManager.ShowBannerAd();
+        PlayBGM();
         Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
+    }
+    void SetDefault()
+    {
+        if (!PlayerPrefs.HasKey("Vibration"))
+        {
+            PlayerPrefs.SetInt("Vibration", 1);
+        }
+        if (!PlayerPrefs.HasKey("Sound"))
+        {
+            PlayerPrefs.SetInt("Sound", 1);
+        }
     }
     public void UpdateGameState(GameState NewState)
     {
@@ -43,12 +61,11 @@ public class GameManager : MonoBehaviour
                 farmerObject.SetActive(true);
                 break;
         }
-        //print(state);
         OnGameStateChanged?.Invoke(NewState);
     }
-    //private void OnApplicationQuit()
-    //{
-    //    ES3AutoSaveMgr.Current.Save();
-    //}
+    public void PlayBGM()
+    {
+        AM.Play("Ambient");
+    }
 }
 public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass, OnPlatform, OnGrassField }

@@ -22,6 +22,7 @@ public class AIWander : MonoBehaviour
     public float maxHeadTurnTime = 5f;
 
     private float nextHeadTurnTime;
+    private float timeSinceDestinationSet = 4f;
 
     private void Start()
     {
@@ -65,20 +66,23 @@ public class AIWander : MonoBehaviour
         {
             if (!isWandering)
             {
-                Vector3 randomPoint = GetRandomPointOnNavMesh(transform.position, wanderRadius);
+                if (Time.time - timeSinceDestinationSet > wanderInterval)
+                {
+                    Vector3 randomPoint = GetRandomPointOnNavMesh(transform.position, wanderRadius);
 
-                if (Vector3.Distance(agent.transform.position, randomPoint) > agent.stoppingDistance)
-                {
-                    agent.SetDestination(randomPoint);
-                    isWandering = true;
-                    animator.SetBool("IsWalking", true);
-                }
-                else
-                {
-                    animator.SetBool("IsWalking", false);
+                    if (Vector3.Distance(agent.transform.position, randomPoint) > agent.stoppingDistance)
+                    {
+                        agent.SetDestination(randomPoint);
+                        timeSinceDestinationSet = Time.time; // Update time since the new destination was set
+                        isWandering = true;
+                        animator.SetBool("IsWalking", true);
+                    }
+                    else
+                    {
+                        animator.SetBool("IsWalking", false);
+                    }
                 }
             }
-
 
             if (!isWandering)
             {
@@ -95,6 +99,13 @@ public class AIWander : MonoBehaviour
             else
             {
                 isIdleHeadTurn = false;
+
+                // Check if the AI hasn't reached its destination within the wanderInterval
+                if (Time.time - timeSinceDestinationSet > wanderInterval)
+                {
+                    agent.ResetPath(); // Reset the path if it hasn't reached the destination in time
+                    isWandering = false;
+                }
             }
 
             yield return null;
@@ -134,9 +145,9 @@ public class AIWander : MonoBehaviour
         agent.SetDestination(targetPosition.position);
         yield return new WaitUntil(() => !agent.pathPending && agent.remainingDistance < 0.1f);
         if (animal == AnimalType.Chicken)
-            transform.localEulerAngles=new Vector3(180,0,180);
+            transform.localEulerAngles = new Vector3(180, 0, 180);
         else if (animal == AnimalType.Cow)
-            transform.localEulerAngles=Vector3.zero;
+            transform.localEulerAngles = Vector3.zero;
         animator.SetBool("IsEating", true);
     }
     void BacktoWandering(AnimalType animal)

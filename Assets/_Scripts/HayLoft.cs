@@ -1,4 +1,4 @@
-using DG.Tweening;
+ using DG.Tweening;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -84,7 +84,6 @@ public class HayLoft : Stacker
     }
     public void StartHayLoft()
     {
-
         IsMovingOnBelt = true;
         GameObject feedCell = Instantiate(feedCellPrefab, feedCellStart.position, Quaternion.identity);
         feedCell.transform.DOLocalMove(feedCellLast.position, 2f).SetEase(Ease.Linear).OnComplete(() =>

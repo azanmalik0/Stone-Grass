@@ -35,7 +35,26 @@ public class LevelInstantiator : MonoBehaviour
             Instantiate(prefab, positions[i].position, Quaternion.identity, transform);
         }
     }
+    [ContextMenu("Instant")]
+    public void Azan()
+    {
+        Transform[] childTransforms = new Transform[transform.childCount - 1];
 
+        for (int i = 0; i < transform.childCount - 1; i++)
+        {
+            childTransforms[i] = transform.GetChild(i);
+        }
+
+        int partSize = Mathf.CeilToInt(childTransforms.Length / (float)cropCellPrefabs.Length);
+
+        for (int i = 0; i < cropCellPrefabs.Length; i++)
+        {
+            int startIndex = i * partSize;
+            int endIndex = Mathf.Min((i + 1) * partSize, childTransforms.Length);
+
+            InstantiatePrefabs(cropCellPrefabs[i], childTransforms, startIndex, endIndex, this.transform);
+        }
+    }
 
     [ContextMenu("Sort")]
     public void SortChildren()

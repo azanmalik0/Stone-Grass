@@ -38,8 +38,7 @@ public class ShopManager : MonoBehaviour
     }
     private void Start()
     {
-        //ES3AutoSaveMgr.Current.Load();
-        AM=AudioManager.instance;
+        AM = AudioManager.instance;
         UpdateSkinVisibility();
         SetDeafult();
         CheckTextColor();
@@ -48,7 +47,7 @@ public class ShopManager : MonoBehaviour
     {
         for (int i = 0; i < skins_CT.Length; i++)
         {
-            CurrencyManager.UpdateAffordabilityStatus(skins_CT[i], skins_CR[i]);
+            CurrencyManager.Instance.UpdateAffordabilityStatus(skins_CT[i], skins_CR[i]);
         }
 
     }
@@ -73,9 +72,10 @@ public class ShopManager : MonoBehaviour
     {
         if (state == GameState.InShop)
         {
+            //InGameUIManager.Instance.inGameUI.SetActive(false);
+            //InGameUIManager.Instance.progressBar.SetActive(false);
             if (shopPanel != null)
             {
-
                 shopPanel.gameObject.SetActive(true);
                 TruckUpgradeManager.Instance.truckUpgradePanel.gameObject.SetActive(false);
             }
@@ -85,6 +85,8 @@ public class ShopManager : MonoBehaviour
     }
     void CloseShopMenu()
     {
+        //InGameUIManager.Instance.inGameUI.SetActive(true);
+        //InGameUIManager.Instance.progressBar.SetActive(true);
         shopPanel.gameObject.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.InGame);
         ApplySkin(selectedIndex);
@@ -99,7 +101,7 @@ public class ShopManager : MonoBehaviour
     {
         AM.Play("Pop");
         VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-        if (CurrencyManager.CheckRequiredCoins(skins_CR[index]))
+        if (CurrencyManager.Instance.CheckRequiredCoins(skins_CR[index]))
         {
             for (int i = 0; i < selectButtons.Length; i++)
             {

@@ -1,12 +1,9 @@
 using DG.Tweening;
-using PT.Garden;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class HayStack : Stacker
 {
@@ -20,36 +17,36 @@ public class HayStack : Stacker
     [Title("Unloading References")]
     [SerializeField] Transform unloadTarget;
     [SerializeField] ParticleSystem boilerParticle;
-    [SerializeField] GameObject PathDrawObject;
+    [Title("Navmesh Path Draw References")]
+    [SerializeField] GameObject HayFullPathDraw;
+    [SerializeField] public GameObject UpgradePathDraw;
+    public List<GameObject> UnloadingHaycells = new();
 
     //==============================================
     [Title("Hay Cell Prefabs")]
     [SerializeField] GameObject cornHayCellPrefab;
     [SerializeField] GameObject cornRedHayCellPrefab;
     [SerializeField] GameObject cornNightHayCellPrefab;
+    [SerializeField] GameObject cornYellowHayCellPrefab;
     [SerializeField] GameObject wheatHayCellPrefab;
     [SerializeField] GameObject sunHayCellPrefab;
-    [Title("Hay Cell Materials")]
-    [SerializeField] Material cornHayMaterial;
-    [SerializeField] Material cornRedHayMaterial;
-    [SerializeField] Material cornNightHayMaterial;
-    [SerializeField] Material sunHayMaterial;
-    [SerializeField] Material wheatHayMaterial;
-
-
+    [Title("HayCell Materials")]
+    [SerializeField] Material[] hayCellMaterials;
     public int sunHayCollected;
     public int cornHayCollected;
     public int cornRedHayCollected;
     public int cornNightHayCollected;
+    public int cornYellowHayCollected;
     public int wheatHayCollected;
     public int totalHayCollected;
 
     //=================================================
     public int haySold;
     int index = 0;
-    float delay = 0;
+    public float delay = 0;
     bool IsFull;
     bool unloading;
+    bool FirstTimeUnloading;
     private void Awake()
     {
         instance = this;
@@ -72,9 +69,10 @@ public class HayStack : Stacker
         }
         CalculateCellPositions();
         UpdateMaxCarCapacity();
+        OnHayCollect?.Invoke(totalHayCollected);
         CheckCapacityFull();
     }
-
+    #region LoadingData
     void LoadSunHayCollected()
     {
         if (sunHayCollected > 0)
@@ -82,8 +80,13 @@ public class HayStack : Stacker
             for (int i = 0; i < sunHayCollected; i++)
             {
                 GameObject cell = Instantiate(sunHayCellPrefab, this.transform);
+                cell.GetComponent<BoxCollider>().enabled = false;
                 cell.transform.localPosition = previousPositions[index];
                 index++;
+                if (i == sunHayCollected - 1)
+                {
+                    CheckCapacityFull();
+                }
 
             }
         }
@@ -92,27 +95,6 @@ public class HayStack : Stacker
             index = 0;
         }
     }
-    //void LoadWheatHayCollected()
-    //{
-    //    if (wheatHayCollected > 0)
-    //    {
-    //        for (int i = 0; i < wheatHayCollected; i++)
-    //        {
-    //            GameObject cell = Instantiate(wheatHayCellPrefab, this.transform);
-    //            cell.transform.localPosition = previousPositions[index];
-    //            index++;
-    //            if (i == wheatHayCollected - 1)
-    //            {
-    //                LoadSunHayCollected();
-    //            }
-
-    //        }
-    //    }
-    //    else
-    //    {
-    //        LoadSunHayCollected();
-    //    }
-    //}
     void LoadCornRedHayCollected()
     {
         if (cornRedHayCollected > 0)
@@ -120,6 +102,7 @@ public class HayStack : Stacker
             for (int i = 0; i < cornRedHayCollected; i++)
             {
                 GameObject cell = Instantiate(cornRedHayCellPrefab, this.transform);
+                cell.GetComponent<BoxCollider>().enabled = false;
                 cell.transform.localPosition = previousPositions[index];
                 index++;
                 if (i == cornRedHayCollected - 1)
@@ -140,6 +123,7 @@ public class HayStack : Stacker
             for (int i = 0; i < cornNightHayCollected; i++)
             {
                 GameObject cell = Instantiate(cornNightHayCellPrefab, this.transform);
+                cell.GetComponent<BoxCollider>().enabled = false;
                 cell.transform.localPosition = previousPositions[index];
                 index++;
                 if (i == cornNightHayCollected - 1)
@@ -153,16 +137,17 @@ public class HayStack : Stacker
             LoadCornRedHayCollected();
         }
     }
-    void LoadCornHayCollected()
+    void LoadCornYellowHayCollected()
     {
-        if (cornHayCollected > 0)
+        if (cornYellowHayCollected > 0)
         {
-            for (int i = 0; i < cornHayCollected; i++)
+            for (int i = 0; i < cornYellowHayCollected; i++)
             {
-                GameObject cell = Instantiate(cornHayCellPrefab, this.transform);
+                GameObject cell = Instantiate(cornYellowHayCellPrefab, this.transform);
+                cell.GetComponent<BoxCollider>().enabled = false;
                 cell.transform.localPosition = previousPositions[index];
                 index++;
-                if (i == cornHayCollected - 1)
+                if (i == cornYellowHayCollected - 1)
                 {
                     LoadCornNightHayCollected();
                 }
@@ -173,6 +158,28 @@ public class HayStack : Stacker
             LoadCornNightHayCollected();
         }
     }
+    void LoadCornHayCollected()
+    {
+        if (cornHayCollected > 0)
+        {
+            for (int i = 0; i < cornHayCollected; i++)
+            {
+                GameObject cell = Instantiate(cornHayCellPrefab, this.transform);
+                cell.GetComponent<BoxCollider>().enabled = false;
+                cell.transform.localPosition = previousPositions[index];
+                index++;
+                if (i == cornHayCollected - 1)
+                {
+                    LoadCornYellowHayCollected();
+                }
+            }
+        }
+        else
+        {
+            LoadCornYellowHayCollected();
+        }
+    }
+    #endregion
     void UpdateMaxCarCapacity()
     {
         maxHayCapacity = TruckUpgradeManager.Instance.maxCarCapacity;
@@ -181,22 +188,26 @@ public class HayStack : Stacker
     }
     void LoadOnTractor(Collider hay)
     {
-        if (transform.childCount >= maxHayCapacity)
+        if (totalHayCollected >= maxHayCapacity)
         {
             CheckCapacityFull();
         }
         else
         {
             totalHayCollected++;
+            CheckCapacityFull();
             if (!AM.IsPlaying("Pickup Hay"))
+            {
                 AM.Play("Pickup Hay");
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
+            }
             OnHayCollect?.Invoke(totalHayCollected);
             hay.transform.SetParent(this.transform);
+            hay.GetComponent<BoxCollider>().enabled = false;
             CheckHayType(hay.gameObject, true);
             DOTween.Complete(hay.transform);
             hay.transform.DOLocalJump(cellPositions[currentR, currentC], 5, 1, 1f).SetEase(Ease.Linear);
             previousPositions.Add(cellPositions[currentR, currentC]);
-
             float randomAngle = UnityEngine.Random.Range(0, 360);
             hay.transform.DOLocalRotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad).OnComplete(() => hay.transform.localRotation = Quaternion.identity);
             UpdateGridPositions();
@@ -207,19 +218,17 @@ public class HayStack : Stacker
     }
     void CheckCapacityFull()
     {
-        if (transform.childCount >= maxHayCapacity)
+        if (totalHayCollected >= maxHayCapacity)
         {
             if (!IsFull)
             {
                 IsFull = true;
-                PathDrawObject.SetActive(true);
-                //for (int i = 0; i < transform.childCount; i++)
-                //{
-                // transform.GetChild(0).GetComponent<MeshRenderer>().material.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                cornHayMaterial.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                wheatHayMaterial.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                sunHayMaterial.DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
-                //}
+                UpgradePathDraw.SetActive(false);
+                HayFullPathDraw.SetActive(true);
+                for (int i = 0; i < hayCellMaterials.Length; i++)
+                    hayCellMaterials[i].DOColor(Color.red, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
+
             }
 
         }
@@ -228,26 +237,22 @@ public class HayStack : Stacker
             if (IsFull)
             {
                 IsFull = false;
-                PathDrawObject.SetActive(false);
-                //for (int i = 0; i < transform.childCount; i++)
-                // {
-                //DOTween.Rewind(transform.GetChild(0).GetComponent<MeshRenderer>().material);
-                DOTween.Rewind(cornHayMaterial);
-                DOTween.Rewind(wheatHayMaterial);
-                DOTween.Rewind(sunHayMaterial);
-
-                //}
-
+                HayFullPathDraw.SetActive(false);
+                RevertMaterialColour();
 
             }
 
         }
 
     }
+    int n = 0;
     IEnumerator UnloadFromTruck()
     {
-        while (unloading && transform.childCount > 0)
+        while (unloading && totalHayCollected > 0)
         {
+            if (!FirstTimeUnloading)
+                FirstTimeUnloading = true;
+
             if (!AudioManager.instance.IsPlaying("SellHay"))
             {
                 AudioManager.instance.Play("SellHay");
@@ -255,30 +260,35 @@ public class HayStack : Stacker
 
             }
             AudioManager.instance.Play("GoldSack");
+            //============================================
             totalHayCollected--;
             haySold++;
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
+            UnloadingHaycells.Add(hayCell);
             CheckHayType(hayCell, false);
-            hayCell.GetComponent<BoxCollider>().enabled = false;
             hayCell.transform.SetParent(null);
-            hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
+            hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
             {
-                OnHayCollect?.Invoke(totalHayCollected);
-                Destroy(hayCell);
+                Destroy(UnloadingHaycells[n]);
+                //UnloadingHaycells[n].SetActive(false);
+                n++;
+                //hayCell.SetActive(false);  
                 boilerParticle.Play();
-                CurrencyManager.Instance.RecieveCoins(1);
-                OnSellingHarvest?.Invoke();
-
             });
-            if ((previousPositions.Count - 1) > 0)
-                previousPositions.RemoveAt(previousPositions.Count - 1);
             delay += 0.000001f;
+            OnHayCollect?.Invoke(totalHayCollected);
+            CurrencyManager.Instance.RecieveCoins(1);
+            OnSellingHarvest?.Invoke();
+            if ((previousPositions.Count - 1) >= 0)
+                previousPositions.RemoveAt(previousPositions.Count - 1);
             ResetGridPositions();
+            RevertMaterialColour();
             CheckCapacityFull();
             yield return null;
 
         }
 
+        delay = 0;
     }
     private void CheckHayType(GameObject hayCell, bool Increment)
     {
@@ -327,6 +337,18 @@ public class HayStack : Stacker
             }
 
         }
+        else if (hayCell.CompareTag("HayCornYellow"))
+        {
+            if (Increment)
+            {
+                cornYellowHayCollected++;
+            }
+            else
+            {
+                cornYellowHayCollected--;
+            }
+
+        }
         else if (hayCell.CompareTag("HaySun"))
         {
             if (Increment)
@@ -354,6 +376,10 @@ public class HayStack : Stacker
         {
             LoadOnTractor(other);
         }
+        else if (other.CompareTag("HayCornYellow"))
+        {
+            LoadOnTractor(other);
+        }
         else if (other.CompareTag("HayWheat"))
         {
             LoadOnTractor(other);
@@ -364,19 +390,39 @@ public class HayStack : Stacker
         }
         else if (other.CompareTag("Unload"))
         {
-
             unloading = true;
             StartCoroutine(UnloadFromTruck());
+            //UnloadFromTruck();
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Unload"))
         {
+            if (PlayerPrefs.GetInt("FirstTimeUnloading") == 0 && (LevelMenuManager.Instance.currentLevel == 0) && FirstTimeUnloading)
+            {
+                //Debug.LogError("UpgradePath");
+                UpgradePathDraw.SetActive(true);
 
+            }
             unloading = false;
         }
 
     }
-
+    private void OnApplicationQuit()
+    {
+        RevertMaterialColour();
+    }
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            RevertMaterialColour();
+        }
+    }
+    public void RevertMaterialColour()
+    {
+        for (int i = 0; i < hayCellMaterials.Length; i++)
+            DOTween.Rewind(hayCellMaterials[i]);
+    }
 }

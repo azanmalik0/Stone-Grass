@@ -14,7 +14,7 @@ public abstract class Stacker : SerializedMonoBehaviour
     [SerializeField] protected float cellHeight = 1.0f;
     [SerializeField] protected Vector3 gridOffset;
     [SerializeField] protected Vector3 gridRotationOffset;
-     public float InitialYOffset;
+    public float InitialYOffset;
     [TableMatrix]
     public Vector3[,] cellPositions;
     public List<Vector3> previousPositions = new();
@@ -24,7 +24,11 @@ public abstract class Stacker : SerializedMonoBehaviour
 
     private void Start()
     {
-        CalculateCellPositions();
+        //if (PlayerPrefs.GetInt("NewGame") == 0)
+        //{
+        //    CalculateCellPositions();
+        //    PlayerPrefs.SetInt("NewGame", 1);
+        //}
     }
     protected void SetGridYOffset(float initial)
     {

@@ -1,9 +1,4 @@
-using DG.Tweening;
-using PT.Garden;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class MovementController : MonoBehaviour
 {
@@ -48,7 +43,6 @@ public class MovementController : MonoBehaviour
         HandleRotation();
 
     }
-
     public void HandleMovement()
     {
         if (IsInMenu)
@@ -77,14 +71,13 @@ public class MovementController : MonoBehaviour
         }
 
     }
-
     void SlowDownTruck(GameState state)
     {
         if (state == GameState.CuttingGrass)
             movementSpeed = 250;
         else if (state == GameState.NotCuttingGrass)
-            movementSpeed=Mathf.Lerp(250, 500, 1);
-            //movementSpeed = 500;
+            movementSpeed = 500;
+            //movementSpeed=Mathf.Lerp(250, 500, 1);
     }
     void ToggleJoyStickInput(GameState state)
     {

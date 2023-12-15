@@ -1,16 +1,11 @@
 using DG.Tweening;
-using PT.Garden;
 using Sirenix.OdinInspector;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelMenuManager : MonoBehaviour
 {
     public static LevelMenuManager Instance;
-    AudioManager AM;
     [TabGroup("Collections")][SerializeField] GameObject[] levelObjects;
     [TabGroup("Collections")][SerializeField] GameObject[] levelButtons;
     //===============================================
@@ -18,8 +13,14 @@ public class LevelMenuManager : MonoBehaviour
     [SerializeField] GameObject loadingPanel;
     [SerializeField] CanvasGroup levelUnlockedPopup;
     //===============================================
+    [SerializeField] Sprite currentLevelSprite;
+
+    //===============================================
     public int currentLevel = 0;
     public int loadedLevel = 0;
+    //===============================================
+    AudioManager AM;
+    AdsManager adsManager;
     private void Awake()
     {
         Instance = this;
@@ -28,20 +29,22 @@ public class LevelMenuManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += OpenLevelSelectionMenu;
-        ProgressBarManager.OnFirstStarUnlock += UnlockNextLevelButton;
-        ProgressBarManager.OnFirstStarUnlock += ShowLevelUnlockedPopup;
+        ProgressBarManager.OnSecondStarUnlock += UnlockNextLevelButton;
+        ProgressBarManager.OnSecondStarUnlock += ShowLevelUnlockedPopup;
     }
     private void OnDisable()
     {
         GameManager.OnGameStateChanged -= OpenLevelSelectionMenu;
-        ProgressBarManager.OnFirstStarUnlock -= UnlockNextLevelButton;
-        ProgressBarManager.OnFirstStarUnlock -= ShowLevelUnlockedPopup;
+        ProgressBarManager.OnSecondStarUnlock -= UnlockNextLevelButton;
+        ProgressBarManager.OnSecondStarUnlock -= ShowLevelUnlockedPopup;
 
     }
     private void Start()
     {
         AM = AudioManager.instance;
+        adsManager = AdsManager.Instance;
         levelObjects[currentLevel].SetActive(true);
+        levelButtons[currentLevel].GetComponent<Image>().sprite = currentLevelSprite;
     }
     public void OnButtonClick(string button)
     {
@@ -52,21 +55,20 @@ public class LevelMenuManager : MonoBehaviour
         }
 
     }
-
-
     public void LoadLevel(int level)
     {
         AM.Play("Pop");
+        adsManager.ShowNonVideoInterstitialAd();
         if (currentLevel != level)
         {
             // PercentageChecker.Instance.SaveLevelTexture();
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
             ES3AutoSaveMgr.Current.Save();
+            HayStack.instance.RevertMaterialColour();
             loadingPanel.SetActive(true);
         }
     }
-
     void OpenLevelSelectionMenu(GameState state)
     {
         if (state == GameState.InLevelMenu)
@@ -77,13 +79,14 @@ public class LevelMenuManager : MonoBehaviour
         levelSelectionPanel.gameObject.SetActive(false);
         GameManager.Instance.UpdateGameState(GameState.InGame);
     }
-
     void UnlockNextLevelButton()
     {
-        levelButtons[currentLevel + 1].transform.GetChild(1).gameObject.SetActive(false);
-        levelButtons[currentLevel + 1].GetComponent<Button>().interactable = true;
+        if (currentLevel < 9)
+        {
+            levelButtons[currentLevel + 1].transform.GetChild(1).gameObject.SetActive(false);
+            levelButtons[currentLevel + 1].GetComponent<Button>().interactable = true;
+        }
     }
-
     void ShowLevelUnlockedPopup()
     {
         print("popup========<<");
@@ -92,16 +95,18 @@ public class LevelMenuManager : MonoBehaviour
             DG.Tweening.Sequence sequence = DOTween.Sequence();
             sequence.Append(levelUnlockedPopup.DOFade(1, 1.5f).SetEase(Ease.Linear))
                 .Insert(3, levelUnlockedPopup.DOFade(0, 1.5f).SetEase(Ease.Linear));
-
+            //adsManager.ShowNonVideoInterstitialAd();
             PlayerPrefs.SetInt($"PopupShown{LevelMenuManager.Instance.currentLevel}", 1);
         }
     }
-
-    public void UnlockNextLevel()
+    public void LoadNextLevel()
     {
+        adsManager.ShowNonVideoInterstitialAd();
         levelObjects[currentLevel].SetActive(false);
         currentLevel++;
         ES3AutoSaveMgr.Current.Save();
+        HayStack.instance.RevertMaterialColour();
         loadingPanel.SetActive(true);
     }
+
 }

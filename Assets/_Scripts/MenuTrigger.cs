@@ -12,18 +12,18 @@ public class MenuTrigger : MonoBehaviour
         if (other.CompareTag("UpgradeZone"))
         {
             GameManager.Instance.UpdateGameState(GameState.Upgrading);
-            shopZoneCollider.enabled = false;
+            //shopZoneCollider.enabled = false;
         }
         else if (other.CompareTag("Shop Zone"))
         {
             GameManager.Instance.UpdateGameState(GameState.InShop);
-            truckUpgradeZoneCollider.enabled = false;
+            //truckUpgradeZoneCollider.enabled = false;
         }
         else if (other.CompareTag("FarmUpgradeZone") && this.CompareTag("Farmer_Stack"))
         {
             GameManager.Instance.UpdateGameState(GameState.InFarmUpgrade);
         }
-        else if (other.CompareTag("LevelZone") && this.CompareTag("Farmer_Stack"))
+        else if (other.CompareTag("LevelZone") /*&& this.CompareTag("Farmer_Stack")*/)
         {
             GameManager.Instance.UpdateGameState(GameState.InLevelMenu);
         }
@@ -37,11 +37,11 @@ public class MenuTrigger : MonoBehaviour
     {
         if (other.CompareTag("UpgradeZone"))
         {
-            shopZoneCollider.enabled = true;
+           // shopZoneCollider.enabled = true;
         }
         else if (other.CompareTag("Shop Zone"))
         {
-            truckUpgradeZoneCollider.enabled = true;
+            //truckUpgradeZoneCollider.enabled = true;
         }
         else if (other.CompareTag("GrassField"))
         {

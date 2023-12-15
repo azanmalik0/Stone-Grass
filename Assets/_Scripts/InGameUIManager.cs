@@ -6,12 +6,18 @@ using UnityEngine.UI;
 
 public class InGameUIManager : MonoBehaviour
 {
+    public static InGameUIManager Instance; 
     AudioManager AM;
     [SerializeField] Image settingsPanel;
-    [SerializeField] GameObject inGameUI;
+    [SerializeField] public GameObject inGameUI;
     [SerializeField] GameObject joyStickStopper;
     [SerializeField] RectTransform nextLevelPopup;
+    public GameObject progressBar;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         AM = AudioManager.instance;
@@ -19,12 +25,12 @@ public class InGameUIManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += SetjoyStickState;
-        ProgressBarManager.OnSecondStarUnlock += EnableNextLevelPopup;
+        ProgressBarManager.OnThirdStarUnlock += EnableNextLevelButtonPopup;
     }
     private void OnDisable()
     {
         GameManager.OnGameStateChanged -= SetjoyStickState;
-        ProgressBarManager.OnSecondStarUnlock -= EnableNextLevelPopup;
+        ProgressBarManager.OnThirdStarUnlock -= EnableNextLevelButtonPopup;
     }
     public void OnButtonClick(string button)
     {
@@ -43,6 +49,7 @@ public class InGameUIManager : MonoBehaviour
         if (button == "PrivacyPolicy")
         {
             AM.Play("Pop");
+            Application.OpenURL("https://sites.google.com/view/biza-studio/home");
             //=================================
         }
 
@@ -61,7 +68,7 @@ public class InGameUIManager : MonoBehaviour
         }
 
     }
-    void EnableNextLevelPopup()
+    void EnableNextLevelButtonPopup(int DontMind)
     {
         if (LevelMenuManager.Instance.currentLevel < 9)
         {

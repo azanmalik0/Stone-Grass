@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("sunHayCollected", "cornHayCollected", "wheatHayCollected", "totalHayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
+	[ES3PropertiesAttribute("sunHayCollected", "cornHayCollected", "cornRedHayCollected", "cornNightHayCollected", "cornYellowHayCollected", "wheatHayCollected", "totalHayCollected", "gridOffset", "previousPositions", "currentR", "currentC")]
 	public class ES3UserType_HayStack : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -18,6 +18,9 @@ namespace ES3Types
 			
 			writer.WriteProperty("sunHayCollected", instance.sunHayCollected, ES3Type_int.Instance);
 			writer.WriteProperty("cornHayCollected", instance.cornHayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("cornRedHayCollected", instance.cornRedHayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("cornNightHayCollected", instance.cornNightHayCollected, ES3Type_int.Instance);
+			writer.WriteProperty("cornYellowHayCollected", instance.cornYellowHayCollected, ES3Type_int.Instance);
 			writer.WriteProperty("wheatHayCollected", instance.wheatHayCollected, ES3Type_int.Instance);
 			writer.WriteProperty("totalHayCollected", instance.totalHayCollected, ES3Type_int.Instance);
 			writer.WritePrivateField("gridOffset", instance);
@@ -39,6 +42,15 @@ namespace ES3Types
 						break;
 					case "cornHayCollected":
 						instance.cornHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "cornRedHayCollected":
+						instance.cornRedHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "cornNightHayCollected":
+						instance.cornNightHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "cornYellowHayCollected":
+						instance.cornYellowHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "wheatHayCollected":
 						instance.wheatHayCollected = reader.Read<System.Int32>(ES3Type_int.Instance);

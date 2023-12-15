@@ -18,7 +18,6 @@ public class VibrationManager : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("Vibration") == 1)
         {
-            print("Vibrate");
             Vibration.Vibrate();
         }
 
@@ -27,7 +26,6 @@ public class VibrationManager : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("Vibration") == 1)
         {
-            print("Vibrate");
             Vibration.VibrateAndroid(ms);
         }
 
@@ -36,7 +34,6 @@ public class VibrationManager : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("Vibration") == 1)
         {
-            print("Vibrate");
             if (type == SpecialVibrationTypes.Peek)
                 Vibration.VibratePeek();
             if (type == SpecialVibrationTypes.Nope)

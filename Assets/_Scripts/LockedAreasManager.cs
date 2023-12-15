@@ -116,8 +116,7 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
-            DOTween.Kill(henhouseLocked_CRT);
-            henhouseLockedPanel.SetActive(false);
+             henhouseLockedPanel.SetActive(false);
             Loading = false;
         }
         else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
@@ -139,7 +138,7 @@ public class LockedAreasManager : MonoBehaviour
     }
     void GiveCoinsToHenhouse()
     {
-        if (CurrencyManager.coins > 0)
+        if (CurrencyManager.Instance.coins > 0)
         {
             if (henhouseLocked_CR > 0)
             {
@@ -165,11 +164,11 @@ public class LockedAreasManager : MonoBehaviour
     }
     void GiveCoinsToBarn()
     {
-        if (CurrencyManager.coins > 0)
+        if (CurrencyManager.Instance.coins > 0)
         {
             if (barnLocked_CR > 0)
             {
-                barnLocked_CR-= decrementAmount;
+                barnLocked_CR -= decrementAmount;
                 barnLocked_CRT.text = barnLocked_CR.ToString();
                 CurrencyManager.Instance.DeductCoins(decrementAmount);
                 Loading = false;
@@ -187,11 +186,11 @@ public class LockedAreasManager : MonoBehaviour
     }
     void GiveCoinsToFarm()
     {
-        if (CurrencyManager.coins > 0 && CanUnlock)
+        if (CurrencyManager.Instance.coins > 0 && CanUnlock)
         {
             if (farmLocked_CR > 0)
             {
-                farmLocked_CR-= decrementAmount;
+                farmLocked_CR -= decrementAmount;
                 farmLocked_CRT.text = farmLocked_CR.ToString();
                 CurrencyManager.Instance.DeductCoins(decrementAmount);
                 Loading = false;
@@ -231,7 +230,6 @@ public class LockedAreasManager : MonoBehaviour
             henhouseInActive.SetActive(false);
             henhouse_smokeParticle.Play();
             henhouseActive.SetActive(true);
-            //henhouseActive.transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack).OnComplete(() => { });
             GameManager.Instance.UpdateGameState(GameState.InGame);
             henhouseUnlocked = true;
             AreaUnlocked?.Invoke("Henhouse");
