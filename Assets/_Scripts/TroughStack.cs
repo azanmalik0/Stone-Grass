@@ -29,7 +29,6 @@ public class TroughStack : Stacker
         SetGridYOffset(0.42f);
         CalculateCellPositions();
         LoadFeedCollected();
-        DisplayCrudeTroughCounter();
     }
     private void LoadFeedCollected()
     {
@@ -41,6 +40,7 @@ public class TroughStack : Stacker
             {
                 if (feedStored >= maxHayCapacity)
                 {
+                    DisplayCrudeTroughCounter();
                     if (animalType == AnimalType.Chicken)
                         OnTroughFull?.Invoke(AnimalType.Chicken);
                     if (animalType == AnimalType.Cow)

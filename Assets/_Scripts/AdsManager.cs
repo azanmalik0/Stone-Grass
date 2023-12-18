@@ -1120,6 +1120,22 @@ public class AdsManager : MonoBehaviour
     //    // reviewed or not, or even whether the review dialog was shown. Thus, no
     //    // matter the result, we continue our app flow.
     //}
+    public void SSTOOL(GameObject obj)
+    {
+        if (!SSTools.call)
+        {
+            DontDestroyOnLoad(obj);
+            SSTools.call = true;
+            StartCoroutine(Dis(obj));
+        }
+    }
+
+    IEnumerator Dis(GameObject obj)
+    {
+        yield return new WaitForSecondsRealtime(1f);
+        Destroy(obj);
+        SSTools.call = false;
+    }
 
 
 }

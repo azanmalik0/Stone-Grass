@@ -191,25 +191,41 @@ public class TruckUpgradeManager : MonoBehaviour
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("IncreaseRotationSpeed");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("IncreaseRotationSpeed");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardAddWheels")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("AddWheels");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("AddWheels");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardAddSawBlades")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("AddSawBlades");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("AddSawBlades");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardIncreaseCarCapacity")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("IncreaseCarCapacity");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("IncreaseCarCapacity");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
 
     }

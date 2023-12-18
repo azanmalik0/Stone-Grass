@@ -224,43 +224,66 @@ public class FarmUpgradeManager : MonoBehaviour
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("AddChickens");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("AddChickens");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
         }
         if (button == "RewardCowNumberIncrease")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("AddCows");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("AddCows");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardChickenTrayCapacityIncrease")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("ChickenTray");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("ChickenTray");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardCowTrayCapacityIncrease")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("CowTray");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("CowTray");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardFarmerCapacityIncrease")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("IncreaseFarmerCapacity");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("IncreaseFarmerCapacity");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
         if (button == "RewardStorageCapacityIncrease")
         {
             AM.Play("Pop");
             VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            adsManager.ShowRewardedAd("IncreaseStorageCapacity");
+            if (adsManager.isRewardedAdLoaded())
+                adsManager.ShowRewardedAd("IncreaseStorageCapacity");
+            else
+                SSTools.ShowMessage("Video not found!", SSTools.Position.bottom, SSTools.Time.oneSecond);
+
         }
 
     }
     public void IncreaseStorageCapacity(int increment)
     {
-        
+
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(maxStorageCapacity))
@@ -300,7 +323,7 @@ public class FarmUpgradeManager : MonoBehaviour
     }
     public void IncreaseFarmerCapacity(int increment)
     {
-        
+
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(maxFarmerCapacity))
@@ -340,7 +363,7 @@ public class FarmUpgradeManager : MonoBehaviour
     }
     public void IncreaseCowTrayCapacity(int increment)
     {
-       
+
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(maxCowTrayCapacity))
@@ -421,7 +444,7 @@ public class FarmUpgradeManager : MonoBehaviour
     public void AddCows()
     {
 
-        
+
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(cowNumbers_CR))

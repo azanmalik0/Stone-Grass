@@ -7,8 +7,8 @@ using UnityEngine.AI;
 public class AIWander : MonoBehaviour
 {
     public AnimalType animalType;
-    private NavMeshAgent agent;
-    private Animator animator;
+    [SerializeField] NavMeshAgent agent;
+    [SerializeField] Animator animator;
     private bool isWandering;
     private bool isIdleHeadTurn;
     [SerializeField] Transform targetPosition;
@@ -26,8 +26,7 @@ public class AIWander : MonoBehaviour
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animator = GetComponentInChildren<Animator>();
+       
         isWandering = false;
         isIdleHeadTurn = false;
         nextHeadTurnTime = Random.Range(minHeadTurnTime, maxHeadTurnTime);

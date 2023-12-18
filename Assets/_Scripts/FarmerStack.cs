@@ -138,6 +138,7 @@ public class FarmerStack : Stacker
     private void UpdateMaxFarmerCapacity()
     {
         maxHayCapacity = FarmUpgradeManager.Instance.maxFarmerCapacity;
+        CheckMax();
     }
     private void OnTriggerStay(Collider other)
     {
@@ -174,11 +175,13 @@ public class FarmerStack : Stacker
     {
         if (other.CompareTag("HayLoft"))
         {
+            AudioManager.instance.Stop("PickupStuff");
             RefreshGrid();
             IsLoading = false;
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
+            AudioManager.instance.Stop("PickupStuff");
             RefreshGrid();
             IsLoading = false;
         }
@@ -264,6 +267,7 @@ public class FarmerStack : Stacker
         {
             if (totalItems >= maxHayCapacity - 1)
             {
+                AudioManager.instance.Stop("PickupStuff");
                 farmerCapacityFullText.gameObject.SetActive(true);
                 RefreshGrid();
                 IsLoading = false;
@@ -271,11 +275,14 @@ public class FarmerStack : Stacker
             }
             else if (other.GetComponent<ProductStack>().eggsGenerated <= 0)
             {
+                AudioManager.instance.Stop("PickupStuff");
                 IsLoading = false;
                 RefreshGrid();
             }
             else if (other.GetComponent<ProductStack>().eggsGenerated > 0)
             {
+                if (!AudioManager.instance.IsPlaying("PickupStuff"))
+                    AudioManager.instance.Play("PickupStuff");
                 eggCollected++;
                 totalItems++;
                 other.GetComponent<ProductStack>().eggsGenerated--;
@@ -311,6 +318,8 @@ public class FarmerStack : Stacker
             }
             else if (other.GetComponent<ProductStack>().milkGenerated > 0)
             {
+                if (!AudioManager.instance.IsPlaying("PickupStuff"))
+                    AudioManager.instance.Play("PickupStuff");
                 milkCollected++;
                 totalItems++;
                 other.GetComponent<ProductStack>().milkGenerated--;
