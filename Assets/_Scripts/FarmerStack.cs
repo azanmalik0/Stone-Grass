@@ -216,7 +216,7 @@ public class FarmerStack : Stacker
             Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
             feedCell.SetParent(this.transform);
             other.GetComponent<HayLoft>().feedStored--;
-            if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) > 0)
+            if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) >= 0)
                 other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
             feedCell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
             feedCell.DOLocalJump(cellPositions[currentC, currentR], 3, 1, 0.3f).SetDelay(delay).SetEase(Ease.InOutSine);
@@ -252,7 +252,7 @@ public class FarmerStack : Stacker
             money.DOLocalJump(coinPos.localPosition, 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => Destroy(money.gameObject));
             delay += 0.001f;
             other.GetComponent<MoneyStack>().ResetGridPositions();
-            if ((other.GetComponent<MoneyStack>().previousPositions.Count - 1) > 0)
+            if ((other.GetComponent<MoneyStack>().previousPositions.Count - 1) >= 0)
                 other.GetComponent<MoneyStack>().previousPositions.RemoveAt(other.GetComponent<MoneyStack>().previousPositions.Count - 1);
             other.GetComponent<MoneyStack>().coinsStored--;
             IsLoading = false;
@@ -281,9 +281,9 @@ public class FarmerStack : Stacker
                 other.GetComponent<ProductStack>().eggsGenerated--;
                 Transform product = other.transform.GetChild(other.transform.childCount - 1);
                 product.SetParent(this.transform);
-                product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
+                product.DOLocalJump(cellPositions[currentC, currentR], 3, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
                 previousPositions.Add(cellPositions[currentC, currentR]);
-                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) > 0)
+                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
                     other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
                 delay += 0.0001f;
                 UpdateGridPositions();
@@ -317,9 +317,9 @@ public class FarmerStack : Stacker
                 Transform product = other.transform.GetChild(other.transform.childCount - 1);
                 product.SetParent(this.transform);
                 product.transform.GetChild(0).localScale = new(0.38f, 1.1f, 0.791418f);
-                product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutQuint).OnComplete(() => product.localRotation = Quaternion.identity);
+                product.DOLocalJump(cellPositions[currentC, currentR], 3, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutQuint).OnComplete(() => product.localRotation = Quaternion.identity);
                 previousPositions.Add(cellPositions[currentC, currentR]);
-                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) > 0)
+                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
                     other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
                 delay += 0.0001f;
                 UpdateGridPositions();

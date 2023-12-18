@@ -17,14 +17,10 @@ public class ProductStack : Stacker
     [SerializeField] GameObject milkPrefab;
 
     float delay;
-    //public int products;
     public int eggsGenerated;
     public int milkGenerated;
     bool IsLoading;
-    private void Awake()
-    {
-
-    }
+   
     private void Start()
     {
         SetGridYOffset(0);
@@ -58,12 +54,6 @@ public class ProductStack : Stacker
     {
         Timer.OnTimeOut += GenerateProduct;
     }
-    private void OnDisable()
-    {
-
-        Timer.OnTimeOut -= GenerateProduct;
-    }
-
     public void GenerateProduct(AnimalType animal)
     {
         if (animal == animalType)
@@ -96,7 +86,7 @@ public class ProductStack : Stacker
                 feedCell.transform.SetParent(null);
                 hayParent.GetComponent<TroughStack>().feedStored--;
                 hayParent.GetComponent<TroughStack>().DisplayCrudeTroughCounter();
-                if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) > 0)
+                if ((hayParent.GetComponent<TroughStack>().previousPositions.Count - 1) >= 0)
                     hayParent.GetComponent<TroughStack>().previousPositions.RemoveAt(hayParent.GetComponent<TroughStack>().previousPositions.Count - 1);
                 Destroy(feedCell);
                 GenerateProduct(animal);
@@ -107,7 +97,7 @@ public class ProductStack : Stacker
     void LoadProductOnShelf(GameObject product)
     {
         product.transform.SetParent(this.transform);
-        product.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
+        product.transform.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
 
         if (type == ProductType.Egg)
         {
@@ -126,14 +116,9 @@ public class ProductStack : Stacker
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
         IsLoading = false;
     }
-
-    private void OnApplicationPause(bool pause)
+    private void OnDisable()
     {
-        if (pause)
-        {
-
-        }
+        Timer.OnTimeOut -= GenerateProduct;
     }
-
 
 }

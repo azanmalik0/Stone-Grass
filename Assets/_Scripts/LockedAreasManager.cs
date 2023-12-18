@@ -11,6 +11,7 @@ public class LockedAreasManager : MonoBehaviour
 {
     public static LockedAreasManager Instance;
     AudioManager AM;
+    AdsManager adsManager;
     public static event Action<string> AreaUnlocked;
     //=======================================================
     [Title("References")]
@@ -68,6 +69,7 @@ public class LockedAreasManager : MonoBehaviour
     private void Start()
     {
         AM = AudioManager.instance;
+        adsManager = AdsManager.Instance;
         henhouseLocked_CRT.text = henhouseLocked_CR.ToString();
         barnLocked_CRT.text = barnLocked_CR.ToString();
         farmLocked_CRT.text = farmLocked_CR.ToString();
@@ -89,8 +91,8 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (!Loading)
             {
-                farmLockedPanel.SetActive(true);
                 Loading = true;
+                farmLockedPanel.SetActive(true);
                 GiveCoinsToFarm();
             }
         }
@@ -98,25 +100,21 @@ public class LockedAreasManager : MonoBehaviour
         {
             if (!Loading)
             {
-                barnLockedPanel.SetActive(true);
                 Loading = true;
+                barnLockedPanel.SetActive(true);
                 GiveCoinsToBarn();
             }
         }
         else if (other.CompareTag("MarketUnlock") && this.CompareTag("Farmer_Stack"))
         {
-            if (!Loading)
-            {
-                marketLockedPanel.SetActive(true);
-                Loading = true;
-            }
+            marketLockedPanel.SetActive(true);
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("HenhouseUnlock") && this.CompareTag("Farmer_Stack"))
         {
-             henhouseLockedPanel.SetActive(false);
+            henhouseLockedPanel.SetActive(false);
             Loading = false;
         }
         else if (other.CompareTag("FarmUnlock") && this.CompareTag("Farmer_Stack"))
@@ -186,7 +184,7 @@ public class LockedAreasManager : MonoBehaviour
     }
     void GiveCoinsToFarm()
     {
-        if (CurrencyManager.Instance.coins > 0 && CanUnlock)
+        if (CurrencyManager.Instance.coins > 0 && PlayerPrefs.GetInt("FarmCanUnlock") == 1)
         {
             if (farmLocked_CR > 0)
             {
@@ -215,28 +213,46 @@ public class LockedAreasManager : MonoBehaviour
     {
         if (area == "Henhouse" || area == "Barn")
         {
-            CanUnlock = true;
+            PlayerPrefs.SetInt("FarmCanUnlock", 1);
             farmCannotUnlockedPanel.SetActive(false);
             farmCanUnlockPanel.SetActive(true);
+
 
             if (!marketUnlocked)
             {
                 UnlockArea("Market");
             }
+
+            if (area == "Henhouse")
+            {
+                adsManager.LogEvent("henhouse_unlocked");
+                AM.Play("AreaUnlock");
+                henhouseInActive.SetActive(false);
+                henhouse_smokeParticle.Play();
+                henhouseActive.SetActive(true);
+                GameManager.Instance.UpdateGameState(GameState.InGame);
+                henhouseUnlocked = true;
+                AreaUnlocked?.Invoke("Henhouse");
+                Loading = false;
+            }
+            else if (area == "Barn")
+            {
+                adsManager.LogEvent("barn_unlocked");
+                AM.Play("AreaUnlock");
+                barnInActive.SetActive(false);
+                barn_smokeParticle.Play();
+                barnActive.SetActive(true);
+                GameManager.Instance.UpdateGameState(GameState.InGame);
+                barnUnlocked = true;
+                AreaUnlocked?.Invoke("Barn");
+                Loading = false;
+            }
         }
-        if (area == "Henhouse")
+
+        else if (area == "Farm")
         {
+            adsManager.LogEvent("barn_unlocked");
             AM.Play("AreaUnlock");
-            henhouseInActive.SetActive(false);
-            henhouse_smokeParticle.Play();
-            henhouseActive.SetActive(true);
-            GameManager.Instance.UpdateGameState(GameState.InGame);
-            henhouseUnlocked = true;
-            AreaUnlocked?.Invoke("Henhouse");
-            Loading = false;
-        }
-        if (area == "Farm")
-        {
             farmInActive.SetActive(false);
             farm_smokeParticle.Play();
             farmActive.SetActive(true);
@@ -244,21 +260,11 @@ public class LockedAreasManager : MonoBehaviour
             farmUnlocked = true;
             Loading = false;
         }
-        if (area == "Barn")
-        {
-            AM.Play("AreaUnlock");
-            barnInActive.SetActive(false);
-            barn_smokeParticle.Play();
-            barnActive.SetActive(true);
-            GameManager.Instance.UpdateGameState(GameState.InGame);
-            barnUnlocked = true;
-            AreaUnlocked?.Invoke("Barn");
-            Loading = false;
-        }
-        if (area == "Market")
+
+        else if (area == "Market")
         {
             marketInActive.SetActive(false);
-            market_smokeParticle.Play();
+            //market_smokeParticle.Play();
             marketActive.SetActive(true);
             GameManager.Instance.UpdateGameState(GameState.InGame);
             marketUnlocked = true;

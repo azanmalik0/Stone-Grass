@@ -147,10 +147,10 @@ public class TroughStack : Stacker
                     //DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
                     DisplayCrudeTroughCounter();
-                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
-                    crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
+                    crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
                     crudeCell.localRotation = Quaternion.identity;
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     UpdateGridPositions();

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace ES3Types
 {
 	[UnityEngine.Scripting.Preserve]
-	[ES3PropertiesAttribute("maxChickenTray_CR", "maxCowTray_CR", "cowNumbers_CR", "chickenNumbers_CR", "maxStorageCapacity_CR", "maxFarmerCapacity_CR")]
+	[ES3PropertiesAttribute("currentChickens", "currentCows", "maxChickenTray_CR", "maxCowTray_CR", "cowNumbers_CR", "chickenNumbers_CR", "maxChickenTrayCapacity", "maxCowTrayCapacity", "maxStorageCapacity", "maxStorageCapacity_CR", "maxFarmerCapacity", "maxFarmerCapacity_CR")]
 	public class ES3UserType_FarmUpgradeManager : ES3ComponentType
 	{
 		public static ES3Type Instance = null;
@@ -16,11 +16,17 @@ namespace ES3Types
 		{
 			var instance = (FarmUpgradeManager)obj;
 			
+			writer.WritePrivateField("currentChickens", instance);
+			writer.WritePrivateField("currentCows", instance);
 			writer.WriteProperty("maxChickenTray_CR", instance.maxChickenTray_CR, ES3Type_int.Instance);
 			writer.WriteProperty("maxCowTray_CR", instance.maxCowTray_CR, ES3Type_int.Instance);
 			writer.WriteProperty("cowNumbers_CR", instance.cowNumbers_CR, ES3Type_int.Instance);
 			writer.WriteProperty("chickenNumbers_CR", instance.chickenNumbers_CR, ES3Type_int.Instance);
+			writer.WriteProperty("maxChickenTrayCapacity", instance.maxChickenTrayCapacity, ES3Type_int.Instance);
+			writer.WriteProperty("maxCowTrayCapacity", instance.maxCowTrayCapacity, ES3Type_int.Instance);
+			writer.WriteProperty("maxStorageCapacity", instance.maxStorageCapacity, ES3Type_int.Instance);
 			writer.WriteProperty("maxStorageCapacity_CR", instance.maxStorageCapacity_CR, ES3Type_int.Instance);
+			writer.WriteProperty("maxFarmerCapacity", instance.maxFarmerCapacity, ES3Type_int.Instance);
 			writer.WriteProperty("maxFarmerCapacity_CR", instance.maxFarmerCapacity_CR, ES3Type_int.Instance);
 		}
 
@@ -32,6 +38,12 @@ namespace ES3Types
 				switch(propertyName)
 				{
 					
+					case "currentChickens":
+					instance = (FarmUpgradeManager)reader.SetPrivateField("currentChickens", reader.Read<System.Int32>(), instance);
+					break;
+					case "currentCows":
+					instance = (FarmUpgradeManager)reader.SetPrivateField("currentCows", reader.Read<System.Int32>(), instance);
+					break;
 					case "maxChickenTray_CR":
 						instance.maxChickenTray_CR = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
@@ -44,8 +56,20 @@ namespace ES3Types
 					case "chickenNumbers_CR":
 						instance.chickenNumbers_CR = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
+					case "maxChickenTrayCapacity":
+						instance.maxChickenTrayCapacity = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "maxCowTrayCapacity":
+						instance.maxCowTrayCapacity = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "maxStorageCapacity":
+						instance.maxStorageCapacity = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
 					case "maxStorageCapacity_CR":
 						instance.maxStorageCapacity_CR = reader.Read<System.Int32>(ES3Type_int.Instance);
+						break;
+					case "maxFarmerCapacity":
+						instance.maxFarmerCapacity = reader.Read<System.Int32>(ES3Type_int.Instance);
 						break;
 					case "maxFarmerCapacity_CR":
 						instance.maxFarmerCapacity_CR = reader.Read<System.Int32>(ES3Type_int.Instance);

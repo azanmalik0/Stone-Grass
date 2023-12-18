@@ -20,16 +20,7 @@ public abstract class Stacker : SerializedMonoBehaviour
     public List<Vector3> previousPositions = new();
     public int currentR = 0;
     public int currentC = 0;
-
-
-    private void Start()
-    {
-        //if (PlayerPrefs.GetInt("NewGame") == 0)
-        //{
-        //    CalculateCellPositions();
-        //    PlayerPrefs.SetInt("NewGame", 1);
-        //}
-    }
+   
     protected void SetGridYOffset(float initial)
     {
         InitialYOffset = initial;

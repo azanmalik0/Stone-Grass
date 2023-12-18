@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
         PlayBGM();
         Application.targetFrameRate = 60;
         UpdateGameState(GameState.Tractor);
+        adsManager.LogEvent("game_launched");
     }
     void SetDefault()
     {

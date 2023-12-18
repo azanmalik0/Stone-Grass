@@ -45,6 +45,7 @@ public class LevelMenuManager : MonoBehaviour
         adsManager = AdsManager.Instance;
         levelObjects[currentLevel].SetActive(true);
         levelButtons[currentLevel].GetComponent<Image>().sprite = currentLevelSprite;
+        adsManager.LogEvent($"game_launched_{currentLevel}");
     }
     public void OnButtonClick(string button)
     {
@@ -57,6 +58,7 @@ public class LevelMenuManager : MonoBehaviour
     }
     public void LoadLevel(int level)
     {
+        adsManager.LogEvent($"level_selected_{level}");
         AM.Play("Pop");
         adsManager.ShowNonVideoInterstitialAd();
         if (currentLevel != level)
@@ -101,6 +103,7 @@ public class LevelMenuManager : MonoBehaviour
     }
     public void LoadNextLevel()
     {
+        adsManager.LogEvent($"level_loaded_{currentLevel}");
         adsManager.ShowNonVideoInterstitialAd();
         levelObjects[currentLevel].SetActive(false);
         currentLevel++;

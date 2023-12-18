@@ -227,6 +227,7 @@ public class TruckUpgradeManager : MonoBehaviour
         DOTween.Kill(tutorialHand);
         PlayerPrefs.SetInt("FirstTimeUpgrading", 1);
         HayStack.instance.UpgradePathDraw.SetActive(false);
+        adsManager.LogEvent($"blades_upgraded_{currentSawBlades}");
     }
     public void IncreaseRotationSpeed(int speed)
     {
@@ -272,6 +273,7 @@ public class TruckUpgradeManager : MonoBehaviour
                 OnIncreasingRotationSpeed?.Invoke(speed);
                 rotationSpeed_Slider.value = RotationSetter.Instance.RotationSpeed;
                 AM.Play("Upgrade");
+                adsManager.LogEvent($"rotaion_speed_upgraded_{RotationSetter.Instance.RotationSpeed}");
 
             }
             else
@@ -332,6 +334,7 @@ public class TruckUpgradeManager : MonoBehaviour
                 carCapacity_Slider.value = maxCarCapacity;
                 OnIncreasingCarCapacity?.Invoke();
                 AM.Play("Upgrade");
+                adsManager.LogEvent($"truck_capacity_upgraded_{maxCarCapacity}");
             }
 
         }
@@ -390,6 +393,7 @@ public class TruckUpgradeManager : MonoBehaviour
                 currentWheels++;
                 wheels_Slider.value = currentWheels;
                 AM.Play("Upgrade");
+                adsManager.LogEvent($"wheels_upgraded_{currentWheels}");
             }
 
         }
@@ -450,6 +454,7 @@ public class TruckUpgradeManager : MonoBehaviour
                 currentSawBlades++;
                 sawBlades_Slider.value = currentSawBlades;
                 AM.Play("Upgrade");
+                adsManager.LogEvent($"blades_upgraded_{currentSawBlades}");
             }
 
         }

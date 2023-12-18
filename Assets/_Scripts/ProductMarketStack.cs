@@ -30,7 +30,6 @@ public class ProductMarketStack : Stacker
         SetProductType(productType);
 
     }
-
     void SetProductType(ProductTypes product)
     {
         if (product == ProductTypes.Egg)
@@ -68,7 +67,6 @@ public class ProductMarketStack : Stacker
 
 
     }
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Farmer_Stack"))
@@ -98,7 +96,6 @@ public class ProductMarketStack : Stacker
             currentR = 0;
         }
     }
-
     void LoadProductOnMarketShelf(Collider other)
     {
 
@@ -139,8 +136,8 @@ public class ProductMarketStack : Stacker
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
-                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() => product.localRotation = Quaternion.identity);
-                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) > 0)
+                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() => product.localRotation = Quaternion.identity);
+                    if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     delay += 0.0001f;
@@ -158,12 +155,5 @@ public class ProductMarketStack : Stacker
 
 
     }
-   
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-        {
-
-        }
-    }
+    
 }

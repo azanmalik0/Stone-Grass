@@ -75,10 +75,15 @@ public class HarvestGrass : MonoBehaviour
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-          GameObject Cell = Instantiate(hayCell,new Vector3(other.transform.position.x, -0.149f, other.transform.position.z), Quaternion.identity);
+            GameObject Cell = Instantiate(hayCell, new Vector3(other.transform.position.x, -0.149f, other.transform.position.z), Quaternion.identity);
+            if (!AM.IsPlaying("Pickup Hay"))
+            {
+                AM.Play("Pickup Hay");
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
+            }
             float randomAngle = UnityEngine.Random.Range(0, 360);
             Cell.transform.DORotate(new Vector3(randomAngle, randomAngle, randomAngle), 1).SetEase(Ease.OutQuad);
-            Cell.transform.DOJump(new Vector3(other.transform.position.x, -0.149f, other.transform.position.z),5,1,1f).SetEase(Ease.OutQuint);
+            Cell.transform.DOJump(new Vector3(other.transform.position.x, -0.149f, other.transform.position.z) + jumpOffset, 5, 1, 1f).SetEase(Ease.Linear);
 
         }
     }

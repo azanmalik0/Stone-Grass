@@ -19,7 +19,7 @@ public class CurrencyManager : MonoBehaviour
     }
     private void Start()
     {
-        // PlayerPrefs.SetInt("Coins", 10000);
+        PlayerPrefs.SetInt("Coins", 10000);
         coins = PlayerPrefs.GetInt("Coins");
         coinText.text = coins.ToString();
     }

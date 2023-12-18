@@ -9640,6 +9640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 070daf42d9da3e04ca7c06e2927318b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpOffset: {x: 0, y: 0, z: 0}
   requiredGrass: 20
   grassCut: 0
   cornCollectParticle: {fileID: 0}

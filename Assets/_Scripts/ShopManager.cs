@@ -8,6 +8,7 @@ public class ShopManager : MonoBehaviour
 {
     public static ShopManager instance;
     AudioManager AM;
+    AdsManager adsManager;
     public Image shopPanel;
     //===================================
     [Title("Select Button References")]
@@ -39,6 +40,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         AM = AudioManager.instance;
+        adsManager = AdsManager.Instance;
         UpdateSkinVisibility();
         SetDeafult();
         CheckTextColor();
@@ -103,6 +105,7 @@ public class ShopManager : MonoBehaviour
         VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
         if (CurrencyManager.Instance.CheckRequiredCoins(skins_CR[index]))
         {
+            adsManager.LogEvent($"skin_bought{index}");
             for (int i = 0; i < selectButtons.Length; i++)
             {
                 if (i == index)

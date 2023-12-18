@@ -90,5 +90,4 @@ public class MovementController : MonoBehaviour
             IsInMenu = false;
 
     }
-
 }

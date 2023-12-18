@@ -153,17 +153,17 @@ public class FarmUpgradeManager : MonoBehaviour
         chickenNumbers_Slider.maxValue = chickens.Length - 1;
         chickenNumbers_Slider.value = currentChickens;
         cowTray_Slider.maxValue = maxCowTrayUpgrade;
-        cowTray_Slider.minValue = maxCowTrayCapacity;
+        cowTray_Slider.value = maxCowTrayCapacity;
         chickenTray_Slider.maxValue = maxChickenTrayUpgrade;
-        chickenTray_Slider.minValue = maxChickenTrayCapacity;
+        chickenTray_Slider.value = maxChickenTrayCapacity;
         //=========================================
         storageCapacity_CT.text = "$" + maxStorageCapacity_CR.ToString();
         farmerCapacity_CT.text = "$" + maxFarmerCapacity_CR.ToString();
         //=========================================
         storageCapacity_Slider.maxValue = maxStorageUpgrade;
-        storageCapacity_Slider.minValue = maxStorageCapacity;
+        storageCapacity_Slider.value = maxStorageCapacity;
         farmerCapacity_Slider.maxValue = maxFarmerUpgrade;
-        farmerCapacity_Slider.minValue = maxFarmerCapacity;
+        farmerCapacity_Slider.value = maxFarmerCapacity;
 
 
 
@@ -176,11 +176,6 @@ public class FarmUpgradeManager : MonoBehaviour
         CurrencyManager.Instance.UpdateAffordabilityStatus(cowTray_CT, maxCowTrayCapacity);
         CurrencyManager.Instance.UpdateAffordabilityStatus(storageCapacity_CT, maxStorageCapacity);
         CurrencyManager.Instance.UpdateAffordabilityStatus(farmerCapacity_CT, maxFarmerCapacity);
-    }
-    private void OnDisable()
-    {
-        GameManager.OnGameStateChanged -= OpenFarmUpgradeMenu;
-        LockedAreasManager.AreaUnlocked -= UnlockUpgrade;
     }
     public void OnButtonClick(string button)
     {
@@ -281,6 +276,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     storageCapacity_Slider.value = maxStorageCapacity;
                     OnIncreasingStorageCapcaity?.Invoke();
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
             }
         }
@@ -296,6 +292,8 @@ public class FarmUpgradeManager : MonoBehaviour
                 maxStorageCapacity += increment;
                 storageCapacity_Slider.value = maxStorageCapacity;
                 OnIncreasingStorageCapcaity?.Invoke();
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"storage_capacity_upgraded_{maxStorageCapacity}");
             }
 
         }
@@ -318,6 +316,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     farmerCapacity_Slider.value = maxFarmerCapacity;
                     OnIncreasingFarmerCapcaity?.Invoke();
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
             }
         }
@@ -333,6 +332,8 @@ public class FarmUpgradeManager : MonoBehaviour
                 maxFarmerCapacity += increment;
                 farmerCapacity_Slider.value = maxFarmerCapacity;
                 OnIncreasingFarmerCapcaity?.Invoke();
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"farmer_capacity_upgraded_{maxFarmerCapacity}");
             }
 
         }
@@ -355,6 +356,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     cowTray_Slider.value = maxCowTrayCapacity;
                     OnIncreasingTrayCapcaity?.Invoke();
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
             }
         }
@@ -370,14 +372,14 @@ public class FarmUpgradeManager : MonoBehaviour
                 maxCowTrayCapacity += increment;
                 cowTray_Slider.value = maxCowTrayCapacity;
                 OnIncreasingTrayCapcaity?.Invoke();
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"cow_tray_upgraded_{maxCowTrayCapacity}");
             }
 
         }
     }
     public void IncreaseChickenTrayCapacity(int increment)
     {
-      
-
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(maxChickenTray_CR))
@@ -393,6 +395,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     chickenTray_Slider.value = maxChickenTrayCapacity;
                     OnIncreasingTrayCapcaity?.Invoke();
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
             }
         }
@@ -408,6 +411,8 @@ public class FarmUpgradeManager : MonoBehaviour
                 maxChickenTrayCapacity += increment;
                 chickenTray_Slider.value = maxChickenTrayCapacity;
                 OnIncreasingTrayCapcaity?.Invoke();
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"chicken_tray_upgraded_{maxChickenTrayCapacity}");
             }
 
         }
@@ -432,6 +437,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     currentCows++;
                     cowNumbers_Slider.value = currentCows;
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
                 else
                 {
@@ -451,6 +457,8 @@ public class FarmUpgradeManager : MonoBehaviour
                 cows[currentCows + 1].SetActive(true);
                 currentCows++;
                 cowNumbers_Slider.value = currentCows;
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"cows_numbers_upgraded_{currentCows}");
             }
             else
             {
@@ -461,8 +469,6 @@ public class FarmUpgradeManager : MonoBehaviour
     }
     public void AddChickens()
     {
-        
-
         if (!UpgradeWithRewardAd)
         {
             if (CurrencyManager.Instance.CheckRequiredCoins(chickenNumbers_CR))
@@ -478,6 +484,7 @@ public class FarmUpgradeManager : MonoBehaviour
                     currentChickens++;
                     chickenNumbers_Slider.value = currentChickens;
                     CheckTextColor();
+                    AM.Play("Upgrade");
                 }
                 else
                 {
@@ -497,6 +504,8 @@ public class FarmUpgradeManager : MonoBehaviour
                 chickens[currentChickens + 1].SetActive(true);
                 currentChickens++;
                 chickenNumbers_Slider.value = currentChickens;
+                AM.Play("Upgrade");
+                adsManager.LogEvent($"chicken_numbers_upgraded_{currentChickens}");
             }
             else
             {
@@ -558,6 +567,11 @@ public class FarmUpgradeManager : MonoBehaviour
             }
         }
 
+    }
+    private void OnDisable()
+    {
+        GameManager.OnGameStateChanged -= OpenFarmUpgradeMenu;
+        LockedAreasManager.AreaUnlocked -= UnlockUpgrade;
     }
 
 }

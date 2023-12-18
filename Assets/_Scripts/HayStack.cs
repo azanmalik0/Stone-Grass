@@ -43,6 +43,7 @@ public class HayStack : Stacker
     //=================================================
     public int haySold;
     int index = 0;
+    int n = 0;
     public float delay = 0;
     bool IsFull;
     bool unloading;
@@ -196,11 +197,11 @@ public class HayStack : Stacker
         {
             totalHayCollected++;
             CheckCapacityFull();
-            if (!AM.IsPlaying("Pickup Hay"))
-            {
-                AM.Play("Pickup Hay");
-                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            }
+            //if (!AM.IsPlaying("Pickup Hay"))
+            //{
+            //    AM.Play("Pickup Hay");
+            //    VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
+            //}
             OnHayCollect?.Invoke(totalHayCollected);
             hay.transform.SetParent(this.transform);
             hay.GetComponent<BoxCollider>().enabled = false;
@@ -245,7 +246,6 @@ public class HayStack : Stacker
         }
 
     }
-    int n = 0;
     IEnumerator UnloadFromTruck()
     {
         while (unloading && totalHayCollected > 0)
@@ -272,7 +272,6 @@ public class HayStack : Stacker
                 Destroy(UnloadingHaycells[n]);
                 //UnloadingHaycells[n].SetActive(false);
                 n++;
-                //hayCell.SetActive(false);  
                 boilerParticle.Play();
             });
             delay += 0.000001f;
