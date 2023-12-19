@@ -18,9 +18,6 @@ public class BuyerStack : Stacker
     [SerializeField] Animator animator;
     [SerializeField] GameObject moneyPrefab;
     [SerializeField] splineMove buyerSpline;
-
-
-
     private void Awake()
     {
         SetGridYOffset(gridOffset.y);
@@ -29,10 +26,6 @@ public class BuyerStack : Stacker
     void Start()
     {
         CalculateCellPositions();
-    }
-    private void OnEnable()
-    {
-        FarmerStack.OnFarmerInteractingWithMarket += CheckCanBuy;
     }
     private void Update()
     {
@@ -88,11 +81,6 @@ public class BuyerStack : Stacker
             IsBuying = true;
             buyerSpline.Pause();
             animator.SetBool("IsWalking", false);
-            //if (CanBuy)
-            //{
-
-
-
             if (productParent.transform.childCount <= 0)
             {
                 StartCoroutine(BuyProduct(milkParent));
@@ -138,7 +126,7 @@ public class BuyerStack : Stacker
             {
                 IsBuying = false;
             }
-            //}
+            
         }
         if (productParent == milkParent)
         {
@@ -146,8 +134,7 @@ public class BuyerStack : Stacker
             IsBuying = true;
             buyerSpline.Pause();
             animator.SetBool("IsWalking", false);
-            //if (CanBuy)
-            //{
+            
             if (productParent.transform.childCount <= 0 && transform.childCount > 0)
             {
                 OnProductBought?.Invoke();
@@ -189,14 +176,8 @@ public class BuyerStack : Stacker
             {
                 IsBuying = false;
             }
-            //}
+            
         }
     }
-    void CheckCanBuy(string state)
-    {
-        if (state == "Entered")
-            CanBuy = true;
-        if (state == "Exited")
-            CanBuy = false;
-    }
+   
 }

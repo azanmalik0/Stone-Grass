@@ -15,11 +15,6 @@ public class MoneyStack : Stacker
     [SerializeField] Transform moneySpawmPoimt;
     public int coinsStored;
     [SerializeField] GameObject coinPrefab;
-
-    private void Awake()
-    {
-
-    }
     void Start()
     {
         SetGridYOffset(0);
@@ -49,7 +44,6 @@ public class MoneyStack : Stacker
         }
 
     }
-
     void GenerateMoney()
     {
         for (int i = 0; i < 3; i++)

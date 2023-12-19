@@ -13,7 +13,7 @@ public class FarmerStack : Stacker
 {
     // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
-    public static event Action<string> OnFarmerInteractingWithMarket;
+    
 
     public int feedCollected;
     public int milkCollected;
@@ -165,7 +165,6 @@ public class FarmerStack : Stacker
 
         if (other.CompareTag("Market"))
         {
-            OnFarmerInteractingWithMarket?.Invoke("Entered");
             if (!IsLoading)
             {
                 IsLoading = true;
@@ -190,8 +189,6 @@ public class FarmerStack : Stacker
         if (other.CompareTag("Market"))
         {
             AM.Stop("GetMoney");
-            OnFarmerInteractingWithMarket?.Invoke("Exited");
-            RefreshGrid();
             IsLoading = false;
         }
     }
@@ -225,15 +222,14 @@ public class FarmerStack : Stacker
                 other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
             feedCell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
             feedCell.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.3f).SetDelay(delay).SetEase(Ease.InOutSine);
-            RefreshGrid();
             feedCell.localRotation = Quaternion.identity;
             UpdateGridPositions();
             previousPositions.Add(cellPositions[currentR, currentC]);
             delay += 0.00001f;
             other.GetComponent<HayLoft>().ResetGridPositions();
             other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
+            RefreshGrid();
             DOTween.Complete(feedCell);
-            //RefreshGrid();
             IsLoading = false;
         }
     }
@@ -306,8 +302,8 @@ public class FarmerStack : Stacker
                 UpdateGridPositions();
                 other.GetComponent<ProductStack>().ResetGridPositions();
                 CheckMax();
-               // RefreshGrid();
                 DOTween.Complete(product);
+                RefreshGrid();
                 IsLoading = false;
 
             }
@@ -347,8 +343,8 @@ public class FarmerStack : Stacker
                 UpdateGridPositions();
                 other.GetComponent<ProductStack>().ResetGridPositions();
                 CheckMax();
-               // RefreshGrid();
                 DOTween.Complete(product);
+                RefreshGrid();
                 IsLoading = false;
 
             }
@@ -365,7 +361,8 @@ public class FarmerStack : Stacker
         CalculateCellPositions();
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).DOLocalMove(cellPositions[currentR, currentC], 0.1f).SetEase(Ease.OutQuint);
+            //transform.GetChild(i).DOLocalMove(cellPositions[currentR, currentC], 0.1f).SetEase(Ease.OutQuint);
+            transform.GetChild(i).localPosition = cellPositions[currentR, currentC];
             UpdateGridPositions();
         }
     }

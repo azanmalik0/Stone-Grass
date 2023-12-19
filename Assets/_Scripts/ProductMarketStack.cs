@@ -122,6 +122,7 @@ public class ProductMarketStack : Stacker
                 else
                 {
 
+                    other.GetComponent<FarmerStack>().totalItems--;
                     Transform product = other.transform.GetChild(other.transform.childCount - productCheckIndex);
                     if (productType == ProductTypes.Egg)
                     {
@@ -146,8 +147,6 @@ public class ProductMarketStack : Stacker
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
-                    //other.GetComponent<FarmerStack>().CheckMax();
-                    other.GetComponent<FarmerStack>().totalItems--;
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
                     IsLoading = false;
 
