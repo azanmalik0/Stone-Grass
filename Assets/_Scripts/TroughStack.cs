@@ -38,6 +38,7 @@ public class TroughStack : Stacker
         for (int i = 0; i < feedStored; i++)
         {
             GameObject cell = Instantiate(feedPrefab, this.transform);
+            cell.transform.localEulerAngles = new(0, 90, 0);
             cell.transform.localPosition = previousPositions[i];
             if (i == feedStored - 1)
             {
@@ -152,16 +153,16 @@ public class TroughStack : Stacker
                     DisplayCrudeTroughCounter();
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
-                    crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+                    crudeCell.DOLocalJump(cellPositions[currentR, currentC], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
                     crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
-                    crudeCell.localRotation = Quaternion.identity;
-                    previousPositions.Add(cellPositions[currentC, currentR]);
+                    crudeCell.localEulerAngles = new(0,90,0);
+                    previousPositions.Add(cellPositions[currentR, currentC]);
                     UpdateGridPositions();
                     delay += 0.0001f;
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().totalItems--;
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
-                    //other.GetComponent<FarmerStack>().CheckMax();
+                    other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }

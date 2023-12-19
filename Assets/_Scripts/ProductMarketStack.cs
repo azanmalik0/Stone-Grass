@@ -2,6 +2,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 using static ProductStack;
 
@@ -17,7 +18,7 @@ public class ProductMarketStack : Stacker
     bool IsLoading;
     float delay = 0;
     [SerializeField] int productCheckIndex;
-    
+
     void Start()
     {
         if (productType == ProductTypes.Egg)
@@ -59,8 +60,9 @@ public class ProductMarketStack : Stacker
             {
                 for (int i = 0; i < milkStored; i++)
                 {
-                    GameObject cell = Instantiate(milkPrefab, this.transform);
-                    cell.transform.localPosition = previousPositions[i];
+                    GameObject milk = Instantiate(milkPrefab, this.transform);
+                    milk.transform.localEulerAngles = new(0, 90, 0);
+                    milk.transform.localPosition = previousPositions[i];
                 }
             }
         }
@@ -90,7 +92,7 @@ public class ProductMarketStack : Stacker
     }
     private void Update()
     {
-        if(this.transform.childCount<=0)
+        if (this.transform.childCount <= 0)
         {
             currentC = 0;
             currentR = 0;
@@ -100,8 +102,8 @@ public class ProductMarketStack : Stacker
     {
         if (other.transform.childCount <= 0)
         {
-            IsLoading=false;
             other.GetComponent<FarmerStack>().RefreshGrid();
+            IsLoading = false;
         }
         else if (other.transform.childCount > 0)
         {
@@ -121,7 +123,6 @@ public class ProductMarketStack : Stacker
                 {
 
                     Transform product = other.transform.GetChild(other.transform.childCount - productCheckIndex);
-                    product.SetParent(this.transform);
                     if (productType == ProductTypes.Egg)
                     {
                         eggsStored++;
@@ -135,11 +136,13 @@ public class ProductMarketStack : Stacker
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
-                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
-                    product.localEulerAngles = new(0,90,0) ;
+                    DOTween.Complete(product);
+                    product.SetParent(this.transform);
+                    product.DOLocalJump(cellPositions[currentR, currentC], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+                    product.localEulerAngles = new(0, 90, 0);
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
-                    previousPositions.Add(cellPositions[currentC, currentR]);
+                    previousPositions.Add(cellPositions[currentR, currentC]);
                     delay += 0.0001f;
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
@@ -155,5 +158,5 @@ public class ProductMarketStack : Stacker
 
 
     }
-    
+
 }

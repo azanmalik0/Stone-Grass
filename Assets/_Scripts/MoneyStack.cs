@@ -55,9 +55,12 @@ public class MoneyStack : Stacker
         for (int i = 0; i < 3; i++)
         {
             GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
-            coinsStored++;
-            money.transform.DOLocalJump(cellPositions[currentC, currentR], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine);
-            previousPositions.Add(cellPositions[currentC, currentR]);
+            money.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                coinsStored++;
+
+            });
+            previousPositions.Add(cellPositions[currentR, currentC]);
             UpdateGridPositions();
             delay += 0.0001f;
             if (i == (3 - 1))
@@ -67,12 +70,6 @@ public class MoneyStack : Stacker
         }
 
     }
-  
-    private void OnApplicationPause(bool pause)
-    {
-        if (pause)
-        {
 
-        }
-    }
+
 }

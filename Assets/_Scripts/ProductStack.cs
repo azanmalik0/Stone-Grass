@@ -97,7 +97,8 @@ public class ProductStack : Stacker
     void LoadProductOnShelf(GameObject product)
     {
         product.transform.SetParent(this.transform);
-        product.transform.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+        product.transform.DOLocalJump(cellPositions[currentR, currentC], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+        product.transform.localRotation=Quaternion.identity;
 
         if (type == ProductType.Egg)
         {
@@ -110,7 +111,7 @@ public class ProductStack : Stacker
             milkGenerated++;
 
         }
-        previousPositions.Add(cellPositions[currentC, currentR]);
+        previousPositions.Add(cellPositions[currentR, currentC]);
         delay += 0.001f;
         UpdateGridPositions();
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
