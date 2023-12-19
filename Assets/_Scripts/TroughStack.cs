@@ -23,11 +23,14 @@ public class TroughStack : Stacker
     public float initialYOffset;
     int crudeCheckIndex = 1;
     [SerializeField] GameObject feedPrefab;
+    public List<GameObject> TweeningCrude = new();
+    int tweenIndex=0;
 
     private void Start()
     {
-        SetGridYOffset(0.42f);
+        SetGridYOffset(0.55f);
         CalculateCellPositions();
+        DisplayCrudeTroughCounter();
         LoadFeedCollected();
     }
     private void LoadFeedCollected()
@@ -38,9 +41,9 @@ public class TroughStack : Stacker
             cell.transform.localPosition = previousPositions[i];
             if (i == feedStored - 1)
             {
+                DisplayCrudeTroughCounter();
                 if (feedStored >= maxHayCapacity)
                 {
-                    DisplayCrudeTroughCounter();
                     if (animalType == AnimalType.Chicken)
                         OnTroughFull?.Invoke(AnimalType.Chicken);
                     if (animalType == AnimalType.Cow)
@@ -144,13 +147,13 @@ public class TroughStack : Stacker
                     feedStored++;
                     other.GetComponent<FarmerStack>().feedCollected--;
                     Transform crudeCell = other.transform.GetChild(other.transform.childCount - crudeCheckIndex);
-                    //DOTween.Complete(crudeCell);
+                    DOTween.Complete(crudeCell);
                     crudeCell.SetParent(this.transform);
                     DisplayCrudeTroughCounter();
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
-                    crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
                     crudeCell.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+                    crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
                     crudeCell.localRotation = Quaternion.identity;
                     previousPositions.Add(cellPositions[currentC, currentR]);
                     UpdateGridPositions();

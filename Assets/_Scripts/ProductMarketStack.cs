@@ -21,7 +21,7 @@ public class ProductMarketStack : Stacker
     void Start()
     {
         if (productType == ProductTypes.Egg)
-            SetGridYOffset(0.34f);
+            SetGridYOffset(0f);
         if (productType == ProductTypes.Milk)
             SetGridYOffset(0);
         productCheckIndex = 1;
@@ -98,7 +98,6 @@ public class ProductMarketStack : Stacker
     }
     void LoadProductOnMarketShelf(Collider other)
     {
-
         if (other.transform.childCount <= 0)
         {
             IsLoading=false;
@@ -136,7 +135,8 @@ public class ProductMarketStack : Stacker
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
-                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() => product.localRotation = Quaternion.identity);
+                    product.DOLocalJump(cellPositions[currentC, currentR], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
+                    product.localEulerAngles = new(0,90,0) ;
                     if ((other.GetComponent<FarmerStack>().previousPositions.Count - 1) >= 0)
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     previousPositions.Add(cellPositions[currentC, currentR]);

@@ -19,7 +19,6 @@ public class CurrencyManager : MonoBehaviour
     }
     private void Start()
     {
-        //PlayerPrefs.SetInt("Coins", 10000);
         coins = PlayerPrefs.GetInt("Coins");
         coinText.text = coins.ToString();
     }
@@ -58,5 +57,12 @@ public class CurrencyManager : MonoBehaviour
         else
             text.color = Color.black;
 
+    }
+
+    public void GetCheatCoins()
+    {
+        coins += 10000;
+        PlayerPrefs.SetInt("Coins", coins);
+        coinText.text = coins.ToString();
     }
 }

@@ -42,6 +42,7 @@ public class HayLoft : Stacker
         SetGridYOffset(0.22f);
         LoadFeedStored();
         CalculateCellPositions();
+        //feedGenerated = 99999;
         feedGeneratedText.text = feedGenerated.ToString();
         DisplayCrudeStorageCounter();
     }

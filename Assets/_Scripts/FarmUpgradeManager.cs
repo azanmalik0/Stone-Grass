@@ -164,6 +164,11 @@ public class FarmUpgradeManager : MonoBehaviour
         storageCapacity_Slider.value = maxStorageCapacity;
         farmerCapacity_Slider.maxValue = maxFarmerUpgrade;
         farmerCapacity_Slider.value = maxFarmerCapacity;
+        //================================================
+        farmerCapacity_Slider.minValue = 14;
+        storageCapacity_Slider.minValue = 10;
+        chickenTray_Slider.minValue = 4;
+        cowTray_Slider.minValue = 4;
 
 
 

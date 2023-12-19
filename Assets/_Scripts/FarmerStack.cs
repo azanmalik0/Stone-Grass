@@ -49,15 +49,15 @@ public class FarmerStack : Stacker
         AM = AudioManager.instance;
         SetGridYOffset(0.92f);
         CalculateCellPositions();
-        UpdateMaxFarmerCapacity();
         LoadFeedCollected();
+        UpdateMaxFarmerCapacity();
     }
     public void CheckMax()
     {
         //everything = feedCollected + eggCollected + milkCollected;
         if (totalItems >= maxHayCapacity-1)
         {
-            print("Here");
+            //print("Here");
             farmerCapacityFullText.gameObject.SetActive(true);
         }
         else
@@ -344,7 +344,6 @@ public class FarmerStack : Stacker
     }
     public void RefreshGrid()
     {
-
         currentC = 0;
         currentR = 0;
         gridOffset.y = 0.92f;
@@ -353,8 +352,6 @@ public class FarmerStack : Stacker
         {
             transform.GetChild(i).DOLocalMove(cellPositions[currentC, currentR], 0.1f).SetEase(Ease.OutQuint);
             UpdateGridPositions();
-
-
         }
     }
 
