@@ -20,6 +20,7 @@ public abstract class Stacker : SerializedMonoBehaviour
     public List<Vector3> previousPositions = new();
     public int currentR = 0;
     public int currentC = 0;
+    public float NextStackHeight;
    
     protected void SetGridYOffset(float initial)
     {
@@ -30,14 +31,14 @@ public abstract class Stacker : SerializedMonoBehaviour
         if (!Reverse)
         {
 
-            gridOffset.y += 0.3f;
+            gridOffset.y += NextStackHeight;
             currentC = 0;
             currentR = 0;
         }
         else
         {
             if (gridOffset.y > InitialYOffset)
-                gridOffset.y -= 0.3f;
+                gridOffset.y -= NextStackHeight;
             else
                 gridOffset.y = InitialYOffset;
             currentC = maxColumns - 1;

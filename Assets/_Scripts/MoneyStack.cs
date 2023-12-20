@@ -9,7 +9,7 @@ using static ProductStack;
 
 public class MoneyStack : Stacker
 {
-    bool IsLoading;
+    bool IsGenerating;
     float delay;
     [SerializeField] GameObject moneyPrefab;
     [SerializeField] Transform moneySpawmPoimt;
@@ -46,6 +46,9 @@ public class MoneyStack : Stacker
     }
     void GenerateMoney()
     {
+       // Debug.LogError("Bought"); 
+
+
         for (int i = 0; i < 3; i++)
         {
             GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
@@ -60,8 +63,10 @@ public class MoneyStack : Stacker
             if (i == (3 - 1))
             {
                 delay = 0;
+
             }
         }
+
 
     }
 

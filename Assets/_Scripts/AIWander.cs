@@ -26,11 +26,11 @@ public class AIWander : MonoBehaviour
 
     private void Start()
     {
-       
         isWandering = false;
         isIdleHeadTurn = false;
         nextHeadTurnTime = Random.Range(minHeadTurnTime, maxHeadTurnTime);
-        StartWandering();
+        if (PlayerPrefs.GetInt($"FirstTimeWandering{animalType}") == 0)
+            StartWandering();
     }
     private void OnEnable()
     {
@@ -63,6 +63,7 @@ public class AIWander : MonoBehaviour
     {
         while (true)
         {
+
             if (!isWandering)
             {
                 if (Time.time - timeSinceDestinationSet > wanderInterval)
@@ -99,10 +100,9 @@ public class AIWander : MonoBehaviour
             {
                 isIdleHeadTurn = false;
 
-                // Check if the AI hasn't reached its destination within the wanderInterval
                 if (Time.time - timeSinceDestinationSet > wanderInterval)
                 {
-                    agent.ResetPath(); // Reset the path if it hasn't reached the destination in time
+                    agent.ResetPath();
                     isWandering = false;
                 }
             }
@@ -134,6 +134,7 @@ public class AIWander : MonoBehaviour
     {
         if (animal == animalType)
         {
+            PlayerPrefs.SetInt($"FirstTimeWandering{animal}", 1);
             StopWandering();
             animator.SetBool("IsWalking", true);
             StartCoroutine(MoveToTarget(animal));
@@ -153,6 +154,7 @@ public class AIWander : MonoBehaviour
     {
         if (animal == animalType)
         {
+            PlayerPrefs.SetInt($"FirstTimeWandering{animal}", 0);
             animator.SetBool("IsEating", false);
             StopCoroutine(MoveToTarget(animal));
             StartWandering();

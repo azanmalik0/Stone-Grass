@@ -98,6 +98,7 @@ public class BuyerStack : Stacker
                     yield return new WaitForSeconds(2);
                     buyerSpline.Resume();
                     animator.SetBool("IsWalking", true);
+                    
                 }
             }
             else if (transform.childCount >= maxHayCapacity)
@@ -126,7 +127,7 @@ public class BuyerStack : Stacker
             {
                 IsBuying = false;
             }
-            
+
         }
         if (productParent == milkParent)
         {
@@ -134,7 +135,7 @@ public class BuyerStack : Stacker
             IsBuying = true;
             buyerSpline.Pause();
             animator.SetBool("IsWalking", false);
-            
+
             if (productParent.transform.childCount <= 0 && transform.childCount > 0)
             {
                 OnProductBought?.Invoke();
@@ -176,8 +177,8 @@ public class BuyerStack : Stacker
             {
                 IsBuying = false;
             }
-            
+
         }
     }
-   
+
 }

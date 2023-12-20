@@ -1,8 +1,4 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
 using static ProductStack;
 
@@ -17,18 +13,18 @@ public class ProductMarketStack : Stacker
     public int milkStored;
     bool IsLoading;
     float delay = 0;
-    [SerializeField] int productCheckIndex;
+    public int productCheckIndex=1;
 
     void Start()
     {
+        SetProductType(productType);
+        productCheckIndex = 1;
         if (productType == ProductTypes.Egg)
             SetGridYOffset(0f);
         if (productType == ProductTypes.Milk)
             SetGridYOffset(0);
-        productCheckIndex = 1;
         CalculateCellPositions();
         LoadProductStored();
-        SetProductType(productType);
 
     }
     void SetProductType(ProductTypes product)
@@ -39,6 +35,8 @@ public class ProductMarketStack : Stacker
             productString = "Milk";
 
     }
+
+    
     private void LoadProductStored()
     {
 
@@ -102,7 +100,7 @@ public class ProductMarketStack : Stacker
     {
         if (other.transform.childCount <= 0)
         {
-            other.GetComponent<FarmerStack>().RefreshGrid();
+            //other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
         }
         else if (other.transform.childCount > 0)
@@ -133,7 +131,7 @@ public class ProductMarketStack : Stacker
                     if (productType == ProductTypes.Milk)
                     {
                         milkStored++;
-                        product.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
+                        product.transform.GetChild(0).localScale = new(0.624787629f, 0.278198987f, 0.342501342f);
                         other.GetComponent<FarmerStack>().milkCollected--;
 
                     }
@@ -148,6 +146,7 @@ public class ProductMarketStack : Stacker
                     UpdateGridPositions();
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
+                    other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4803805616267426787}
   - component: {fileID: 8432234202680423494}
   - component: {fileID: 5972238324733739148}
+  - component: {fileID: 193333773019349990}
   m_Layer: 0
   m_Name: egg
   m_TagString: Untagged
@@ -115,3 +116,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &193333773019349990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5323636758323470681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
+  outlineWidth: 0.6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

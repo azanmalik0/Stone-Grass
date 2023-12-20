@@ -1,18 +1,25 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class LevelInstantiator : MonoBehaviour
 {
     public GameObject[] cropCellPrefabs;
+    [Title("Navmesh References")]
+    public static event Action OnBakingNavmesh;
+    [SerializeField] NavMeshSurface Navsurface;
+    [SerializeField] MeshRenderer[] renderers;
 
     void Start()
     {
-        Transform[] childTransforms = new Transform[transform.childCount-1];
+        Transform[] childTransforms = new Transform[transform.childCount - 1];
 
-        for (int i = 0; i < transform.childCount-1; i++)
+        for (int i = 0; i < transform.childCount - 1; i++)
         {
             childTransforms[i] = transform.GetChild(i);
         }
@@ -24,7 +31,12 @@ public class LevelInstantiator : MonoBehaviour
             int startIndex = i * partSize;
             int endIndex = Mathf.Min((i + 1) * partSize, childTransforms.Length);
 
-                InstantiatePrefabs(cropCellPrefabs[i], childTransforms, startIndex, endIndex, this.transform);
+            InstantiatePrefabs(cropCellPrefabs[i], childTransforms, startIndex, endIndex, this.transform);
+            if (i == cropCellPrefabs.Length - 1)
+            {
+                Navsurface.BuildNavMesh();
+                DisableRenderers();
+            }
         }
     }
 
@@ -33,8 +45,22 @@ public class LevelInstantiator : MonoBehaviour
         for (int i = startIndex; i < endIndex; i++)
         {
             Instantiate(prefab, positions[i].position, Quaternion.identity, transform);
+            
         }
     }
+
+    private void DisableRenderers()
+    {
+        for(int i = 0;i < renderers.Length;i++)
+        {
+            renderers[i].enabled = false;
+            if(i==renderers.Length-1)
+            {
+                OnBakingNavmesh?.Invoke();
+            }
+        }
+    }
+
     [ContextMenu("Instant")]
     public void Azan()
     {

@@ -69,12 +69,24 @@ public class GameManager : MonoBehaviour
     {
         AM.Play("Ambient");
     }
-#if UNITY_EDITOR
+
     private void OnApplicationQuit()
     {
+        print("OnApplicationQuit"+gameObject.name);
         ES3AutoSaveMgr.Current.Save();
     }
-#endif
+    private void OnDestroy()
+    {
+        print("OnDestroy" + gameObject.name);
+        ES3AutoSaveMgr.Current.Save();
+        
+    }
+    private void OnDisable()
+    {
+        print("OnDisable" + gameObject.name);
+        ES3AutoSaveMgr.Current.Save();
+    }
+
 
 }
 public enum GameState { Tractor, Farmer, Upgrading, InGame, InShop, InFarmUpgrade, InLevelMenu, UnlockingArea, CuttingGrass, NotCuttingGrass, OnPlatform, OnGrassField }

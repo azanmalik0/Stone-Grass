@@ -410,14 +410,21 @@ public class HayStack : Stacker
     }
     private void OnApplicationQuit()
     {
+        print("OnApplicationQuit" + gameObject.name);
         RevertMaterialColour();
     }
     private void OnApplicationPause(bool pause)
     {
         if (pause)
         {
+            print("OnApplicationPause" + gameObject.name);
             RevertMaterialColour();
         }
+    }
+    private void OnDestroy()
+    {
+        print("OnDestroy" + gameObject.name);
+        RevertMaterialColour();
     }
     public void RevertMaterialColour()
     {

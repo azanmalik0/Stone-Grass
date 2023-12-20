@@ -24,11 +24,13 @@ public class TroughStack : Stacker
     int crudeCheckIndex = 1;
     [SerializeField] GameObject feedPrefab;
     public List<GameObject> TweeningCrude = new();
-    int tweenIndex=0;
+    //====================
+    [SerializeField] BoxCollider troughTrigger;
+    [SerializeField] BoxCollider productStorageTrigger;
 
     private void Start()
     {
-        SetGridYOffset(0.55f);
+        SetGridYOffset(0.1f);
         CalculateCellPositions();
         DisplayCrudeTroughCounter();
         LoadFeedCollected();
@@ -38,7 +40,6 @@ public class TroughStack : Stacker
         for (int i = 0; i < feedStored; i++)
         {
             GameObject cell = Instantiate(feedPrefab, this.transform);
-            cell.transform.localEulerAngles = new(0, 90, 0);
             cell.transform.localPosition = previousPositions[i];
             if (i == feedStored - 1)
             {
@@ -88,6 +89,8 @@ public class TroughStack : Stacker
             IsLoading = false;
             produceTimer.SetActive(false);
             crudeCounter.SetActive(true);
+            //troughTrigger.enabled = true;
+            //productStorageTrigger.enabled = false;
         }
     }
     private void OnTriggerStay(Collider other)
@@ -121,12 +124,15 @@ public class TroughStack : Stacker
                 OnTroughFull?.Invoke(AnimalType.Cow);
             produceTimer.SetActive(true);
             crudeCounter.SetActive(false);
+            //troughTrigger.enabled = false;
+            //productStorageTrigger.enabled = true;
+
 
         }
         else if (other.GetComponent<FarmerStack>().feedCollected <= 0)
         {
 
-            other.GetComponent<FarmerStack>().RefreshGrid();
+            //other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
         }
         else if (other.GetComponent<FarmerStack>().feedCollected > 0)
@@ -155,14 +161,14 @@ public class TroughStack : Stacker
                         other.GetComponent<FarmerStack>().previousPositions.RemoveAt(other.GetComponent<FarmerStack>().previousPositions.Count - 1);
                     crudeCell.DOLocalJump(cellPositions[currentR, currentC], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
                     crudeCell.transform.GetChild(0).localScale = new(1.1f, 1.1f, 1.1f);
-                    crudeCell.localEulerAngles = new(0,90,0);
+                    crudeCell.transform.localRotation = Quaternion.identity;
                     previousPositions.Add(cellPositions[currentR, currentC]);
                     UpdateGridPositions();
                     delay += 0.0001f;
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().totalItems--;
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
-                    other.GetComponent<FarmerStack>().RefreshGrid();
+                    //other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }
@@ -171,7 +177,7 @@ public class TroughStack : Stacker
         }
 
     }
-}
+ }
 public enum AnimalType { Cow, Chicken }
 
 
