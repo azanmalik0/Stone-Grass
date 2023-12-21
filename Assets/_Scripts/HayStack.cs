@@ -197,11 +197,11 @@ public class HayStack : Stacker
         {
             totalHayCollected++;
             CheckCapacityFull();
-            //if (!AM.IsPlaying("Pickup Hay"))
-            //{
-            //    AM.Play("Pickup Hay");
-            //    VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
-            //}
+            if (!AM.IsPlaying("Pickup Hay"))
+            {
+                AM.Play("Pickup Hay");
+                VibrationManager.SpecialVibrate(SpecialVibrationTypes.Pop);
+            }
             OnHayCollect?.Invoke(totalHayCollected);
             hay.transform.SetParent(this.transform);
             hay.GetComponent<BoxCollider>().enabled = false;

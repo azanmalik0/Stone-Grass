@@ -79,9 +79,9 @@ public class ShopManager : MonoBehaviour
             if (shopPanel != null)
             {
                 shopPanel.gameObject.SetActive(true);
+                CheckTextColor();
                 TruckUpgradeManager.Instance.truckUpgradePanel.gameObject.SetActive(false);
             }
-            CheckTextColor();
 
         }
     }

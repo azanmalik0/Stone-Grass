@@ -31,6 +31,7 @@ public class InGameUIManager : MonoBehaviour
     {
         GameManager.OnGameStateChanged -= SetjoyStickState;
         ProgressBarManager.OnThirdStarUnlock -= EnableNextLevelButtonPopup;
+        
     }
     public void OnButtonClick(string button)
     {
@@ -72,9 +73,12 @@ public class InGameUIManager : MonoBehaviour
     {
         if (LevelMenuManager.Instance.currentLevel < 9)
         {
+            //Debug.LogError("EnableNextlevel ===>");
             nextLevelPopup.gameObject.SetActive(true);
             nextLevelPopup.DOScale(Vector3.one, 1f).SetLoops(-1, LoopType.Yoyo);
         }
     }
+
+
 
 }

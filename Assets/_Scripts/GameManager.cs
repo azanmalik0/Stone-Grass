@@ -70,22 +70,22 @@ public class GameManager : MonoBehaviour
         AM.Play("Ambient");
     }
 
-    private void OnApplicationQuit()
-    {
-        print("OnApplicationQuit"+gameObject.name);
-        ES3AutoSaveMgr.Current.Save();
-    }
-    private void OnDestroy()
-    {
-        print("OnDestroy" + gameObject.name);
-        ES3AutoSaveMgr.Current.Save();
+    //private void OnApplicationQuit()
+    //{
+    //    print("OnApplicationQuit"+gameObject.name);
+    //    ES3AutoSaveMgr.Current.Save();
+    //}
+    //private void OnDestroy()
+    //{
+    //    print("OnDestroy" + gameObject.name);
+    //    ES3AutoSaveMgr.Current.Save();
         
-    }
-    private void OnDisable()
-    {
-        print("OnDisable" + gameObject.name);
-        ES3AutoSaveMgr.Current.Save();
-    }
+    //}
+    //private void OnDisable()
+    //{
+    //    print("OnDisable" + gameObject.name);
+    //    ES3AutoSaveMgr.Current.Save();
+    //}
 
 
 }

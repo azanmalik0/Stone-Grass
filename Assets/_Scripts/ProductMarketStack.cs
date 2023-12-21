@@ -147,6 +147,7 @@ public class ProductMarketStack : Stacker
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
                     other.GetComponent<FarmerStack>().RefreshGrid();
+                    other.GetComponent<FarmerStack>().CheckMax();
                     IsLoading = false;
 
                 }

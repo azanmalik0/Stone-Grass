@@ -66,7 +66,6 @@ public class HarvestGrass : MonoBehaviour
             GenerateHay(other, sunHayCellPrefab);
         }
     }
-
     public void GenerateHay(Collider other, GameObject hayCell)
     {
         other.gameObject.SetActive(false);

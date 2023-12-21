@@ -168,7 +168,8 @@ public class TroughStack : Stacker
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().totalItems--;
                     other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
-                    //other.GetComponent<FarmerStack>().RefreshGrid();
+                    other.GetComponent<FarmerStack>().CheckMax();
+                    other.GetComponent<FarmerStack>().RefreshGrid();
                     IsLoading = false;
 
                 }

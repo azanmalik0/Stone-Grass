@@ -94,6 +94,7 @@ public class ProgressBarManager : MonoBehaviour
                 AM.Play("LevelUnlocked");
                 star3Particle.Play();
                 OnThirdStarUnlock?.Invoke(300);
+                //Debug.LogError("ThirdStarInvoke===>");
                 UnlockOnce3 = true;
 
             }
