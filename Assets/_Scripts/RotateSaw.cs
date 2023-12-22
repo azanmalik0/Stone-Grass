@@ -4,9 +4,7 @@ using Sirenix.OdinInspector;
 public class RotateSaw : MonoBehaviour
 {
    [ReadOnly] public float rotationSpeed;
-    private void OnEnable()
-    {
-    }
+
     void Update()
     {
         Rotate();

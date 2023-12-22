@@ -10,6 +10,7 @@ public class BuyerStack : Stacker
 {
     public static event Action OnProductBought;
     public bool IsBuying;
+    public bool HasBought;
     bool IsFirst;
     bool CanBuy;
     float delay = 0;
@@ -66,6 +67,7 @@ public class BuyerStack : Stacker
     public void ResetStack()
     {
         IsBuying = false;
+        HasBought = false;
         for (int i = 0; i < transform.childCount; i++)
         {
             Destroy(transform.GetChild(i).gameObject);
@@ -94,19 +96,27 @@ public class BuyerStack : Stacker
                 }
                 else
                 {
-                    OnProductBought?.Invoke();
-                    yield return new WaitForSeconds(2);
-                    buyerSpline.Resume();
-                    animator.SetBool("IsWalking", true);
-                    
+                    if (!HasBought)
+                    {
+                        HasBought = true;
+                        OnProductBought?.Invoke();
+                        yield return new WaitForSeconds(2);
+                        buyerSpline.Resume();
+                        animator.SetBool("IsWalking", true);
+                    }
+
                 }
             }
             else if (transform.childCount >= maxHayCapacity)
             {
-                OnProductBought?.Invoke();
-                yield return new WaitForSeconds(2);
-                buyerSpline.Resume();
-                animator.SetBool("IsWalking", true);
+                if (!HasBought)
+                {
+                    HasBought = true;
+                    OnProductBought?.Invoke();
+                    yield return new WaitForSeconds(2);
+                    buyerSpline.Resume();
+                    animator.SetBool("IsWalking", true);
+                }
 
             }
             else if (productParent.transform.childCount > 0)

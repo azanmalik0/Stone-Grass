@@ -101,4 +101,5 @@ public class CoinReward : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         CurrencyManager.Instance.RecieveCoins(coins);
     }
+    
 }

@@ -46,29 +46,53 @@ public class MoneyStack : Stacker
     }
     void GenerateMoney()
     {
-       // Debug.LogError("Bought"); 
+        StartCoroutine(AnimateMoney());
+    }
+    IEnumerator AnimateMoney()
+    {
+        // Debug.LogError("Bought"); 
 
-
-        for (int i = 0; i < 3; i++)
+        if (!IsGenerating)
         {
-            GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
-            money.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
+            IsGenerating = true;
+            for (int i = 0; i < 3; i++)
             {
-                coinsStored++;
+                GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
+                DOTween.Complete(money);
+                money.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
+                {
+                    coinsStored++;
 
-            });
-            previousPositions.Add(cellPositions[currentR, currentC]);
-            UpdateGridPositions();
-            delay += 0.0001f;
-            if (i == (3 - 1))
-            {
-                delay = 0;
-
+                });
+                previousPositions.Add(cellPositions[currentR, currentC]);
+                UpdateGridPositions();
+                delay += 0.0001f;
+                if (i == (3 - 1))
+                {
+                    delay = 0;
+                    IsGenerating = false;
+                    //RefreshGrid();
+                }
+                yield return null;
             }
         }
 
 
     }
+    public void RefreshGrid()
+    {
+        currentR = 0;
+        currentC = 0;
+        gridOffset.y = 0f;
+        CalculateCellPositions();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            DOTween.Complete(transform.GetChild(i));
+            transform.GetChild(i).localPosition = cellPositions[currentR, currentC];
+            UpdateGridPositions();
 
+        }
+
+    }
 
 }

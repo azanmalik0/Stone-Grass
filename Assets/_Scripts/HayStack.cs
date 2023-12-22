@@ -420,6 +420,14 @@ public class HayStack : Stacker
             print("OnApplicationPause" + gameObject.name);
             RevertMaterialColour();
         }
+      
+
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if(focus)
+            CheckCapacityFull();
     }
     private void OnDestroy()
     {

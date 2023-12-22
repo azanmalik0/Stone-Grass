@@ -89,8 +89,6 @@ public class TroughStack : Stacker
             IsLoading = false;
             produceTimer.SetActive(false);
             crudeCounter.SetActive(true);
-            //troughTrigger.enabled = true;
-            //productStorageTrigger.enabled = false;
         }
     }
     private void OnTriggerStay(Collider other)
@@ -118,21 +116,18 @@ public class TroughStack : Stacker
     {
         if (feedStored >= maxHayCapacity)
         {
+            other.GetComponent<FarmerStack>().RefreshGrid();
             if (animalType == AnimalType.Chicken)
                 OnTroughFull?.Invoke(AnimalType.Chicken);
             if (animalType == AnimalType.Cow)
                 OnTroughFull?.Invoke(AnimalType.Cow);
             produceTimer.SetActive(true);
             crudeCounter.SetActive(false);
-            //troughTrigger.enabled = false;
-            //productStorageTrigger.enabled = true;
-
 
         }
+       
         else if (other.GetComponent<FarmerStack>().feedCollected <= 0)
         {
-
-            //other.GetComponent<FarmerStack>().RefreshGrid();
             IsLoading = false;
         }
         else if (other.GetComponent<FarmerStack>().feedCollected > 0)
@@ -167,9 +162,8 @@ public class TroughStack : Stacker
                     delay += 0.0001f;
                     other.GetComponent<FarmerStack>().ResetGridPositions();
                     other.GetComponent<FarmerStack>().totalItems--;
-                    other.GetComponent<FarmerStack>().farmerCapacityFullText.gameObject.SetActive(false);
-                    other.GetComponent<FarmerStack>().CheckMax();
                     other.GetComponent<FarmerStack>().RefreshGrid();
+                    other.GetComponent<FarmerStack>().CheckMax();
                     IsLoading = false;
 
                 }
@@ -178,7 +172,7 @@ public class TroughStack : Stacker
         }
 
     }
- }
+}
 public enum AnimalType { Cow, Chicken }
 
 

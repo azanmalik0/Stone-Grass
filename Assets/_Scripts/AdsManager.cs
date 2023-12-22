@@ -81,11 +81,8 @@ public class AdsManager : MonoBehaviour
 
         }
     }
-
-
-    void Start()
+    private void Awake()
     {
-
         if (Instance == null)
         {
             Instance = this;
@@ -97,6 +94,12 @@ public class AdsManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+
+        
 
         if (isShowTestAds)
         {
@@ -332,7 +335,7 @@ public class AdsManager : MonoBehaviour
         }
         else
         {
-
+            RequestNonVideoInterstitialAd();
         }
     }
 
@@ -350,7 +353,7 @@ public class AdsManager : MonoBehaviour
 
         ad.OnAdFullScreenContentClosed += () =>
         {
-            RequestVideoInterstitialAd();
+            RequestNonVideoInterstitialAd();
             //LogEvent("play_ad_show_done");
         };
 

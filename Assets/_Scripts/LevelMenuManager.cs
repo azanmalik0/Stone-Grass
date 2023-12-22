@@ -60,9 +60,9 @@ public class LevelMenuManager : MonoBehaviour
     {
         adsManager.LogEvent($"level_selected_{level}");
         AM.Play("Pop");
-        adsManager.ShowNonVideoInterstitialAd();
         if (currentLevel != level)
         {
+            adsManager.ShowNonVideoInterstitialAd();
             // PercentageChecker.Instance.SaveLevelTexture();
             levelObjects[currentLevel].SetActive(false);
             currentLevel = level;
@@ -70,6 +70,8 @@ public class LevelMenuManager : MonoBehaviour
             HayStack.instance.RevertMaterialColour();
             loadingPanel.SetActive(true);
         }
+        else if (currentLevel == level)
+            levelSelectionPanel.gameObject.SetActive(false);
     }
     void OpenLevelSelectionMenu(GameState state)
     {

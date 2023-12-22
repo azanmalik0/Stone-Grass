@@ -1,0 +1,816 @@
+{
+  "project_info": {
+    "project_number": "913860464232",
+    "firebase_url": "https://right-left-jump-68576612.firebaseio.com",
+    "project_id": "right--left-jump-68576612",
+    "storage_bucket": "right--left-jump-68576612.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:7c4701ab069515b246b5dd",
+        "android_client_info": {
+          "package_name": "ball.sort.color.match.puzzle.games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~9277122316"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:30f4c2f11b8cc29146b5dd",
+        "android_client_info": {
+          "package_name": "com.biza.cookingchef.food.restaurantfever.burger.cafegame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~8299793084"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:03a4422ccebf23e846b5dd",
+        "android_client_info": {
+          "package_name": "com.biza.fashion.game.stylist.girl.games.dressup.gamesforgirls"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~3700707798"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:4a552ec331ab97d346b5dd",
+        "android_client_info": {
+          "package_name": "com.biza.idle.doctor.games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~7175538749"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:c7991f4735606e7846b5dd",
+        "android_client_info": {
+          "package_name": "com.biza.tattoogames.tattoo.design.studio.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~3182699671"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:28d316de356581b0",
+        "android_client_info": {
+          "package_name": "com.biza.tycoon.idle.clicker.business"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~7482326436"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:3531adbfd20aae5946b5dd",
+        "android_client_info": {
+          "package_name": "com.bubble.buster2048.ball.shooter.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:0ad8124e98473d3946b5dd",
+        "android_client_info": {
+          "package_name": "com.candy.saga.sugar.rush.adventure"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:5d9d6d248cfb037046b5dd",
+        "android_client_info": {
+          "package_name": "com.cat.escape.hide.seek.cats.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~9847603261"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:30e0ac40101fc82c46b5dd",
+        "android_client_info": {
+          "package_name": "com.colorcars3d.traffic.slide.puzzle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:4199cd03ced4969346b5dd",
+        "android_client_info": {
+          "package_name": "com.idle.zoo.tycoon.animal.park.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:dc7d613d50e75a5146b5dd",
+        "android_client_info": {
+          "package_name": "com.lawn.grass.cutting.mowing.simulator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:304a83d3da404f6f46b5dd",
+        "android_client_info": {
+          "package_name": "com.ludo.world.fun.dice.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~3849249088"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:51c2ee3807505af546b5dd",
+        "android_client_info": {
+          "package_name": "com.parking.traffic.jam.car.games.sorting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:1b35c1f04b8c986c46b5dd",
+        "android_client_info": {
+          "package_name": "com.trafficescape.master.car.parkingjam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:3127e10f2c66aba346b5dd",
+        "android_client_info": {
+          "package_name": "com.twisted.tangle.master.rope.puzzle.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:cd4c57187fc3afb646b5dd",
+        "android_client_info": {
+          "package_name": "com.worms.zone.io.hungry.snake.games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:cf6e2e6e85466bc146b5dd",
+        "android_client_info": {
+          "package_name": "fashion.dressup.show.makeup.designer.style.battle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5865730352286957~5562515655"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:8b66851199de3e7b46b5dd",
+        "android_client_info": {
+          "package_name": "galaxy.attack.alien.space.shooter.sky.shooting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~1323311684"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:7ac93ef08047866946b5dd",
+        "android_client_info": {
+          "package_name": "nummerge.number.match.puzzle.games"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~9119184496"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:d790700a8ad1d2ca46b5dd",
+        "android_client_info": {
+          "package_name": "sudoku.puzzle.free.brain.number.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~7038130537"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:913860464232:android:3639fd13b657f3e246b5dd",
+        "android_client_info": {
+          "package_name": "water.sort.color.puzzle.games.puzsort"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdPHe8v9GuS9D4c8RS-wQSWGsMsBg2s1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "913860464232-2k81i2rarch1vgnmim1ndtna7sk0srvg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "913860464232-na1v9jf4es0qqn3jeptfhbkohgbc23ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appswing.fashiongame.stylist.girlgames.dressup.gamesforgirls"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5383330200914402~1261788509"
+    }
+  ],
+  "configuration_version": "1"
+}

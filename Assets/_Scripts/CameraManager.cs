@@ -68,22 +68,24 @@ public class CameraManager : MonoBehaviour
         }
         if (CurrentState == GameState.OnGrassField)
         {
-            ChangeCameraToGrassFieldPosition();
+            StartCoroutine(ChangeCameraToGrassFieldPosition());
         }
         if (CurrentState == GameState.OnPlatform)
         {
-            ChangeCameraToPlatformPosition();
+            StartCoroutine(ChangeCameraToPlatformPosition());
         }
 
     }
-    void ChangeCameraToPlatformPosition()
+    IEnumerator ChangeCameraToPlatformPosition()
     {
-        transform.DOMoveY(17, 1f).SetEase(Ease.OutSine).SetDelay(1f).OnStart(() => offset = platformOffset);
+        yield return new WaitForSeconds(1);
+        transform.DOMoveY(17, 1f).SetEase(Ease.OutSine).OnStart(() => offset = platformOffset);
         transform.DORotate(new Vector3(47.97f, 0, 0), 1f).SetEase(Ease.Linear);
     }
-    void ChangeCameraToGrassFieldPosition()
+    IEnumerator ChangeCameraToGrassFieldPosition()
     {
-        transform.DOMoveY(12.7f, 1f).SetEase(Ease.OutSine).SetDelay(1f).OnStart(() => offset = grassFieldOffset);
+        yield return new WaitForSeconds(1);
+        transform.DOMoveY(12.7f, 1f).SetEase(Ease.OutSine).OnStart(() => offset = grassFieldOffset);
         transform.DORotate(new Vector3(47.97f, 0, 0), 1f).SetEase(Ease.Linear);
 
     }

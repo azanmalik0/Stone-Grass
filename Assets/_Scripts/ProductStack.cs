@@ -44,6 +44,7 @@ public class ProductStack : Stacker
             for (int i = 0; i < milkGenerated; i++)
             {
                 GameObject cell = Instantiate(milkPrefab, this.transform);
+                cell.transform.localEulerAngles =new(0,90,0);
                 cell.transform.localPosition = previousPositions[i];
             }
         }
@@ -98,21 +99,16 @@ public class ProductStack : Stacker
     {
         product.transform.SetParent(this.transform);
         product.transform.DOLocalJump(cellPositions[currentR, currentC], 2, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear);
-        product.transform.localRotation=Quaternion.identity;
-
         if (type == ProductType.Egg)
         {
             eggsGenerated++;
-
         }
         if (type == ProductType.Milk)
         {
-
             milkGenerated++;
-
         }
         previousPositions.Add(cellPositions[currentR, currentC]);
-        delay += 0.001f;
+        delay += 0.00001f;
         UpdateGridPositions();
         hayParent.GetComponent<TroughStack>().ResetGridPositions();
         IsLoading = false;

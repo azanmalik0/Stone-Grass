@@ -11,10 +11,7 @@ using static ProductStack;
 
 public class FarmerStack : Stacker
 {
-    // public static event Action OnMoneyCollect;
     public static FarmerStack Instance;
-
-
     public int feedCollected;
     public int milkCollected;
     public int eggCollected;
@@ -32,10 +29,12 @@ public class FarmerStack : Stacker
     //====================================
     public List<GameObject> TweeningMoney = new();
     float delay;
-    bool IsLoading;
+    public bool IsLoading;
     int index;
     int n;
     AudioManager AM;
+    public bool CanStackCheese;
+    public bool IsLoadingOnTrough;
     private void Awake()
     {
         Instance = this;
@@ -150,46 +149,34 @@ public class FarmerStack : Stacker
 
         if (other.CompareTag("HayLoft"))
         {
-            if (other.GetComponent<HayLoft>().feedStored > 0)
+            if (!IsLoading)
             {
-                if (!IsLoading)
-                {
-                    IsLoading = true;
-                    StartCoroutine(LoadFeedOnFarmer(other));
+                IsLoading = true;
+                StartCoroutine(LoadFeedOnFarmer(other));
 
-                }
             }
-
-
 
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
             if (other.GetComponent<ProductStack>().type == ProductType.Egg)
             {
-                if (other.GetComponent<ProductStack>().eggsGenerated > 0)
+                if (!IsLoading)
                 {
-                    if (!IsLoading)
-                    {
-                        IsLoading = true;
-                        StartCoroutine(LoadProductOnFarmer(other));
 
-                    }
+                    IsLoading = true;
+                    StartCoroutine(LoadProductOnFarmer(other));
+
                 }
-
             }
             else if (other.GetComponent<ProductStack>().type == ProductType.Milk)
             {
-                if (other.GetComponent<ProductStack>().milkGenerated > 0)
+                if (!IsLoading)
                 {
-                    if (!IsLoading)
-                    {
-                        IsLoading = true;
-                        StartCoroutine(LoadProductOnFarmer(other));
+                    IsLoading = true;
+                    StartCoroutine(LoadProductOnFarmer(other));
 
-                    }
                 }
-
 
             }
         }
@@ -207,126 +194,100 @@ public class FarmerStack : Stacker
     {
         if (other.CompareTag("HayLoft"))
         {
-            //AM.Stop("PickupStuff");
-            RefreshGrid();
             IsLoading = false;
         }
         if (other.CompareTag("LS_ProductShelf"))
         {
-            //AM.Stop("PickupStuff");
-            RefreshGrid();
             IsLoading = false;
         }
         if (other.CompareTag("Market"))
         {
-            RefreshGrid();
-            TweeningMoney.Clear();
-            n = 0;
-            //AM.Stop("GetMoney");
             IsLoading = false;
         }
     }
     IEnumerator LoadFeedOnFarmer(Collider other)
     {
-        if (!CheckMax())
+
+        while (IsLoading && other.GetComponent<HayLoft>().feedStored > 0 && !CheckMax())
         {
+            feedCollected++;
+            totalItems++;
+            Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
+            DOTween.Complete(feedCell);
+            feedCell.SetParent(this.transform);
+            feedCell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
+            feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
+            other.GetComponent<HayLoft>().feedStored--;
+            if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) >= 0)
+                other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
+            feedCell.localRotation = Quaternion.identity;
+            UpdateGridPositions();
+            previousPositions.Add(cellPositions[currentR, currentC]);
+            delay += 0.000001f;
+            other.GetComponent<HayLoft>().ResetGridPositions();
+            other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
+            if (CheckMax())
+                break;
 
-            while (IsLoading && other.GetComponent<HayLoft>().feedStored > 0)
-            {
-                feedCollected++;
-                //if (!AM.IsPlaying("PickupStuff"))
-                //AM.Play("PickupStuff");
-                totalItems++;
-                Transform feedCell = other.transform.GetChild(other.transform.childCount - 1);
-                feedCell.SetParent(this.transform);
-                feedCell.transform.GetChild(0).localScale = new(0.38f, 1.1f, 1.1f);
-                feedCell.transform.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
-                other.GetComponent<HayLoft>().feedStored--;
-                if ((other.GetComponent<HayLoft>().previousPositions.Count - 1) >= 0)
-                    other.GetComponent<HayLoft>().previousPositions.RemoveAt(other.GetComponent<HayLoft>().previousPositions.Count - 1);
-                feedCell.localRotation = Quaternion.identity;
-                UpdateGridPositions();
-                previousPositions.Add(cellPositions[currentR, currentC]);
-                delay += 0.000001f;
-                other.GetComponent<HayLoft>().ResetGridPositions();
-                other.GetComponent<HayLoft>().DisplayCrudeStorageCounter();
-                if (CheckMax())
-                    break;
-
-                yield return null;
-
-
-            }
-            RefreshGrid();
-            IsLoading = false;
-            delay = 0;
+            yield return null;
         }
+        IsLoading = false;
+        delay = 0;
     }
     IEnumerator LoadProductOnFarmer(Collider other)
     {
         if (other.GetComponent<ProductStack>().type == ProductType.Egg)
         {
-            if (!CheckMax())
+            while (other.GetComponent<ProductStack>().eggsGenerated > 0 && !CheckMax())
             {
-                while (IsLoading && other.GetComponent<ProductStack>().eggsGenerated > 0)
-                {
-                    //if (!AM.IsPlaying("PickupStuff"))
-                    //AM.Play("PickupStuff");
-                    eggCollected++;
-                    totalItems++;
-                    other.GetComponent<ProductStack>().eggsGenerated--;
-                    Transform product = other.transform.GetChild(other.transform.childCount - 1);
-                    product.SetParent(this.transform);
-                    product.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
-                    product.localRotation = Quaternion.identity;
-                    previousPositions.Add(cellPositions[currentR, currentC]);
-                    if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
-                        other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
-                    delay += 0.000001f;
-                    UpdateGridPositions();
-                    other.GetComponent<ProductStack>().ResetGridPositions();
-                    if (CheckMax())
-                        break;
-                    yield return null;
+                eggCollected++;
+                totalItems++;
+                other.GetComponent<ProductStack>().eggsGenerated--;
+                Transform product = other.transform.GetChild(other.transform.childCount - 1);
+                DOTween.Complete(product);
+                product.SetParent(this.transform);
+                product.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
+                product.localRotation = Quaternion.identity;
+                previousPositions.Add(cellPositions[currentR, currentC]);
+                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
+                    other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
+                delay += 0.000001f;
+                UpdateGridPositions();
+                other.GetComponent<ProductStack>().ResetGridPositions();
+                if (CheckMax())
+                    break;
+                yield return null;
 
-                }
-                RefreshGrid();
-                IsLoading = false;
-                delay = 0;
             }
+            IsLoading = false;
+            delay = 0;
         }
         else if (other.GetComponent<ProductStack>().type == ProductType.Milk)
         {
-            if (!CheckMax())
+            while (other.GetComponent<ProductStack>().milkGenerated > 0 && !CheckMax())
             {
-                while (IsLoading && other.GetComponent<ProductStack>().milkGenerated > 0)
-                {
-
-                    //if (!AM.IsPlaying("PickupStuff"))
-                    //AM.Play("PickupStuff");
-                    milkCollected++;
-                    totalItems++;
-                    other.GetComponent<ProductStack>().milkGenerated--;
-                    Transform product = other.transform.GetChild(other.transform.childCount - 1);
-                    product.SetParent(this.transform);
-                    product.transform.GetChild(0).localScale = new Vector3(0.202438757f, 0.276839554f, 0.336927205f);
-                    product.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
-                    product.localRotation = Quaternion.identity;
-                    previousPositions.Add(cellPositions[currentR, currentC]);
-                    if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
-                        other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
-                    delay += 0.000001f;
-                    UpdateGridPositions();
-                    other.GetComponent<ProductStack>().ResetGridPositions();
-                    if (CheckMax())
-                        break;
-
-                    yield return null;
-                }
-                RefreshGrid();
-                IsLoading = false;
-                delay = 0;
+                milkCollected++;
+                totalItems++;
+                other.GetComponent<ProductStack>().milkGenerated--;
+                Transform product = other.transform.GetChild(other.transform.childCount - 1);
+                DOTween.Complete(product);
+                product.SetParent(this.transform);
+                product.transform.GetChild(0).localScale = new Vector3(0.202438757f, 0.276839554f, 0.336927205f);
+                product.DOLocalJump(cellPositions[currentR, currentC], 3, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear);
+                product.localRotation = Quaternion.identity;
+                previousPositions.Add(cellPositions[currentR, currentC]);
+                if ((other.GetComponent<ProductStack>().previousPositions.Count - 1) >= 0)
+                    other.GetComponent<ProductStack>().previousPositions.RemoveAt(other.GetComponent<ProductStack>().previousPositions.Count - 1);
+                delay += 0.000001f;
+                UpdateGridPositions();
+                other.GetComponent<ProductStack>().ResetGridPositions();
+                if (CheckMax())
+                    break;
+                yield return null;
             }
+            IsLoading = false;
+            delay = 0;
+
 
         }
 
@@ -337,8 +298,6 @@ public class FarmerStack : Stacker
         if (other.GetComponent<MoneyStack>().coinsStored <= 0)
         {
             IsLoading = false;
-            //AM.Stop("GetMoney");
-
             delay = 0;
         }
         else if (other.GetComponent<MoneyStack>().coinsStored > 0)
@@ -350,8 +309,9 @@ public class FarmerStack : Stacker
             }
             CurrencyManager.Instance.RecieveCoins(5);
             Transform money = other.transform.GetChild(other.transform.childCount - 1);
+            DOTween.Complete(money);
             TweeningMoney.Add(money.gameObject);
-            money.SetParent(this.transform);
+            money.SetParent(coinPos.transform);
             money.DOLocalJump(coinPos.localPosition, 2, 1, 0.4f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 Destroy(TweeningMoney[n]);
