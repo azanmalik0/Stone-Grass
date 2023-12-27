@@ -423,7 +423,6 @@ public class HayStack : Stacker
       
 
     }
-
     private void OnApplicationFocus(bool focus)
     {
         if(focus)

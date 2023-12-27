@@ -50,7 +50,6 @@ public class MoneyStack : Stacker
     }
     IEnumerator AnimateMoney()
     {
-        // Debug.LogError("Bought"); 
 
         if (!IsGenerating)
         {
@@ -71,27 +70,11 @@ public class MoneyStack : Stacker
                 {
                     delay = 0;
                     IsGenerating = false;
-                    //RefreshGrid();
                 }
                 yield return null;
             }
         }
 
-
-    }
-    public void RefreshGrid()
-    {
-        currentR = 0;
-        currentC = 0;
-        gridOffset.y = 0f;
-        CalculateCellPositions();
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            DOTween.Complete(transform.GetChild(i));
-            transform.GetChild(i).localPosition = cellPositions[currentR, currentC];
-            UpdateGridPositions();
-
-        }
 
     }
 

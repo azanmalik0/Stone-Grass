@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ public class Init : MonoBehaviour
     public GameObject PrivacyPolicyPanel;
 
     public LoadScene loadingPanel;
+    
     
     private void Start()
     {
@@ -42,7 +44,7 @@ public class Init : MonoBehaviour
         PrivacyPolicyPanel.SetActive(false);
         PlayerPrefs.SetInt("PPStr", 1);
         loadingPanel.enabled = true;
-
+        
         adsManager.RequestBannerAd();
         adsManager.RequestNonVideoInterstitialAd();
         adsManager.RequestRewardedAd();

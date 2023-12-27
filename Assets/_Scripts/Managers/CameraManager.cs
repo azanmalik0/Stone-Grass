@@ -43,7 +43,6 @@ public class CameraManager : MonoBehaviour
     {
         CurrentState = state;
         if (CurrentState == GameState.Tractor)
-            //followTarget = GM.tractorObject.transform;
             followTarget = tractorObject.transform;
         if (CurrentState == GameState.Farmer)
             followTarget = GM.farmerObject.transform;
@@ -55,11 +54,13 @@ public class CameraManager : MonoBehaviour
         if (CurrentState == GameState.Upgrading)
         {
             IsInMenu = true;
+            DOTween.Kill(transform);
             transform.DOLocalMove(upgradePosition, 0.5f).SetEase(Ease.Linear);
         }
         if (CurrentState == GameState.InShop)
         {
             IsInMenu = true;
+            DOTween.Kill(transform);
             transform.DOLocalMove(shopPosition, 0.5f).SetEase(Ease.Linear);
         }
         if (CurrentState == GameState.InGame)

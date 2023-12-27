@@ -9,7 +9,9 @@ public class LoadScene : MonoBehaviour
 {
     public static LoadScene instance;
     [SerializeField] Image loadingFillBar;
+    public DOTweenAnimation gameTitleAnimation;
     public int sceneID;
+    
 
     private void Awake()
     {
@@ -19,14 +21,12 @@ public class LoadScene : MonoBehaviour
         }
 
     }
-
     private void Start()
     {
+        gameTitleAnimation.DOPlay();
         StartCoroutine(LoadSceneAsync(sceneID));
 
     }
-
-
     IEnumerator LoadSceneAsync(int sceneID)
     {
         yield return new WaitForSeconds(2f);
