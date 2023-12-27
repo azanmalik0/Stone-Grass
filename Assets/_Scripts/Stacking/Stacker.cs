@@ -1,0 +1,120 @@
+using DG.Tweening;
+using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class Stacker : SerializedMonoBehaviour
+{
+    [Title("General Preferences")]
+    public int maxHayCapacity;
+    [Title("Grid Preferences")]
+    [SerializeField] protected int maxRows;
+    [SerializeField] protected int maxColumns;
+    [SerializeField] protected float cellWidth = 1.0f;
+    [SerializeField] protected float cellHeight = 1.0f;
+    [SerializeField] protected Vector3 gridOffset;
+    [SerializeField] protected Vector3 gridRotationOffset;
+    public float InitialYOffset;
+    [TableMatrix]
+    public Vector3[,] cellPositions;
+    public List<Vector3> previousPositions = new();
+    public int currentR = 0;
+    public int currentC = 0;
+    public float NextStackHeight;
+   
+    protected void SetGridYOffset(float initial)
+    {
+        InitialYOffset = initial;
+    }
+    protected virtual void RepositionStack(bool Reverse)
+    {
+        if (!Reverse)
+        {
+
+            gridOffset.y += NextStackHeight;
+            currentC = 0;
+            currentR = 0;
+        }
+        else
+        {
+            if (gridOffset.y > InitialYOffset)
+                gridOffset.y -= NextStackHeight;
+            else
+                gridOffset.y = InitialYOffset;
+            currentC = maxColumns - 1;
+            currentR = maxRows - 1;
+
+
+        }
+        CalculateCellPositions();
+
+    }
+    protected void CalculateCellPositions()
+    {
+        cellPositions = new Vector3[maxRows, maxColumns];
+        Vector3 startPosition = transform.localPosition + gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
+
+        for (int row = 0; row < maxRows; row++)
+        {
+            for (int col = 0; col < maxColumns; col++)
+            {
+                cellPositions[row, col] = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
+            }
+        }
+
+    }
+    public void UpdateGridPositions()
+    {
+        currentC++;
+        if (currentC >= maxColumns)
+        {
+            currentC = 0;
+            currentR++;
+
+            if (currentR >= maxRows)
+            {
+                RepositionStack(false);
+            }
+        }
+    }
+    public void ResetGridPositions()
+    {
+        currentC--;
+        if (currentC < 0)
+        {
+            currentC = maxColumns - 1;
+            currentR--;
+
+            if (currentR < 0)
+            {
+                RepositionStack(true);
+            }
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Matrix4x4 oldGizmosMatrix = Gizmos.matrix;
+        Gizmos.matrix = transform.localToWorldMatrix;
+
+        Quaternion rotation = Quaternion.Euler(gridRotationOffset);
+
+        Vector3 startPosition = gridOffset - new Vector3((maxColumns - 1) * cellWidth / 2, 0, (maxRows - 1) * cellHeight / 2);
+
+        for (int row = 0; row < maxRows; row++)
+        {
+            for (int col = 0; col < maxColumns; col++)
+            {
+                Vector3 position = startPosition + new Vector3(col * cellWidth, 0, row * cellHeight);
+
+                // Apply rotation to the position
+                position = rotation * position;
+
+                Gizmos.DrawWireCube(position, new Vector3(cellWidth, 0.1f, cellHeight));
+            }
+        }
+
+        Gizmos.matrix = oldGizmosMatrix;
+    }
+
+}
