@@ -1,5 +1,6 @@
 using DG.Tweening;
 using ES3Internal;
+using EZ_Pooling;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,8 +38,9 @@ public class MoneyStack : Stacker
         {
             for (int i = 0; i < coinsStored; i++)
             {
-                GameObject cell = Instantiate(coinPrefab, this.transform);
-                cell.transform.localPosition = previousPositions[i];
+                Transform coins = EZ_PoolManager.Spawn(coinPrefab.transform, Vector3.zero, Quaternion.identity);
+                coins.SetParent(this.transform);
+                coins.localPosition = previousPositions[i];
 
             }
         }
@@ -56,13 +58,10 @@ public class MoneyStack : Stacker
             IsGenerating = true;
             for (int i = 0; i < 3; i++)
             {
-                GameObject money = Instantiate(moneyPrefab, moneySpawmPoimt.position, Quaternion.identity, this.transform);
+                Transform money = EZ_PoolManager.Spawn(moneyPrefab.transform, moneySpawmPoimt.position, Quaternion.identity);
+                money.SetParent(this.transform);
                 DOTween.Complete(money);
-                money.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    coinsStored++;
-
-                });
+                money.transform.DOLocalJump(cellPositions[currentR, currentC], 1, 1, 0.2f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() => coinsStored++);
                 previousPositions.Add(cellPositions[currentR, currentC]);
                 UpdateGridPositions();
                 delay += 0.0001f;

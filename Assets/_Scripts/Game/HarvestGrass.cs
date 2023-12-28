@@ -1,4 +1,5 @@
 using DG.Tweening;
+using EZ_Pooling;
 using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
@@ -75,7 +76,7 @@ public class HarvestGrass : MonoBehaviour
         if (grassCut >= requiredGrass)
         {
             grassCut = 0;
-            GameObject Cell = Instantiate(hayCell, new Vector3(other.transform.position.x, -0.149f, other.transform.position.z), Quaternion.identity);
+            Transform Cell = EZ_PoolManager.Spawn(hayCell.transform, new Vector3(other.transform.position.x, -0.149f, other.transform.position.z), Quaternion.identity);
             if (!AM.IsPlaying("Pickup Hay"))
             {
                 AM.Play("Pickup Hay");

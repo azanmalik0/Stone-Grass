@@ -1,4 +1,5 @@
 using DG.Tweening;
+using EZ_Pooling;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -80,9 +81,10 @@ public class HayStack : Stacker
         {
             for (int i = 0; i < sunHayCollected; i++)
             {
-                GameObject cell = Instantiate(sunHayCellPrefab, this.transform);
+                Transform cell = EZ_PoolManager.Spawn(sunHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
+                cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
-                cell.transform.localPosition = previousPositions[index];
+                cell.localPosition = previousPositions[index];
                 index++;
                 if (i == sunHayCollected - 1)
                 {
@@ -102,9 +104,10 @@ public class HayStack : Stacker
         {
             for (int i = 0; i < cornRedHayCollected; i++)
             {
-                GameObject cell = Instantiate(cornRedHayCellPrefab, this.transform);
+                Transform cell = EZ_PoolManager.Spawn(cornRedHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
+                cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
-                cell.transform.localPosition = previousPositions[index];
+                cell.localPosition = previousPositions[index];
                 index++;
                 if (i == cornRedHayCollected - 1)
                 {
@@ -123,9 +126,10 @@ public class HayStack : Stacker
         {
             for (int i = 0; i < cornNightHayCollected; i++)
             {
-                GameObject cell = Instantiate(cornNightHayCellPrefab, this.transform);
+                Transform cell = EZ_PoolManager.Spawn(cornNightHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
+                cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
-                cell.transform.localPosition = previousPositions[index];
+                cell.localPosition = previousPositions[index];
                 index++;
                 if (i == cornNightHayCollected - 1)
                 {
@@ -144,9 +148,10 @@ public class HayStack : Stacker
         {
             for (int i = 0; i < cornYellowHayCollected; i++)
             {
-                GameObject cell = Instantiate(cornYellowHayCellPrefab, this.transform);
+                Transform cell = EZ_PoolManager.Spawn(cornYellowHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
+                cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
-                cell.transform.localPosition = previousPositions[index];
+                cell.localPosition = previousPositions[index];
                 index++;
                 if (i == cornYellowHayCollected - 1)
                 {
@@ -165,9 +170,10 @@ public class HayStack : Stacker
         {
             for (int i = 0; i < cornHayCollected; i++)
             {
-                GameObject cell = Instantiate(cornHayCellPrefab, this.transform);
+                Transform cell = EZ_PoolManager.Spawn(cornHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
+                cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
-                cell.transform.localPosition = previousPositions[index];
+                cell.localPosition = previousPositions[index];
                 index++;
                 if (i == cornHayCollected - 1)
                 {
@@ -264,14 +270,12 @@ public class HayStack : Stacker
             totalHayCollected--;
             haySold++;
             GameObject hayCell = transform.GetChild(transform.childCount - 1).gameObject;
-            UnloadingHaycells.Add(hayCell);
             CheckHayType(hayCell, false);
             hayCell.transform.SetParent(null);
             hayCell.transform.DOJump(unloadTarget.position, 2, 1, 0.5f).SetDelay(delay).SetEase(Ease.Linear).OnComplete(() =>
             {
-                Destroy(UnloadingHaycells[n]);
-                //UnloadingHaycells[n].SetActive(false);
-                n++;
+                EZ_PoolManager.Despawn(hayCell.transform);
+                hayCell.GetComponent<BoxCollider>().enabled = true;
                 boilerParticle.Play();
             });
             delay += 0.000001f;
@@ -420,12 +424,12 @@ public class HayStack : Stacker
             print("OnApplicationPause" + gameObject.name);
             RevertMaterialColour();
         }
-      
+
 
     }
     private void OnApplicationFocus(bool focus)
     {
-        if(focus)
+        if (focus)
             CheckCapacityFull();
     }
     private void OnDestroy()

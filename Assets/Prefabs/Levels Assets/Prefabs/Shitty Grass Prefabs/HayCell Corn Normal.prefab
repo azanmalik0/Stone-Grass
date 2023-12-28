@@ -12,13 +12,12 @@ GameObject:
   - component: {fileID: 204026808303810992}
   - component: {fileID: 204026808303810991}
   - component: {fileID: 204026808303810994}
-  - component: {fileID: 2228605806175437403}
   m_Layer: 0
   m_Name: HayCell Corn Normal
   m_TagString: HayCorn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &204026808303810993
 Transform:
@@ -106,21 +105,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2228605806175437403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 204026808303810990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMode: 1
-  outlineColor: {r: 0, g: 0, b: 0, a: 1}
-  outlineWidth: 0.8
-  precomputeOutline: 0
-  bakeKeys: []
-  bakeValues: []

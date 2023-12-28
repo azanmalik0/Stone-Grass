@@ -1,4 +1,5 @@
 using DG.Tweening;
+using EZ_Pooling;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -314,10 +315,8 @@ public class FarmerStack : Stacker
             money.SetParent(coinPos.transform);
             money.DOLocalJump(coinPos.localPosition, 2, 1, 0.4f).SetDelay(delay).SetEase(Ease.OutSine).OnComplete(() =>
             {
-                Destroy(TweeningMoney[n]);
-                n++;
+                EZ_PoolManager.Despawn(money);
             });
-            //delay += 0.001f;
             other.GetComponent<MoneyStack>().ResetGridPositions();
             if ((other.GetComponent<MoneyStack>().previousPositions.Count - 1) >= 0)
                 other.GetComponent<MoneyStack>().previousPositions.RemoveAt(other.GetComponent<MoneyStack>().previousPositions.Count - 1);
