@@ -7,6 +7,8 @@ using Firebase;
 using Firebase.Analytics;
 using Firebase.Extensions;
 using System.Threading.Tasks;
+using GoogleMobileAds.Ump.Api;
+using DG.Tweening.Core.Easing;
 //using BubbleShooterKit;
 //using Google.Play.Review;
 
@@ -114,18 +116,39 @@ public class AdsManager : MonoBehaviour
 
 
         MobileAds.RaiseAdEventsOnUnityMainThread = true;
-        MobileAds.Initialize((InitializationStatus initstatus) =>
+        //These followings are for testing GDPR consent
+        var debugSettings = new ConsentDebugSettings
         {
-            if (initstatus == null)
+            // Geography appears as in EEA for debug devices.
+            DebugGeography = DebugGeography.EEA,
+            TestDeviceHashedIds = new List<string>
+     {
+          "8AF033739916D58267D650CBDC019A8C",
+          "8AF033739916D58267D650CBDC019A8B",
+          "C2CC467A27A0F512A5D4EF27D32E0B87",
+          "BA2FB27B70746321DF40BE552FAF2718",
+          "4CFEF353B4A2E5075F3CF7F0CFE95987",
+          "5D1F8648993E6EFB6B6299814F9D2228"
+     }
+        };
+        if (Application.internetReachability != NetworkReachability.NotReachable)
+        {
+            // Here false means users are not under age of consent.
+            ConsentRequestParameters request = new ConsentRequestParameters
             {
-                return;
-            }
-            _isInitialized = true;
+                TagForUnderAgeOfConsent = false,
+                ConsentDebugSettings = debugSettings,
+            };
 
+            // Check the current consent information status.
+            ConsentInformation.Update(request, OnConsentInfoUpdated);
+        }
+        else
+        {
+            InitializeAds();
+        }
 
-        });
-
-        RequestNonVideoInterstitialAd();
+        
 
         try
         {
@@ -136,7 +159,61 @@ public class AdsManager : MonoBehaviour
             Debug.Log("Exception Generated" + ex);
         }
     }
+    void OnConsentInfoUpdated(FormError consentError)
+    {
+        if (consentError != null)
+        {
+            // Handle the error.
+            Debug.Log("Consent Error    " + consentError.Message);
+            InitializeAds();
+            return;
+        }
 
+        if (ConsentInformation.PrivacyOptionsRequirementStatus == PrivacyOptionsRequirementStatus.Required &&
+            ConsentInformation.ConsentStatus != GoogleMobileAds.Ump.Api.ConsentStatus.Obtained)
+        {
+            Debug.Log("Obtaining Consent........");
+            ConsentForm.LoadAndShowConsentFormIfRequired((FormError formError) =>
+            {
+                if (formError == null)
+                {
+                    PlayerPrefs.SetInt("UserConsent", 1);
+                }
+                InitializeAds();
+            });
+        }
+        else
+        {
+            Debug.Log("Consent Not Required");
+            InitializeAds();
+        }
+    }
+
+    void InitializeAds()
+    {
+
+        MobileAds.Initialize((InitializationStatus initstatus) =>
+        {
+            if (initstatus == null)
+            {
+                return;
+            }
+            _isInitialized = true;
+            RequestNonVideoInterstitialAd();
+            if (!PlayerPrefs.HasKey("UserConsent"))
+            {
+                Debug.Log("UserConsent Required PP");
+
+                FindObjectOfType<Init>().EnablePP();
+
+            }
+            else
+            {
+                FindObjectOfType<Init>().AcceptConsent();
+            }
+            RequestNonVideoInterstitialAd();
+        });
+    }
 
 
 

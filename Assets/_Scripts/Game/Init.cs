@@ -9,19 +9,14 @@ public class Init : MonoBehaviour
 {
     AdsManager adsManager;
     public GameObject PrivacyPolicyPanel;
-
     public LoadScene loadingPanel;
     
     
     private void Start()
     {
         adsManager = AdsManager.Instance;
-        if (PlayerPrefs.GetInt("PPStr") == 0)
-        {
-            PrivacyPolicyPanel.SetActive(true);
 
-        }
-        else
+        if (PlayerPrefs.GetInt("PPStr") == 1)
         {
             PrivacyPolicyPanel.SetActive(false);
             loadingPanel.enabled = true;
@@ -31,10 +26,10 @@ public class Init : MonoBehaviour
             adsManager.ShowBannerAd();
 
         }
+        
     }
     public void PrivacyPolicy()
     {
-        //  AudioManager.instance.Play("Pop");
         Application.OpenURL("https://sites.google.com/view/biza-studio/home");
     }
 
@@ -49,13 +44,15 @@ public class Init : MonoBehaviour
         adsManager.RequestNonVideoInterstitialAd();
         adsManager.RequestRewardedAd();
         adsManager.ShowBannerAd();
+        PlayerPrefs.SetInt("UserConsent", 1);
 
-        //  StartLoading = true;
-        //if (!istOpen)
-        //{
-        //    Resources.UnloadUnusedAssets();
-        //    GC.Collect();
-        //}
-
+    }
+    public void EnablePP()
+    {
+        PrivacyPolicyPanel.SetActive(true);
+    }
+    public void AcceptConsent()
+    {
+        IAgreePrivacyPolicy();
     }
 }

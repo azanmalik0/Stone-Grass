@@ -65,8 +65,10 @@ public class HayStack : Stacker
     {
         AM = AudioManager.instance;
         SetGridYOffset(0.15f);
+        Debug.LogError(totalHayCollected);
         if (totalHayCollected > 0)
         {
+            Debug.LogError("Corn Loaded 1");
             LoadCornHayCollected();
         }
         CalculateCellPositions();
@@ -168,8 +170,10 @@ public class HayStack : Stacker
     {
         if (cornHayCollected > 0)
         {
+            Debug.LogError("Corn Loaded 2");
             for (int i = 0; i < cornHayCollected; i++)
             {
+                Debug.LogError("Corn Loaded 3");
                 Transform cell = EZ_PoolManager.Spawn(cornHayCellPrefab.transform, Vector3.zero, Quaternion.identity);
                 cell.SetParent(this.transform);
                 cell.GetComponent<BoxCollider>().enabled = false;
